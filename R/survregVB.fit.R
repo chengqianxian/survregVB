@@ -1,0 +1,96 @@
+#' Variational Bayes inference of survival data for a log-logistic AFT
+#' model fitting function.
+#'
+#' Called by survregVB to do the actual parameter and ELBO computations.
+#'
+#' @name survregVB.fit
+#'
+#' @param Y A `Surv` object containing 2 columns: time and event.
+#' @param X A matrix of predictors (covariates), including an intercept.
+#' @param alpha_0 Hyperparameter \eqn{\alpha_0} of the prior
+#'  distribution of \emph{b}.
+#' @param omega_0 Hyperparameter \eqn{\omega_0} of the prior
+#'  distribution of \emph{b}.
+#' @param v_0 Precision hyperparameter \eqn{v_0} of the prior
+#'  distribution of \emph{β}.
+#' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of
+#'  \emph{β}.
+#' @param max_iteration The maximum number of iterations for the
+#'  variational  inference optimization. If reached, iteration stops.
+#'  (Default:100)
+#' @param threshold The convergence threshold for the evidence based
+#'  lower bound (ELBO) optimization. If the difference between the
+#'  current and previous ELBO's is smaller than this threshold,
+#'  iteration stops. (Default:0.0001)
+#'
+#' @details This routine does no checking that the arguments are the
+#'  proper length or type.
+#'
+#' @returns A list containing results of the fit.
+#' @export
+#' @seealso \code{\link{survregVB}}
+survregVB.fit <- function(Y,
+                          X,
+                          alpha_0,
+                          omega_0,
+                          mu_0,
+                          v_0,
+                          max_iteration = 100,
+                          threshold = 0.0001) {
+  y <- log(Y[,1])
+  delta <- Y[,2]
+  alpha <- alpha_star(alpha_0, delta)
+  omega <- omega_0
+  mu <- mu_0
+
+  converged <- FALSE
+  iteration <- 0
+
+  expectation_b <- expectation_b(alpha, omega)
+  curr_mu <- mu_0
+  curr_elbo <- 0
+
+  while (!converged & iteration < max_iteration) {
+    iteration <- iteration + 1
+    Sigma <-
+      sigma_star(y, X, delta, v_0, alpha, omega, curr_mu, expectation_b)
+    mu <-
+      mu_star(y, X, delta, mu_0, v_0, alpha, omega, curr_mu, Sigma,
+              expectation_b)
+    omega <-
+      omega_star(y, X, delta, omega_0, mu, expectation_b)
+
+    elbo <-
+      elbo(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
+           curr_mu, Sigma, expectation_b)
+
+    elbo_diff <- abs(elbo - curr_elbo)
+    mu_diff <- sum(abs(mu - curr_mu))
+    if (elbo_diff > threshold & mu_diff > threshold) {
+      converged <- FALSE
+    } else {
+      converged <- TRUE
+    }
+
+    expectation_b <- expectation_b(alpha, omega)
+    curr_elbo <- elbo
+    curr_mu <- mu
+  }
+
+  if (converged == FALSE) {
+    warning(
+      "The max iteration has been achieved and the algorithm has not converged\n"
+    )
+  }
+
+  return_list <- list(
+    ELBO = elbo,
+    alpha = alpha,
+    omega = omega,
+    Sigma = Sigma,
+    mu = mu,
+    iterations = iteration
+  )
+
+  return(return_list)
+}
