@@ -115,13 +115,11 @@ test_that("diff_b", {
 })
 
 test_that("elbo", {
-  expect_equal(
-    elbo(
-      log(T), X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega, mu, Sigma,
-      expectation_b
-    ),
-    elbo
-  )
+  expected <- elbo(log(T), X, delta, alpha_0, omega_0, mu_0, v_0, alpha,
+                   omega, mu, Sigma, expectation_b)
+  result <- -16736.1527
+  expect_equal(expected, result)
+
   expect_equal(
     elbo(
       log(T.10), X, delta.10, alpha_0, omega_0, mu_0, v_0, alpha.10, omega.10,
@@ -137,4 +135,3 @@ test_that("elbo", {
     elbo.30
   )
 })
-

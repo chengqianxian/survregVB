@@ -1,4 +1,4 @@
-## Parameter Update Calculations =======================================
+## Parameter Calculations ==============================================
 
 #' Calculates parameter \eqn{\alpha^*} of the approximate posterior
 #' distribution of \emph{b} in order to optimize the evidence based
@@ -13,13 +13,11 @@
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
 #' @seealso \code{\link{elbo}}
-alpha_star <- function(alpha_0,
-                       delta) {
+alpha_star <- function(alpha_0, delta) {
   r <- sum(delta)
   alpha <- alpha_0 + r
-  return(alpha)
+  alpha
 }
-
 
 #' Calculates parameter \eqn{\omega^*} of the approximate posterior
 #' distribution of \emph{b} in order to optimize the evidence based
@@ -39,12 +37,7 @@ alpha_star <- function(alpha_0,
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
 #' @seealso \code{\link{elbo}}
-omega_star <- function(y,
-                       X,
-                       delta,
-                       omega_0,
-                       mu,
-                       expectation_b) {
+omega_star <- function(y, X, delta, omega_0, mu, expectation_b) {
   res <- 0
   for (i in 1:nrow(X)) {
     bz_i <- y[i] - sum(X[i, ] * mu)
@@ -54,9 +47,8 @@ omega_star <- function(y,
     res <- res + res_i
   }
   omega <- omega_0 - res
-  return(omega)
+  omega
 }
-
 
 #' Calculates parameter \eqn{\mu^*} of the approximate posterior
 #' distribution of \emph{β} in order to optimize the evidence based
@@ -84,16 +76,8 @@ omega_star <- function(y,
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
 #' @seealso \code{\link{elbo}}
-mu_star <- function(y,
-                    X,
-                    delta,
-                    mu_0,
-                    v_0,
-                    alpha,
-                    omega,
-                    curr_mu,
-                    Sigma,
-                    expectation_b) {
+mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, curr_mu,
+                    Sigma, expectation_b) {
   p <- ncol(X)
   expectation_inverse_b <- expectation_inverse_b(alpha, omega)
   expectation_inverse_b_2 <- expectation_inverse_b_2(alpha, omega)
@@ -114,7 +98,7 @@ mu_star <- function(y,
 
   yX_matrix <- v_0 * mu_0 + yX_matrix
   mu <- yX_matrix %*% Sigma
-  return(mu)
+  mu
 }
 
 #' Calculates parameter \eqn{\Sigma^*} of the approximate posterior
@@ -140,13 +124,7 @@ mu_star <- function(y,
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
 #' @seealso \code{\link{elbo}}
-sigma_star <- function(y,
-                       X,
-                       delta,
-                       v_0,
-                       alpha,
-                       omega,
-                       curr_mu,
+sigma_star <- function(y, X, delta, v_0, alpha, omega, curr_mu,
                        expectation_b) {
   p <- ncol(X)
   X_matrix <- matrix(0, nrow = p, ncol = p)
@@ -165,9 +143,5 @@ sigma_star <- function(y,
   } else {
     Sigma <- inv(Sigma_inv)
   }
-
-  return(Sigma)
+  Sigma
 }
-
-
-

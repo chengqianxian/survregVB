@@ -34,48 +34,55 @@ alpha_0 <- 11
 omega_0 <- 10
 
 test_that("survregVB.fit", {
-  model <- survregVB.fit(Surv(T, delta), X, alpha_0, omega_0, mu_0, v_0,
-                           max_iteration = 100, threshold = 0.01)
-  expect_equal(model$ELBO, -1723.49313)
-  expect_equal(model$iterations, 8)
-  expect_equal(model$alpha, 311)
-  expect_equal(model$omega, 250.80861)
-  expect_equal(model$Sigma,
-               matrix(c(0.18803590, -0.17354666, -0.01347363,
-                        -0.17354666,  0.17261785, -0.00006534,
-                        -0.01347363, -0.00006534,  0.02541609),
-                      nrow = 3, ncol = 3, byrow = TRUE))
-  expect_equal(model$mu,
-               matrix(c(0.05739117, 0.5273361, 0.84186673),
-                      nrow = 1, ncol = 3, byrow = TRUE))
+  result <- survregVB.fit(Surv(T, delta), X, alpha_0, omega_0, mu_0, v_0,
+                         max_iteration = 100, threshold = 0.01)
+  expected <- list(
+    ELBO = -1723.49313,
+    alpha = 311,
+    omega = 250.808607,
+    Sigma = matrix(c(0.18803590, -0.17354666, -0.01347363,
+                     -0.17354666, 0.17261785, -0.00006534,
+                     -0.01347363, -0.00006534, 0.02541609),
+                   nrow = 3, ncol = 3, byrow = FALSE,
+                   dimnames = list(NULL, NULL)),
+    mu = c(0.05739117, 0.52733610, 0.84186673),
+    iterations = 8
+  )
+  expect_equal(result, expected)
 
-  model.10 <- survregVB.fit(Surv(T.10, delta.10), X, alpha_0, omega_0, mu_0, v_0,
-                              max_iteration = 100, threshold = 0.01)
-  expect_equal(model.10$ELBO, -1509.54707)
-  expect_equal(model.10$iterations, 8)
-  expect_equal(model.10$alpha, 279)
-  expect_equal(model.10$omega, 220.246487)
-  expect_equal(model.10$Sigma,
-               matrix(c(0.18618723, -0.17209913, -0.01362264,
-                        -0.17209913,  0.17137950,  0.00027204,
-                        -0.01362264,  0.00027204,  0.02529148),
-                      nrow = 3, ncol = 3, byrow = TRUE))
-  expect_equal(model.10$mu,
-               matrix(c(-0.02694604, 0.58702326, 0.88834972),
-                      nrow = 1, ncol = 3, byrow = TRUE))
+  result <- survregVB.fit(Surv(T.10, delta.10), X, alpha_0, omega_0,
+                            mu_0, v_0, max_iteration = 100,
+                            threshold = 0.01)
+  expected <- list(
+    ELBO = -1509.54706,
+    alpha = 279,
+    omega = 220.24649,
+    Sigma = matrix(c(
+      0.18618723, -0.17209913, -0.01362264,
+      -0.17209913, 0.17137950, 0.00027204,
+      -0.01362264, 0.00027204, 0.02529148),
+      nrow = 3, ncol = 3, byrow = FALSE,
+      dimnames = list(NULL, NULL)),
+    mu = c(-0.02694604, 0.58702326, 0.88834972),
+    iterations = 8
+  )
+  expect_equal(result, expected)
 
-  model.30 <- survregVB.fit(Surv(T.30, delta.30), X, alpha_0, omega_0, mu_0, v_0,
-                              max_iteration = 100, threshold = 0.01)
-  expect_equal(model.30$ELBO, -1149.4328)
-  expect_equal(model.30$iterations, 8)
-  expect_equal(model.30$alpha, 220)
-  expect_equal(model.30$omega, 181.545475)
-  expect_equal(model.30$Sigma,
-               matrix(c(0.22110740, -0.20505044, -0.01636788,
-                        -0.20505044,  0.20381168,  0.00156902,
-                        -0.01636788,  0.00156902,  0.02919876),
-                      nrow = 3, ncol = 3, byrow = TRUE))
-  expect_equal(model.30$mu,
-               matrix(c(0.14789765, 0.44725114, 0.87358818),
-                      nrow = 1, ncol = 3, byrow = TRUE))
+  result <- survregVB.fit(Surv(T.30, delta.30), X, alpha_0, omega_0,
+                          mu_0, v_0, max_iteration = 100,
+                          threshold = 0.01)
+  expected <- list(
+    ELBO = -1149.4328,
+    alpha = 220,
+    omega = 181.545475,
+    Sigma = matrix(c(
+      0.22110740, -0.20505044, -0.01636788,
+      -0.20505044, 0.20381168, 0.00156902,
+      -0.01636788, 0.00156902, 0.02919876
+    ), nrow = 3, ncol = 3, byrow = FALSE,
+    dimnames = list(NULL, NULL)),
+    mu = c(0.14789765, 0.44725114, 0.87358818),
+    iterations = 8
+  )
+  expect_equal(result, expected)
 })

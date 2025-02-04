@@ -13,7 +13,10 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports:
     matlib,
-    stats
+    stats,
+    bayestestR,
+    dplyr,
+    invgamma
 Suggests: 
     knitr,
     rmarkdown,

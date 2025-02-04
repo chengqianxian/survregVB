@@ -2,8 +2,10 @@
 % Please edit documentation in R/survregVB.R
 \name{survregVB}
 \alias{survregVB}
-\title{Variational Bayes inference of survival data for a log-logistic AFT
-model.}
+\alias{print.survregVB}
+\alias{survregVB.object}
+\title{Variational Bayesian Analysis of Survival Data Using a Log-Logistic
+Accelerated Failure Time Model}
 \usage{
 survregVB(
   formula,
@@ -18,8 +20,9 @@ survregVB(
 }
 \arguments{
 \item{formula}{A formula object, with the response on the left of a
-\code{~} operator, and the covariates on the right. The response must be a
-survival object of type \code{right}, as returned by the \code{Surv} function.}
+\code{~} operator, and the covariates on the right. The response must be
+a survival object of type \code{right}, as returned by the \code{Surv}
+function.}
 
 \item{data}{A \code{data.frame} in which to interpret the variables named
 in the formula`.}
@@ -32,7 +35,7 @@ in the formula`.}
 
 \item{mu_0}{A numeric vector containing the mean hyperparameters
 \eqn{\mu_0} for the prior multivariate normal distributions of the
-intercept (\eqn{\beta_0})  and the  coefficients (\eqn{\beta_i})
+intercept (\eqn{\beta_0}) and the coefficients (\eqn{\beta_i})
 corresponding to the covariates.}
 
 \item{v_0}{A numeric scalar specifying the precision (inverse
@@ -49,33 +52,45 @@ current and previous ELBO's is smaller than this threshold,
 iteration stops. (Default:0.0001)}
 }
 \value{
-A list containing the following:
+An object of class \code{survregVB}.
+Objects of this class have methods for the functions \code{print} and
+\code{summary}. The components of this class are:
 \itemize{
-\item \code{ELBO}: The final value of the Evidence Lower Bound (ELBO) at the
-last iteration.
-\item \code{alpha}: The updated parameter \eqn{\alpha} of the approximate
-posterior distribution of \emph{b}.
-\item \code{omega}: The updated parameter \eqn{\omega} of the approximate
-posterior distribution of \emph{b}.
-\item \code{mu}: The updated vector of means \eqn{\mu} of the approximate
-posterior distribution of \emph{β}.
-\item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of the
-approximate posterior distribution \emph{β}.
-\item \code{iterations}: The number of iterations performed by the VB
-algorithm before converging or reaching \code{max_iteration}.
+\item \code{ELBO}: The final value of the Evidence Lower Bound
+(ELBO) at the last iteration.
+\item \code{alpha}: The updated parameter \eqn{\alpha} of the
+approximate posterior distribution of \emph{b}.
+\item \code{omega}: The updated parameter \eqn{\omega} of the
+approximate posterior distribution of \emph{b}.
+\item \code{mu}: The updated vector of means \eqn{\mu} of the
+approximate posterior distribution of \emph{β}.
+\item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
+the approximate posterior distribution of \emph{β}.
+\item \code{iterations}: The number of iterations performed by the
+VB algorithm: before converging or reaching \code{max_iteration}.
+\item \code{call}: The function call used to invoke the
+\code{survregVB} method.
+\item \code{not_converged}: A boolean indicating if the algorithm
+converged.
+\itemize{
+\item \code{TRUE}: If the algorithm did not converge prior to
+achieving \code{max_iteration}.
+\item \code{NULL}: If the algorithm converged successfully.
+}
 }
 }
 \description{
-This function applies mean-field Variational Bayes (VB) algorithm to
-infer the parameters of an accelerated failure time (AFT) survival
-model with right-censored  survival times following a log-logistic
-distribution. The model is specified with the parameters:
-\emph{β}, the vector of coefficients for the fixed effects, and
-\emph{b} a scale parameter.
-The goal is to maximize the evidence lower bound (ELBO) in order to
-approximate posterior distributions of the model parameters.
+Applies a mean-field Variational Bayes (VB) algorithm to infer the
+parameters of an accelerated failure time (AFT) survival model with
+right-censored  survival times following a log-logistic distribution.
 }
 \details{
+The log-logistic AFT model is specified with the parameters:
+\emph{β}, the vector of coefficients for the fixed effects, and
+\emph{b}, a scale parameter.
+The goal is to maximize the evidence lower bound (ELBO) in order to
+approximate posterior distributions of the model parameters.
+
 The prior distributions are:
 \itemize{
 \item \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} where
@@ -104,13 +119,8 @@ result <- survregVB(formula = example_formula,
                     data = example_data,
                     alpha_0 = 10,
                     omega_0 = 11,
-                    mu_0 = rep(0, 3),
+                    mu_0 = c(5,0,0),
                     v_0 = 0.2)
-# Access results
-result$ELBO
-result$iterations
-result$alpha
-result$omega
-result$Sigma
-result$mu
+# View results
+summary(result)
 }

@@ -17,13 +17,8 @@
 #' @returns The approximated log-likelihood \eqn{\log(p(D|\beta,b))}.
 #'
 #' @noRd
-expectation_log_likelihood <- function(y,
-                                       X,
-                                       delta,
-                                       alpha,
-                                       omega,
-                                       curr_mu,
-                                       expectation_b) {
+expectation_log_likelihood <- function(y, X, delta, alpha, omega,
+                                       curr_mu, expectation_b) {
   res <- 0
   for (i in 1:nrow(X)) {
     bz_i <- y[i] - sum(X[i, ] * curr_mu)
@@ -39,7 +34,7 @@ expectation_log_likelihood <- function(y,
 
   expectation_log_likelihood <- -r * expectation_log_b +
     expectation_inverse_b * res
-  return(expectation_log_likelihood)
+  expectation_log_likelihood
 }
 
 #' Calculates \eqn{\diff_\beta}, the difference between the expectations
@@ -57,13 +52,10 @@ expectation_log_likelihood <- function(y,
 #'  \eqn{\log(p(\beta))} and \eqn{\log(q(\beta))}.
 #'
 #' @noRd
-diff_beta <- function(mu_0,
-                      v_0,
-                      curr_mu,
-                      Sigma) {
+diff_beta <- function(mu_0, v_0, curr_mu, Sigma) {
   res <- sum(diag(Sigma)) + sum((curr_mu - mu_0) * (curr_mu - mu_0))
   diff_beta <- (-v_0 * res + log(det(Sigma))) / 2
-  return(diff_beta)
+  diff_beta
 }
 
 #' Calculate \eqn{\text{diff}_b}, the difference between the
@@ -81,10 +73,7 @@ diff_beta <- function(mu_0,
 #'  \log(q(b)).
 #'
 #' @noRd
-diff_b <- function(alpha_0,
-                   omega_0,
-                   alpha,
-                   omega) {
+diff_b <- function(alpha_0, omega_0, alpha, omega) {
   expectation_log_b <- expectation_log_b(alpha, omega)
   expectation_inverse_b <- expectation_inverse_b(alpha, omega)
 
@@ -92,7 +81,7 @@ diff_b <- function(alpha_0,
   omega_res <- (omega - omega_0) * expectation_inverse_b
 
   diff_b <- alpha_res + omega_res - alpha * log(omega)
-  return(diff_b)
+  diff_b
 }
 
 #' Calculates the variational Bayes convergence criteria, evidence lower
@@ -124,18 +113,8 @@ diff_b <- function(alpha_0,
 #'
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
-elbo <- function(y,
-                 X,
-                 delta,
-                 alpha_0,
-                 omega_0,
-                 mu_0,
-                 v_0,
-                 alpha,
-                 omega,
-                 curr_mu,
-                 Sigma,
-                 expectation_b) {
+elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
+                 curr_mu, Sigma, expectation_b) {
   expectation_log_likelihood <-
     expectation_log_likelihood(y, X, delta, alpha, omega, curr_mu,
                                expectation_b)
@@ -143,5 +122,5 @@ elbo <- function(y,
   diff_b <- diff_b(alpha_0, omega_0, alpha,  omega)
 
   elbo <- expectation_log_likelihood + diff_beta + diff_b
-  return(elbo)
+  elbo
 }

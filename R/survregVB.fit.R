@@ -1,7 +1,8 @@
-#' Variational Bayes inference of survival data for a log-logistic AFT
-#' model fitting function.
+#' Variational Bayesian Analysis of Survival Data Using a Log-Logistic
+#' Accelerated Failure Time Model
 #'
-#' Called by survregVB to do the actual parameter and ELBO computations.
+#' Called by \code{survregVB} to do the actual parameter and ELBO
+#' computations.
 #'
 #' @name survregVB.fit
 #'
@@ -29,14 +30,8 @@
 #' @returns A list containing results of the fit.
 #' @export
 #' @seealso \code{\link{survregVB}}
-survregVB.fit <- function(Y,
-                          X,
-                          alpha_0,
-                          omega_0,
-                          mu_0,
-                          v_0,
-                          max_iteration = 100,
-                          threshold = 0.0001) {
+survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
+                          max_iteration = 100, threshold = 0.0001) {
   y <- log(Y[,1])
   delta <- Y[,2]
   alpha <- alpha_star(alpha_0, delta)
@@ -52,16 +47,13 @@ survregVB.fit <- function(Y,
 
   while (!converged & iteration < max_iteration) {
     iteration <- iteration + 1
-    Sigma <-
-      sigma_star(y, X, delta, v_0, alpha, omega, curr_mu, expectation_b)
-    mu <-
-      mu_star(y, X, delta, mu_0, v_0, alpha, omega, curr_mu, Sigma,
+    Sigma <- sigma_star(y, X, delta, v_0, alpha, omega, curr_mu,
+                        expectation_b)
+    mu <- mu_star(y, X, delta, mu_0, v_0, alpha, omega, curr_mu, Sigma,
               expectation_b)
-    omega <-
-      omega_star(y, X, delta, omega_0, mu, expectation_b)
+    omega <- omega_star(y, X, delta, omega_0, mu, expectation_b)
 
-    elbo <-
-      elbo(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
+    elbo <- elbo(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
            curr_mu, Sigma, expectation_b)
 
     elbo_diff <- abs(elbo - curr_elbo)
@@ -77,20 +69,26 @@ survregVB.fit <- function(Y,
     curr_mu <- mu
   }
 
-  if (converged == FALSE) {
-    warning(
-      "The max iteration has been achieved and the algorithm has not converged\n"
-    )
-  }
+  mu <- c(mu)
+  names(mu) <- colnames(X)
+  dimnames(Sigma) <- list(colnames(X), colnames(X))
 
   return_list <- list(
-    ELBO = elbo,
+    ELBO = unname(elbo),
     alpha = alpha,
-    omega = omega,
+    omega = unname(omega),
     Sigma = Sigma,
     mu = mu,
     iterations = iteration
   )
 
-  return(return_list)
+  if (converged == FALSE) {
+    warning(
+      "The max iteration has been achieved and the algorithm has not
+      converged\n"
+    )
+    return_list$not_converged = TRUE
+  }
+
+  return_list
 }

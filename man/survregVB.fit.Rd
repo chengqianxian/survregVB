@@ -2,8 +2,8 @@
 % Please edit documentation in R/survregVB.fit.R
 \name{survregVB.fit}
 \alias{survregVB.fit}
-\title{Variational Bayes inference of survival data for a log-logistic AFT
-model fitting function.}
+\title{Variational Bayesian Analysis of Survival Data Using a Log-Logistic
+Accelerated Failure Time Model}
 \usage{
 survregVB.fit(
   Y,
@@ -46,7 +46,8 @@ iteration stops. (Default:0.0001)}
 A list containing results of the fit.
 }
 \description{
-Called by survregVB to do the actual parameter and ELBO computations.
+Called by \code{survregVB} to do the actual parameter and ELBO
+computations.
 }
 \details{
 This routine does no checking that the arguments are the
