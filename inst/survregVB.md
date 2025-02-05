@@ -211,11 +211,11 @@ fit <- survregVB(formula = Surv(time, infect) ~ trt + fev,
                  v_0 = 1, 
                  max_iteration = 10000, 
                  threshold = 0.0005)
-fit
 ```
 
 We can view summary statistics for the results of the fit via the
-`summary` function:
+`summary` function. We can adjust the significance level for the
+credible intervals by altering the `ci` argument:
 
 ``` r
 summary(fit, ci=0.9)
