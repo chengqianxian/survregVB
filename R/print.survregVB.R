@@ -10,7 +10,7 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
     cat("\nThe VB algorithm did not converge.\n")
   }
 
-  cat("\nELBO: ", round(x$ELBO, 3), "\n")
+  cat("\nELBO: ", round(x$ELBO, digits), "\n")
   cat("\nNumber of iterations: ", x$iterations, "\n")
 
   cat("\nPosterior distributions of Beta (regression coefficients):")
@@ -22,6 +22,11 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
 
   cat("\nPosterior distribution of b (scale parameter):")
   cat("\nAlpha: ", x$alpha, "  Omega: ", x$omega, "\n")
+
+  omit <- x$na.action
+  if (length(omit))
+    cat("\nn=", x$n, " (", naprint(omit), ")\n", sep="")
+  else cat("\nn=", x$n, "\n")
 
   invisible(x)
 }

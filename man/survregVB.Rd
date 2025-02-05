@@ -14,6 +14,7 @@ survregVB(
   omega_0,
   mu_0,
   v_0,
+  na.action,
   max_iteration = 100,
   threshold = 1e-04
 )
@@ -42,6 +43,10 @@ corresponding to the covariates.}
 variance) hyperparameter \eqn{v_0} of the prior multivariate normal
 prior distribution for \emph{β}.}
 
+\item{na.action}{A missing-data filter function, applied to the
+model.frame, after any subset argument has been used.
+(Default:\code{options()$na.action}).}
+
 \item{max_iteration}{The maximum number of iterations for the
 variational inference optimization. If reached, iteration stops.
 (Default:100)}
@@ -66,8 +71,11 @@ approximate posterior distribution of \emph{b}.
 approximate posterior distribution of \emph{β}.
 \item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
 the approximate posterior distribution of \emph{β}.
+\item \code{na.action}: A missing-data filter function, applied to
+the model.frame, after any subset argument has been used.
 \item \code{iterations}: The number of iterations performed by the
 VB algorithm: before converging or reaching \code{max_iteration}.
+\item \code{n}: The number of observations.
 \item \code{call}: The function call used to invoke the
 \code{survregVB} method.
 \item \code{not_converged}: A boolean indicating if the algorithm

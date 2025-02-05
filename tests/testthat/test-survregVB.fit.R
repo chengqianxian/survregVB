@@ -46,7 +46,8 @@ test_that("survregVB.fit", {
                    nrow = 3, ncol = 3, byrow = FALSE,
                    dimnames = list(NULL, NULL)),
     mu = c(0.05739117, 0.52733610, 0.84186673),
-    iterations = 8
+    iterations = 8,
+    n = 300
   )
   expect_equal(result, expected)
 
@@ -64,7 +65,8 @@ test_that("survregVB.fit", {
       nrow = 3, ncol = 3, byrow = FALSE,
       dimnames = list(NULL, NULL)),
     mu = c(-0.02694604, 0.58702326, 0.88834972),
-    iterations = 8
+    iterations = 8,
+    n = 300
   )
   expect_equal(result, expected)
 
@@ -82,7 +84,8 @@ test_that("survregVB.fit", {
     ), nrow = 3, ncol = 3, byrow = FALSE,
     dimnames = list(NULL, NULL)),
     mu = c(0.14789765, 0.44725114, 0.87358818),
-    iterations = 8
+    iterations = 8,
+    n = 300
   )
   expect_equal(result, expected)
 })

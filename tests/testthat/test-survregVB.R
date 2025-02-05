@@ -56,6 +56,7 @@ test_that("survregVB", {
     mu =  c("(Intercept)" = 4.11256275, "trt" = 0.41556503,
             "fev" = 0.0214483),
     iterations = 10,
+    n = 645,
     call = quote(survregVB(formula = Surv(time, infect) ~ trt + fev,
                            data = dnase, alpha_0 = alpha_0,
                            omega_0 = omega_0, mu_0 = mu_0, v_0 = v_0,

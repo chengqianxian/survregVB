@@ -8,23 +8,63 @@ vignette: >
 editor_options: 
   markdown: 
     wrap: 72
+bibliography: references.bib
+csl: apa.csl
 ---
 
 # Introduction
 
 This vignette demonstrates how to use the `survregVB` function from the
-`survregVB` package to fit a log-logistic Accelerated Failure Time (AFT)
-model. This function uses Variational Bayes (VB) to infer the model
-parameters by maximizing the Evidence Lower Bound (ELBO). We will use
-the `rhDNase` dataset from the `survival` package to illustrate the
-process. Specifically, we will show you how to prepare the data, set
+**survregVB** package to fit a log-logistic Accelerated Failure Time
+(AFT) model. This function uses Variational Bayes (VB) to infer the
+model parameters by maximizing the Evidence Lower Bound (ELBO). We will
+use the `rhDNase` dataset from the **survival** package to illustrate
+the process. Specifically, we will show you how to prepare the data, set
 prior distributions, fit the model, and interpret the results.
+
+## Background
+
+The goal of the `survregVB` function is to fit it a log-logistic AFT
+regression model of the following form for right-censored survival time
+$T_i$:
+
+$$
+log(T_i):=Y=X_i^T+bz_i
+$$
+
+where $X_i$ is column vector of $p-1$ covariates and a constant one
+(i.e. $X_i=(1,x_i1,...,x_i(p-1))^T$), $\beta$ is a vector of
+coefficients, $z_i$ is a random variable following a standard logistic
+distribution and $b$ is a scale parameter. In particular, `survregVB`
+uses a Bayesian framework to obtain the optimal variational densities of
+parameters $\beta$ and $b$ by maximizing the evidence based lower bound
+(ELBO) (@jordan1999; @blei2017). In order to do so, we assume prior
+distributions:
+
+-   $\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})$, with precision
+    $v_0=1/\sigma^2$, and
+
+-   $b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)$
+
+where $\mu_0,v_0,\alpha_0$ and $\omega_0$ are known hyperparameters
+(@nedelman2005; @faes2011).
+
+At the end of the model fitting process, the `survregVB` function
+obtains the approximated posterior distributions given as follows:
+
+-   $q^*(\beta)$ is a $N_p(\mu,\Sigma)$ density function, and
+
+-   $q^*(b)$ is an $\text{Inverse-Gamma}(\alpha,\omega)$ density
+    function,
+
+where the parameters $\mu,\Sigma,\alpha$ and $\omega$ are obtained via
+the VB algorithm (@xian2024).
 
 # Installation
 
-First, install the `survregVB` package if not already installed. Since
-we'll be using the `rhDNase` dataset, install the `survival` package as
-well:
+First, install the **survregVB** package if not already installed. Since
+we'll be using the `rhDNase` dataset, install the **survival** package
+as well:
 
 ```{r install, eval=FALSE}
 install.packages("survregVB")
@@ -48,7 +88,7 @@ rhDNase for the treatment of cystic fibrosis. The survival time, *T*, is
 defined as the time until the first pulmonary exacerbation. *T* is
 calculated as the difference between the date of entry into the study
 (`entry.dt`) and date of last follow-up (`end.dt`), with the follow-up
-period capped at 169 days. The covariates of interest are:
+period capped at 169 days (@survival). The covariates of interest are:
 
 -   Treatment (`trt`: 0=placebo, 1=rhDNase), and
 -   Forced expiratory volume (`fev`)
@@ -59,7 +99,8 @@ Here is a preview of the `rhDNase` dataset:
 head(rhDNase)
 ```
 
-Next, we need to prepare the data for modeling:
+Next, we need to prepare the data for modeling via the example code
+provided in the survival package (@survival)::
 
 ```{r}
 # Extract the first row for each subject
@@ -101,7 +142,7 @@ $${\log(T):=Y=\beta_0+\beta_1x_1+\beta_2x_2+bz}$$ where:
 -   $x_2$ is `fev`, and
 
 -   $z$ is a random variable following a standard logistic distribution
-    with scale parameter *b*.
+    with scale parameter *b (*\@xian2024).
 
 The event of interest is whether or not the subject experienced
 infection, `infect`.
@@ -111,8 +152,8 @@ infection, `infect`.
 We define a formula, where the left-hand side is a survival object
 returned by the `Surv` function, and the right-hand side consists of the
 covariates, `trt` and `infect`. The object returned by the `Surv`
-function consists of the time and event of interest. In this case, the
-time is `time` and the event of interest is `infect`:
+function consists of the time and event of interest (@survival). In this
+case, the time is `time` and the event of interest is `infect`:
 
 ```{r}
 formula <- Surv(time, infect) ~ trt + fev
@@ -123,36 +164,13 @@ formula <- Surv(time, infect) ~ trt + fev
 Next we define the prior distributions of the model parameters, *β* and
 *b*.
 
-The prior distribution of the scale parameter *b* is:
-
-$$
-b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)
-$$
-
-where:
-
--   $alpha_0$ is the shape, and
-
--   $\omega_0$ is the scale.
-
 We set hyperparameters $\alpha_0=501$ and $\omega_0=500$ to achieve a
-mean scale of one:
+mean scale of one.
 
 ```{r}
 alpha_0 <- 501
 omega_0 <- 500
 ```
-
-For the vector of coefficients for the covariants, *β*, the prior
-distribution is a multivariate normal distribution:
-
-$$\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})$$where:
-
--   $\mu_0$ is the vector of means,
-
--   $\sigma_0^2$ is the variance, and
-
--   $v_{0}=1/\sigma^2$ is the precision.
 
 The prior means for $\mu_0$ are chosen based on historical data and
 similar analyses on this type of data:
@@ -160,12 +178,9 @@ similar analyses on this type of data:
 -   for the intercept $\beta_0$, we use $\log(169/2)\approx4.4$ (half
     the follow-up period),
 
--   for $\beta_1$ (`trt`), we use $\log(1.28)\approx0.25$, and
+-   for $\beta_1$ (`trt`), we use $\log(1.28)\approx0.25$ (@shah1996)
 
--   for $\beta_2$ (`fev`) we use $\log(1.04)\approx0.04$.
-
-For the precision hyperparameter, we use a low precision $v_0=1$ to
-obtain a flat prior:
+-   for $\beta_2$ (`fev`) we use $\log(1.04)\approx0.04$ (@block2006)
 
 ```{r}
 mu_0 <- c(4.4, 0.25, 0.04)
@@ -179,12 +194,18 @@ the `rhDNase` dataset to the log-logistic AFT model using the
 `survregVB` function. The remaining parameters we need to set are:
 
 -   `max_iteration`: The maximum number of iterations the VB algorithm
-    will run for. In this case, we allow up to 10,000 iterations to
-    ensure that the algorithm has enough time to converge.
+    will run for with default 100. In this case, we allow up to 10,000
+    iterations to ensure that the algorithm has enough time to converge.
 
 -   `threshold`: The convergence threshold based on the change in the
-    ELBO between iterations. In this case, the algorithm will stop if
-    the change in ELBO becomes smaller than 0.0005.
+    ELBO between iterations. with default 0.0001 In this case, the
+    algorithm will stop if the change in ELBO becomes smaller than
+    0.0005.
+
+-   `na.action`: A filter function that specifies how to deal with
+    missing data in the provided data-set with default
+    `options()$na.action`. In this case, we set it to `na.omit` to omit
+    any missing values if present.
 
 ```{r}
 fit <- survregVB(formula = Surv(time, infect) ~ trt + fev, 
@@ -194,8 +215,8 @@ fit <- survregVB(formula = Surv(time, infect) ~ trt + fev,
                  mu_0 = c(4.4, 0.25, 0.04), 
                  v_0 = 1, 
                  max_iteration = 10000, 
-                 threshold = 0.0005)
-fit
+                 threshold = 0.0005,
+                 na.action = na.omit)
 ```
 
 If the VB algorithm reaches the maximum number of iterations before
@@ -212,39 +233,23 @@ survregVB(formula = Surv(time, infect) ~ trt + fev,
           threshold = 0.0005)
 ```
 
+# Interpreting the Results
+
 At the end of the model fitting process, the VB algorithm obtains the
-approximated posterior distributions of *b* and *β*.
+approximated posterior distributions of *b* and *β*:
 
-The approximated posterior distribution of the scale parameter *b* is:
+```{r}
+print(fit)
+```
 
-$$
-b\sim\text{Inverse-Gamma}(\alpha,\omega)
-$$
+## The `survregVB` Object
 
-where:
-
--   $\alpha$ is the shape, and
-
--   $\omega$ is the scale.
-
-The approximated posterior distribution of the vector of coefficients
-*β* is:
-
-$$
-\beta\sim N_p(\mu,\Sigma)
-$$
-
-where:
-
--   $\mu$ is the vector of means, and
-
--   $\Sigma$ is the covariance matrix of the coefficients.
-
-The `survregVB` function returns a list containing results including:
+The `survregVB` function returns a `survreg` object, which is a list
+containing the following results:
 
 -   `ELBO`: The value of the converged ELBO. If the algorithm does not
-    converge before reaching `max_iteration`, will be the value of ELBO
-    at the final iteration.
+    converge before reaching `max_iteration`, it will be the value of
+    ELBO at the final iteration.
 
 -   `alpha`: The final value of parameter $\alpha$ of the approximate
     posterior distribution of *b.*
@@ -261,9 +266,66 @@ The `survregVB` function returns a list containing results including:
 -   `iterations`: The number of iterations the algorithm performs before
     converging or reaching `max_iteration`.
 
+-   `n`: The number of observations.
+
+-   `call`: The function call used to invoke the `survregVB` method.
+
 We can access each item in the list using the `$` operator. For example,
 if we want to view the evidence lower bound (ELBO):
 
 ```{r}
 fit$ELBO
 ```
+
+We can also view summary statistics for the results of the fit via the
+`summary` function, which returns the following:
+
+-   `call`: The function call used to invoke the `survregVB` method.
+
+-   `alpha`: The parameter $\alpha$ of the approximate posterior
+    distribution of the scale parameter *b.*
+
+-   `omega`: The parameter $\omega$ of the approximate posterior
+    distribution of the scale parameter *b.*
+
+-   `mu`: The parameter $\mu$ of the approximate posterior distribution
+    of the regression coefficient *β*.
+
+-   `Sigma`: The parameter $\Sigma$ of the approximate posterior
+    distribution of the regression coefficient *β*.
+
+-   `iteration`: The number of iterations performed by the \#' VB
+    algorithm: before converging or reaching `max_iteration`.
+
+-   `n`: The number of observations.
+
+-   `coefficients`: A matrix with one row for each coefficient, and
+    columns containing:
+
+    -   `Value`: The estimated value of each of the regression
+        coefficients of *β*.
+
+    -   `Lower CI`: The lower bound of the credible interval associated
+        with the coefficient.
+
+    -   `Upper CI`: The upper bound of the credible interval associated
+        with the coefficient.
+
+-   `scale`: A vector containing:
+
+    -   `Value`: The estimated value of the scale parameter *b*.
+
+    -   `Lower CI`: The lower bound of the credible interval associated
+        with the scale parameter.
+
+    -   `Upper CI`: The upper bound of the credible interval associated
+        with the scale parameter.
+
+We can adjust the significance level for the credible intervals by
+altering the `ci` argument. The default is set to `0.95`.
+
+```{r}
+summary(fit, ci=0.9)
+```
+
+# References

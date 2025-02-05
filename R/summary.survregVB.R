@@ -24,9 +24,13 @@
 #'   \item \code{mu}: The updated vector of means \eqn{\mu} of the
 #'    approximate posterior distribution of the regression coefficients.
 #'   \item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
-#'    the approximate posterior distribution of regression coefficients.
+#'    the approximate posterior distribution of the regression
+#'    coefficients.
+#'   \item \code{na.action}: A missing-data filter function, applied to
+#'    the model.frame, after any subset argument has been used.
 #'   \item \code{iterations}: The number of iterations performed by the
 #'    VB algorithm: before converging or reaching \code{max_iteration}.
+#'   \item \code{n}: The number of observations.
 #'   \item \code{coefficients}: A matrix with one row for each
 #'    coefficient, and columns containing:
 #'   \itemize{
@@ -70,7 +74,7 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
   names(scale) <- c("Value", "Lower CI", "Upper CI")
 
   x <- object[match(c('call', 'ELBO', 'alpha', 'omega', 'mu', 'Sigma',
-                      'iterations'),
+                      'na.action', 'iterations', 'n'),
                     names(object), nomatch=0)]
   x <- c(x, list(coefficients=coefficients, scale=scale))
 

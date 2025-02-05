@@ -26,6 +26,9 @@
 #' @param v_0 A numeric scalar specifying the precision (inverse
 #'  variance) hyperparameter \eqn{v_0} of the prior multivariate normal
 #'  prior distribution for \emph{β}.
+#' @param na.action A missing-data filter function, applied to the
+#'  model.frame, after any subset argument has been used.
+#'  (Default:\code{options()$na.action}).
 #' @param max_iteration The maximum number of iterations for the
 #'  variational inference optimization. If reached, iteration stops.
 #'  (Default:100)
@@ -48,8 +51,11 @@
 #'    approximate posterior distribution of \emph{β}.
 #'   \item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
 #'    the approximate posterior distribution of \emph{β}.
+#'   \item \code{na.action}: A missing-data filter function, applied to
+#'    the model.frame, after any subset argument has been used.
 #'   \item \code{iterations}: The number of iterations performed by the
 #'    VB algorithm: before converging or reaching \code{max_iteration}.
+#'   \item \code{n}: The number of observations.
 #'   \item \code{call}: The function call used to invoke the
 #'    \code{survregVB} method.
 #'   \item \code{not_converged}: A boolean indicating if the algorithm
@@ -101,7 +107,8 @@
 #'
 #' @export
 survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
-                       max_iteration = 100, threshold = 0.0001) {
+                       na.action, max_iteration = 100,
+                       threshold = 0.0001) {
   Call <- match.call()    # save a copy of the call
 
   if (missing(formula)) stop("a formula argument is required")
@@ -120,7 +127,8 @@ survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
   else
     terms(formula, data = data)
 
-  indx <- match(c("formula", "data"), names(Call), nomatch=0)
+  indx <- match(c("formula", "data", "na.action"),
+                names(Call), nomatch=0)
   if (indx[1] ==0) stop("A formula argument is required")
   temp <- Call[c(1,indx)]  # only keep the arguments we wanted
   temp[[1L]] <- quote(stats::model.frame)   # change the function called
@@ -143,6 +151,9 @@ survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
   X <- model.matrix(Terms, m)
   if (!all(is.finite(X)) || !all(is.finite(Y)))
     stop("data contains an infinite predictor")
+
+  na.action <- attr(m, "na.action")
+  if (length(na.action)) fit$na.action <- na.action
 
   result <- survregVB.fit(Y, X, alpha_0, omega_0, mu_0, v_0,
                           max_iteration, threshold)

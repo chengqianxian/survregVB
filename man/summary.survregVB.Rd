@@ -29,9 +29,13 @@ approximate posterior distribution of the scale parameter.
 \item \code{mu}: The updated vector of means \eqn{\mu} of the
 approximate posterior distribution of the regression coefficients.
 \item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
-the approximate posterior distribution of regression coefficients.
+the approximate posterior distribution of the regression
+coefficients.
+\item \code{na.action}: A missing-data filter function, applied to
+the model.frame, after any subset argument has been used.
 \item \code{iterations}: The number of iterations performed by the
 VB algorithm: before converging or reaching \code{max_iteration}.
+\item \code{n}: The number of observations.
 \item \code{coefficients}: A matrix with one row for each
 coefficient, and columns containing:
 \itemize{

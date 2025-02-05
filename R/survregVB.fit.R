@@ -34,6 +34,7 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
                           max_iteration = 100, threshold = 0.0001) {
   y <- log(Y[,1])
   delta <- Y[,2]
+  n <- nrow(X)
   alpha <- alpha_star(alpha_0, delta)
   omega <- omega_0
   mu <- mu_0
@@ -79,7 +80,8 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
     omega = unname(omega),
     Sigma = Sigma,
     mu = mu,
-    iterations = iteration
+    iterations = iteration,
+    n = n
   )
 
   if (converged == FALSE) {
