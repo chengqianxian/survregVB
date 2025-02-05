@@ -17,10 +17,10 @@ log-logistic, log-normal or gamma. In particular, the log-logistic
 distribution is suitable for modelling a wide variety of survival data
 (@rivas-lópez2022). In cases where correlated survival data arises from
 clusters of individuals with shared environmental factors, a shared
-frailty AFT model can be used to account for correlations amongst
-survival data (@hougaard1995; @hanagal2011; @gorfine2023). Since the
-choice of distribution is not critical, the log-logistic AFT model can
-be used (@lambert2004).
+frailty AFT model can be used to account for correlations among survival
+data (@hougaard1995; @hanagal2011; @gorfine2023). Since the choice of
+distribution is not critical, the log-logistic AFT model can be used
+(@lambert2004).
 
 Bayesian inference is a technique used to derive the posterior
 distribution of model parameters based on Bayes’ theorem. Markov Chain

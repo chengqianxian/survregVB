@@ -349,7 +349,7 @@ The prior distributions are:
 
 -   $b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)$
 
-The aproximate posterior distributions are:
+The approximate posterior distributions are:
 
 -   $q^*(\beta)$ is a $N_p(\mu,\Sigma)$ density function, and
 
