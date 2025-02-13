@@ -41,6 +41,7 @@ achieving \code{max_iteration}.
 The following components are present if \code{survregVB} was called with
 the cluster argument (shared frailty):
 \itemize{
+\item \code{clustered}: A boolean indicating that the model was clustered.
 \item \code{tau}: The updated vector of variance \eqn{\tau} of the
 approximate posterior distribution of \eqn{\gamma_i} for \eqn{i=1,...,K}
 clusters.

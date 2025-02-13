@@ -66,9 +66,16 @@ First, install the **survregVB** package if not already installed. Since
 we'll be using the `rhDNase` dataset, install the **survival** package
 as well:
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 ```{r install, eval=FALSE}
-#install.packages("survregVB")
-#install.packages("survival")
+install.packages("survregVB")
+install.packages("survival")
 ```
 
 # Basic Usage
@@ -79,6 +86,8 @@ function:
 ```{r setup}
 #library(survregVB)
 library(survival)
+library(devtools)
+load_all()
 ```
 
 # Preparing the Data

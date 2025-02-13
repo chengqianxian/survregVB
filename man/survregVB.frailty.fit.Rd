@@ -41,8 +41,8 @@ of \eqn{\sigma_\gamma^2}.}
 \item{eta_0}{Hyperparameter \eqn{\eta_0} of the prior distribution of
 \eqn{\sigma_\gamma^2}.}
 
-\item{cluster}{A vector indicating the group membership for each observation,
-where each cluster is assumed to have shared frailty.}
+\item{cluster}{A named list indicating the group membership for each
+observation, where each cluster is assumed to have shared frailty.}
 
 \item{max_iteration}{The maximum number of iterations for the variational
 inference optimization. If reached, iteration stops. (Default:100)}

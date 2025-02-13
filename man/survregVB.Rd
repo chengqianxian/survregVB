@@ -73,12 +73,12 @@ parameters of an accelerated failure time (AFT) survival model with
 right-censored  survival times following a log-logistic distribution.
 }
 \details{
-\emph{β}, the vector of coefficients for the fixed effects, and \emph{b},
-a scale parameter.
-If shared frailty is introduced, the correlated AFT model is specified
-with the additional parameter:
-\eqn{\sigma_\gamma^2}, a random intercept for the \eqn{i^{th}} cluster
-for \eqn{i=1,...,K} clusters.
+The log-logistic AFT model without shared frailty is specified with the
+parameters:
+\emph{β}, the vector of coefficients for the fixed effects, and
+\emph{b}, a scale parameter.
+With shared frailty, the model is specified with an additional parameter:
+\eqn{\sigma^2_\gamma}, the random intercept.
 The goal is to maximize the evidence lower bound (ELBO) in order to
 approximate posterior distributions of the model parameters.
 

@@ -252,7 +252,7 @@ Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
-sigma_star <- function(y, X, delta, alpha, omega, mu, tau, lambda, eta,
+sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda, eta,
                        expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   expectation_inverse_b_2 <- expectation_inverse_b_2(alpha, omega)
