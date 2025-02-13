@@ -18,6 +18,12 @@ print.summary.survregVB <- function(x, digits =
 
   cat("\nScale Parameter:\n")
   print(x$scale, digits = digits)
+
+  if (!is.null(x$clustered)) {
+    cat("\nRandom Intercept:\n")
+    print(x$intercept, digits = digits)
+  }
+
   omit <- x$na.action
   if (length(omit))
     cat("\nn=", x$n, " (", naprint(omit), ")\n", sep="")

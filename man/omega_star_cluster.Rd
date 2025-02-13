@@ -2,11 +2,10 @@
 % Please edit documentation in R/parameters.R
 \name{omega_star_cluster}
 \alias{omega_star_cluster}
-\title{Calculates parameter \eqn{\omega^*} of the approximate posterior
-distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.frailty.fit}.}
+\title{Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the evidence
+based lower bound (ELBO) in \code{survregVB.frailty.fit}.}
 \usage{
-omega_star_cluster(y, X, delta, omega_0, mu, tau, expectation_b, cluster_index)
+omega_star_cluster(y, X, delta, omega_0, mu, tau, expectation_b, cluster)
 }
 \arguments{
 \item{y}{A vector of observed log-transformed survival times.}
@@ -15,23 +14,27 @@ omega_star_cluster(y, X, delta, omega_0, mu, tau, expectation_b, cluster_index)
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior
-distribution of \emph{b}.}
+\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior distribution
+of \emph{b}.}
 
-\item{mu}{Parameter \eqn{\mu^*} of the approximate posterior
-distribution of \emph{β}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+
+\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(sigma^2_{\gamma})} for
+all clusters.}
 
 \item{expectation_b}{The expected value of b.}
+
+\item{cluster}{A numeric vector indicating the cluster assignment for
+each observation.}
 }
 \value{
-Parameter \eqn{\omega^*} of the approximate posterior
-distribution of \emph{b}.
+Parameter \eqn{\omega^*} of the approximate posterior distribution
+of \emph{b}.
 }
 \description{
-Calculates parameter \eqn{\omega^*} of the approximate posterior
-distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.frailty.fit}.
+Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the evidence
+based lower bound (ELBO) in \code{survregVB.frailty.fit}.
 }
 \seealso{
-\code{\link{survregVB.fit}}
+\code{\link{survregVB.frailty.fit}}
 }

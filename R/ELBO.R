@@ -13,8 +13,8 @@
 #' @returns The approximated log-likelihood \eqn{\log(p(D|\beta,b))}.
 #'
 #' @noRd
-expectation_log_likelihood <- function(y, X, delta, alpha, omega,
-                                       curr_mu, expectation_b) {
+expectation_log_likelihood <- function(y, X, delta, alpha, omega, curr_mu,
+                                       expectation_b) {
   res <- 0
   for (i in 1:nrow(X)) {
     bz_i <- y[i] - sum(X[i, ] * curr_mu)
@@ -176,6 +176,10 @@ elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
 #'  \emph{β}.
 #' @param v_0 Precision hyperparameter \eqn{v_0} of the prior
 #'  distribution of \emph{β}.
+#' @param lambda_0 Hyperparameter \eqn{\lambda_0} of the prior distribution
+#'  of \eqn{sigma^2_{\gamma}}.
+#' @param eta_0 Hyperparameter \eqn{\eta_0} of the prior distribution of
+#'  \eqn{sigma^2_{\gamma}}.
 #' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
 #' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 #' @param mu The current value of the parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
@@ -194,9 +198,9 @@ elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
 #'
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
-elbo_cluster <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha,
-                         omega, mu, Sigma, tau, sigma, lambda, eta,
-                         expectation_b, cluster) {
+elbo_cluster <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, lambda_0,
+                         eta_0, alpha, omega, mu, Sigma, tau, sigma, lambda,
+                         eta, expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   expectation_log_likelihood <-
     expectation_log_likelihood(y_cluster, X, delta, alpha, omega, mu,

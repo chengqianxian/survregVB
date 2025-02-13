@@ -67,8 +67,8 @@ we'll be using the `rhDNase` dataset, install the **survival** package
 as well:
 
 ```{r install, eval=FALSE}
-install.packages("survregVB")
-install.packages("survival")
+#install.packages("survregVB")
+#install.packages("survival")
 ```
 
 # Basic Usage
@@ -77,7 +77,7 @@ Once installed, you can load both libraries with the `library()`
 function:
 
 ```{r setup}
-library(survregVB)
+#library(survregVB)
 library(survival)
 ```
 

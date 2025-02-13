@@ -21,8 +21,8 @@
 #'  of \eqn{\sigma_\gamma^2}.
 #' @param eta_0 Hyperparameter \eqn{\eta_0} of the prior distribution of
 #'  \eqn{\sigma_\gamma^2}.
-#' @param cluster A vector indicating the group membership for each observation,
-#'  where each cluster is assumed to have shared frailty.
+#' @param cluster A named list indicating the group membership for each
+#'  observation, where each cluster is assumed to have shared frailty.
 #' @param max_iteration The maximum number of iterations for the variational
 #'  inference optimization. If reached, iteration stops. (Default:100)
 #' @param threshold The convergence threshold for the evidence based lower
@@ -38,7 +38,7 @@
 #' and \eqn{j=1,...,n_i}, the shared-frailty log-logistic AFT model is specified
 #' as follows:
 #' \eqn{\log(T_{ij})=\gamma_i+X_{ij}^T\beta+b\epsilon_{ij}}, where
-#' \eqn{X_{ij} is a column vector of length \eqn{p, p\ge2} containing \eqn{p-1}
+#' \eqn{X_{ij}} is a column vector of length \eqn{p, p\ge2} containing \eqn{p-1}
 #' covariates and a constant one to incorporate the intercept
 #' (i.e., \eqn{X_i=(1,x_{ij1},...,x_{ij(p-1)})^T}),
 #' \emph{β} is the corresponding vector of coefficients for the fixed effects,
@@ -49,12 +49,13 @@
 #'
 #' @export
 #' @seealso \code{\link{survregVB}}
-survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
-                                  lambda_0, eta_0, cluster,
-                                  max_iteration = 100,
+survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
+                                  eta_0, cluster, max_iteration = 100,
                                   threshold = 0.0001) {
   y <- log(Y[,1])
   delta <- Y[,2]
+  cluster_names <- unique(cluster)
+  cluster <- as.numeric(as.factor(cluster))
   n <- nrow(X)
   p <- ncol(X)
   K <- length(unique(cluster))
@@ -87,9 +88,8 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
     eta <- eta_star(eta_0, tau, sigma)
 
     elbo <- elbo_cluster(y, X, delta, alpha_0, omega_0, mu_0, v_0,
-                         alpha, omega, mu, Sigma,
-                         tau, sigma, lambda, eta,
-                         expectation_b, cluster)
+                         lambda_0, eta_0, alpha, omega, mu, Sigma, tau,
+                         sigma, lambda, eta, expectation_b, cluster)
 
     elbo_diff <- abs(elbo - curr_elbo)
     mu_diff <- sum(abs(mu - curr_mu))
@@ -109,8 +109,11 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
   mu <- c(mu)
   names(mu) <- colnames(X)
   dimnames(Sigma) <- list(colnames(X), colnames(X))
+  names(tau) <- cluster_names
+  names(sigma) <- cluster_names
 
   return_list <- list(
+    clustered = TRUE,
     ELBO = unname(elbo),
     alpha = alpha,
     omega = unname(omega),
@@ -121,8 +124,7 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
     lambda = lambda,
     eta = eta,
     iterations = iteration,
-    n = n,
-    K = K
+    n = n
   )
 
   if (converged == FALSE) {

@@ -12,22 +12,21 @@ survregVB(
   omega_0,
   mu_0,
   v_0,
+  lambda_0,
+  eta_0,
   na.action,
+  cluster,
   max_iteration = 100,
-  threshold = 1e-04,
-  cluster = NULL,
-  lambda_0 = NULL,
-  eta_0 = NULL
+  threshold = 1e-04
 )
 }
 \arguments{
-\item{formula}{A formula object, with the response on the left of a
-\code{~} operator, and the covariates on the right. The response must be
-a survival object of type \code{right}, as returned by the \code{Surv}
-function.}
+\item{formula}{A formula object, with the response on the left of a \code{~}
+operator, and the covariates on the right. The response must be a survival
+object of type \code{right}, as returned by the \code{Surv} function.}
 
-\item{data}{A \code{data.frame} in which to interpret the variables named
-in the formula`.}
+\item{data}{A \code{data.frame} in which to interpret the variables named in
+the formula`.}
 
 \item{alpha_0}{A numeric scalar specifying the shape hyperparameter
 \eqn{\alpha_0} of the prior Inverse-Gamma distribution for \emph{b}.}
@@ -40,31 +39,33 @@ in the formula`.}
 intercept (\eqn{\beta_0}) and the coefficients (\eqn{\beta_i})
 corresponding to the covariates.}
 
-\item{v_0}{A numeric scalar specifying the precision (inverse
-variance) hyperparameter \eqn{v_0} of the prior multivariate normal
-prior distribution for \emph{β}.}
+\item{v_0}{A numeric scalar specifying the precision (inverse variance)
+hyperparameter \eqn{v_0} of the prior multivariate normal prior
+distribution for \emph{β}.}
+
+\item{lambda_0}{Hyperparameter \eqn{\lambda_0} of the prior distribution
+of \eqn{\sigma_\gamma^2}.}
+
+\item{eta_0}{Hyperparameter \eqn{\eta_0} of the prior distribution of
+\eqn{\sigma_\gamma^2}.}
 
 \item{na.action}{A missing-data filter function, applied to the
-model.frame, after any subset argument has been used.
+\code{model.frame}, after any subset argument has been used.
 (Default:\code{options()$na.action}).}
 
-\item{max_iteration}{The maximum number of iterations for the
-variational inference optimization. If reached, iteration stops.
-(Default:100)}
-
-\item{threshold}{The convergence threshold for the evidence based
-lower bound (ELBO) optimization. If the difference between the
-current and previous ELBO's is smaller than this threshold,
-iteration stops. (Default:0.0001)}
-
 \item{cluster}{An optional variable which clusters the observations to
-introduce shared frailty.}
+introduce shared frailty for correlated survival data.}
 
-\item{lambda_0}{}
+\item{max_iteration}{The maximum number of iterations for the variational
+inference optimization. If reached, iteration stops. (Default:100)}
+
+\item{threshold}{The convergence threshold for the evidence based lower
+bound (ELBO) optimization. If the difference between the current and
+previous ELBO's is smaller than this threshold, iteration stops.
+(Default:0.0001)}
 }
 \value{
-An object of class \code{survregVB}, \code{survregVB.object}
-or \code{survregVB.frailty.object}.
+An object of class \code{survregVB}.
 }
 \description{
 Applies a mean-field Variational Bayes (VB) algorithm to infer the
@@ -72,27 +73,31 @@ parameters of an accelerated failure time (AFT) survival model with
 right-censored  survival times following a log-logistic distribution.
 }
 \details{
-\emph{β}, the vector of coefficients for the fixed effects, and
-\emph{b}, a scale parameter.
+\emph{β}, the vector of coefficients for the fixed effects, and \emph{b},
+a scale parameter.
 If shared frailty is introduced, the correlated AFT model is specified
 with the additional parameter:
-\eqn{\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)},
-a random intercept for the \eqn{i^{th}} cluster for \eqn{i=1,...,K}
-clusters.
+\eqn{\sigma_\gamma^2}, a random intercept for the \eqn{i^{th}} cluster
+for \eqn{i=1,...,K} clusters.
 The goal is to maximize the evidence lower bound (ELBO) in order to
 approximate posterior distributions of the model parameters.
 
 The prior distributions are:
 \itemize{
-\item \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} where
-precision, \eqn{v_{0}=1/\sigma^2}, and
-\item \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)}.
+\item \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} where precision,
+\eqn{v_{0}=1/\sigma^2},
+\item \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)},
+\item \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)},
+and
+\item \eqn{\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}.
 }
 
 The approximate posterior distributions are:
 \itemize{
-\item \eqn{\beta\sim N_p(\mu,\Sigma)}, and
-\item \eqn{q^*(b)\sim\text{Inverse-Gamma}(\alpha,\omega)}.
+\item \eqn{\beta\sim N_p(\mu,\Sigma)},
+\item \eqn{q^*(b)\sim\text{Inverse-Gamma}(\alpha,\omega)},
+\item \eqn{q^*(\gamma_i)~N_l(\tau^*_i,\sigma^{2*}_i))}, and
+\item \eqn{q^*(\sigma^2_\gamma)\sim\text{Inverse-Gamma}(\lambda^*,\eta^*)}.
 }
 }
 \examples{
@@ -101,22 +106,32 @@ example_data <- data.frame(
   time = c(100, 120, 90, 35, 140),
   status = c(1, 0, 1, 0, 1),
   age = c(60, 55, 45, 70, 50),
-  gender = factor(c("M", "F", "M", "M", "F"))
+  gender = c("M", "F", "M", "M", "F"),
+  group = c(1, 1, 2, 3, 3)
 )
 # Formula for the survival model
 example_formula <- survival::Surv(time, status) ~ age + gender
 # Call the survregVB function
-result <- survregVB(formula = example_formula,
-                    data = example_data,
-                    alpha_0 = 10,
-                    omega_0 = 11,
-                    mu_0 = c(5,0,0),
-                    v_0 = 0.2)
+result1 <- survregVB(formula = example_formula,
+                     data = example_data,
+                     alpha_0 = 10,
+                     omega_0 = 11,
+                     mu_0 = c(5,0,0),
+                     v_0 = 0.2)
 # View results
-summary(result)
+summary(result1)
+
+# Call the survregVB function with shared frailty
+result2 <- survregVB(formula = example_formula,
+                     data = example_data,
+                     alpha_0 = 10,
+                     omega_0 = 11,
+                     mu_0 = c(5,0,0),
+                     v_0 = 0.2,
+                     lambda_0 = 3,
+                     eta_0 = 2,
+                     cluster = group)
 }
 \seealso{
 \code{\link{survregVB.object}}
-
-\code{\link{survregVB.frailty.object}}
 }

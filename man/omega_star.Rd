@@ -2,9 +2,8 @@
 % Please edit documentation in R/parameters.R
 \name{omega_star}
 \alias{omega_star}
-\title{Calculates parameter \eqn{\omega^*} of the approximate posterior
-distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.fit}.}
+\title{Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the evidence
+based lower bound (ELBO) in \code{survregVB.fit}.}
 \usage{
 omega_star(y, X, delta, omega_0, mu, expectation_b)
 }
@@ -15,22 +14,20 @@ omega_star(y, X, delta, omega_0, mu, expectation_b)
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior
-distribution of \emph{b}.}
+\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior distribution
+of \emph{b}.}
 
-\item{mu}{Parameter \eqn{\mu^*} of the approximate posterior
-distribution of \emph{β}.}
+\item{mu}{Parameter \eqn{\mu^*} of the approximate posterior distribution
+of \emph{β}. \eqn{q}}
 
 \item{expectation_b}{The expected value of b.}
 }
 \value{
-Parameter \eqn{\omega^*} of the approximate posterior
-distribution of \emph{b}.
+Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 }
 \description{
-Calculates parameter \eqn{\omega^*} of the approximate posterior
-distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.fit}.
+Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the evidence
+based lower bound (ELBO) in \code{survregVB.fit}.
 }
 \seealso{
 \code{\link{survregVB.fit}}

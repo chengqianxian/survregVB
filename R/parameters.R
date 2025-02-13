@@ -102,8 +102,7 @@ mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma, expectation
 #' @importFrom matlib inv
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
-Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu,
-                       expectation_b) {
+Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu, expectation_b) {
   p <- ncol(X)
   X_matrix <- matrix(0, nrow = p, ncol = p)
   for (i in 1:nrow(X)) {
@@ -165,7 +164,8 @@ get_cluster_y <- function(y, tau, cluster) {
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
-omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b, cluster) {
+omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
+                               cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   res <- 0
   for (i in 1:nrow(X)) {
@@ -252,7 +252,7 @@ Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
-sigma_star <- function(y, X, delta, alpha, omega, mu, tau,  lambda, eta,
+sigma_star <- function(y, X, delta, alpha, omega, mu, tau, lambda, eta,
                        expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   expectation_inverse_b_2 <- expectation_inverse_b_2(alpha, omega)
@@ -286,9 +286,9 @@ sigma_star <- function(y, X, delta, alpha, omega, mu, tau,  lambda, eta,
 #' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
 #' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 #' @param mu The parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param tau Parameter \eqn{\tau^*} of
-#'  \eqn{q^*(\gamma)} for all clusters.
-#' @param Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)}} for all clusters.
+#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
+#' @param sigma Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all
+#'  clusters.
 #' @param expectation_b The expected value of b.
 #' @param cluster A numeric vector indicating the cluster assignment for
 #'  each observation.
@@ -319,7 +319,7 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
     zeta_k <- zeta[cluster == k]
     rho_k <- rho[cluster == k]
     y_k <- y[cluster == k]
-    X_k <- X[cluster == k, ]
+    X_k <- X[cluster == k, , drop = FALSE]
     tau_k <- 0
 
     for (i in 1:nrow(X_k)) {

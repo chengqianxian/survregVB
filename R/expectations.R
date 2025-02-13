@@ -1,7 +1,6 @@
 ## Expectation Calculations ============================================
 
-#' Calculates the expected value of
-#' \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
+#' Calculates the expected value of an Inverse-Gamma distribution.
 #'
 #' @param alpha Parameter \eqn{\alpha^*} of the distribution of
 #'  \emph{b}.

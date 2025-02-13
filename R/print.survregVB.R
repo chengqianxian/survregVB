@@ -14,14 +14,25 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
   cat("\nNumber of iterations: ", x$iterations, "\n")
 
   cat("\nPosterior distributions of Beta (regression coefficients):")
-  cat("\nMu:\n")
+  cat("\nmu:\n")
   print(x$mu, digits = digits)
   cat("\nSigma:\n")
   printCoefmat(x$Sigma, digits = digits, signif.stars=signif.stars,
                P.values=TRUE, has.Pvalue=TRUE)
 
   cat("\nPosterior distribution of b (scale parameter):")
-  cat("\nAlpha: ", x$alpha, "  Omega: ", x$omega, "\n")
+  cat("\nalpha: ", x$alpha, "  omega: ", x$omega, "\n")
+
+  if (!is.null(x$clustered)) {
+    cat("\nPosterior distribution of sigma_gamma squared (random intercept):")
+    cat("\nlamda: ", x$lambda, "  eta: ", x$eta, "\n")
+
+    cat("\nPosterior distribution of gamma (variance of the random intercept):")
+    cat("\ntau:\n")
+    print(x$tau, digits = digits)
+    cat("\nsigma squared:\n")
+    print(x$sigma, digits = digits)
+  }
 
   omit <- x$na.action
   if (length(omit))

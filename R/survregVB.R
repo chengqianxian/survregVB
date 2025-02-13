@@ -42,13 +42,12 @@
 #' @returns An object of class \code{survregVB}.
 #'
 #' @details
-#'
-#' \emph{β}, the vector of coefficients for the fixed effects, and \emph{b},
-#' a scale parameter.
-#' If shared frailty is introduced, the correlated AFT model is specified
-#' with the additional parameter:
-#' \eqn{\sigma_\gamma^2}, a random intercept for the \eqn{i^{th}} cluster
-#' for \eqn{i=1,...,K} clusters.
+#' The log-logistic AFT model without shared frailty is specified with the
+#' parameters:
+#' \emph{β}, the vector of coefficients for the fixed effects, and
+#' \emph{b}, a scale parameter.
+#' With shared frailty, the model is specified with an additional parameter:
+#' \eqn{\sigma^2_\gamma}, the random intercept.
 #' The goal is to maximize the evidence lower bound (ELBO) in order to
 #' approximate posterior distributions of the model parameters.
 #'
@@ -72,7 +71,8 @@
 #'   time = c(100, 120, 90, 35, 140),
 #'   status = c(1, 0, 1, 0, 1),
 #'   age = c(60, 55, 45, 70, 50),
-#'   gender = factor(c("M", "F", "M", "M", "F"))
+#'   gender = c("M", "F", "M", "M", "F"),
+#'   group = c(1, 1, 2, 3, 3)
 #' )
 #' # Formula for the survival model
 #' example_formula <- survival::Surv(time, status) ~ age + gender
@@ -86,8 +86,6 @@
 #' # View results
 #' summary(result1)
 #'
-#' # Data frame containing correlated survival data
-#' example_data$group <- c(1, 1, 2, 2, 3)
 #' # Call the survregVB function with shared frailty
 #' result2 <- survregVB(formula = example_formula,
 #'                      data = example_data,
@@ -103,18 +101,18 @@
 #' @export
 #' @seealso \code{\link{survregVB.object}}
 survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
-                        lambda_0, eta_0, na.action, cluster = NULL,
-                        max_iteration = 100, threshold = 0.0001) {
+                       lambda_0, eta_0, na.action, cluster,
+                       max_iteration = 100, threshold = 0.0001) {
   Call <- match.call()    # save a copy of the call
 
   if (missing(formula)) stop("a formula argument is required")
   if (is.list(formula))
     stop("formula argument cannot be a list")
 
-  defined <- if (!is.null(cluster))
-    c("alpha_0", "omega_0", "mu_0", "v_0", "lambda_0", "eta_0")
-  else
+  defined <- if (missing(cluster))
     c("alpha_0", "omega_0", "mu_0", "v_0")
+  else
+    c("alpha_0", "omega_0", "mu_0", "v_0", "lambda_0", "eta_0")
   passed <- names(as.list(Call)[-1])
   if (any(!defined %in% passed))
     stop(paste("Missing value(s) for", paste(setdiff(defined, passed),
@@ -151,8 +149,8 @@ survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
     stop("data contains an infinite predictor")
 
   cluster <- model.extract(m, "cluster")
+
   if (length(cluster)) {
-    cluster <- as.numeric(as.factor(cluster))
     result <- survregVB.frailty.fit(Y, X, alpha_0, omega_0, mu_0, v_0,
                                     lambda_0, eta_0, cluster,
                                     max_iteration, threshold)
@@ -209,6 +207,7 @@ survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
 #' The following components are present if \code{survregVB} was called with
 #' the cluster argument (shared frailty):
 #' \itemize{
+#'   \item \code{clustered}: A boolean indicating that the model was clustered.
 #'   \item \code{tau}: The updated vector of variance \eqn{\tau} of the
 #'    approximate posterior distribution of \eqn{\gamma_i} for \eqn{i=1,...,K}
 #'    clusters.

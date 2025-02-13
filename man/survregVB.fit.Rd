@@ -52,7 +52,7 @@ proper length or type.
 }
 \details{
 For right-censored survival time \eqn{T_i} of the \eqn{i_{th}} subject
-in the sample, \eqn{i=1,...,n}, the log-logistic AFT model is specified
+in a sample, \eqn{i=1,...,n}, the log-logistic AFT model is specified
 as follows:
 \eqn{\log(T_i)=X_i^T\beta+bz_i}, where
 \eqn{X_i} is a column vector of length \eqn{p, p\ge2} containing

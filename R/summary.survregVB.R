@@ -1,3 +1,14 @@
+#' Produces a summary table containing the value and confidence intervals
+#' for an Inverse-Gamma posterior distribution.
+#'
+#' @param shape The shape parameter of the distribution.
+#' @param scale The scale parameter of the distribution.
+summary_table <- function(shape, scale) {
+  summary_table <- c(expectation_b(shape, scale), b_ci(shape, scale))
+  names(summary_table) <- c("Value", "Lower CI", "Upper CI")
+  summary_table
+}
+
 #' Summary for Variational Bayes log-logistic AFT models.
 #'
 #' Produces a summary of a fitted Variational Bayes Parametric Survival
@@ -70,13 +81,21 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
 
   alpha <- object$alpha
   omega <- object$omega
-  scale <- c(expectation_b(alpha, omega), b_ci(alpha, omega))
-  names(scale) <- c("Value", "Lower CI", "Upper CI")
+  scale <- summary_table(object$alpha, object$omega)
 
-  x <- object[match(c('call', 'ELBO', 'alpha', 'omega', 'mu', 'Sigma',
-                      'na.action', 'iterations', 'n'),
-                    names(object), nomatch=0)]
-  x <- c(x, list(coefficients=coefficients, scale=scale))
+  if (!is.null(object$clustered)) {
+    intercept <- summary_table(object$lambda, object$eta)
+    x <- object[match(c('clustered', 'call', 'ELBO', 'alpha', 'omega',
+                        'mu', 'Sigma', 'tau', 'sigma', 'lambda', 'eta',
+                        'na.action', 'iterations', 'n'),
+                      names(object), nomatch=0)]
+    x <- c(x, list(coefficients=coefficients, scale=scale, intercept=intercept))
+  }
+  else {
+    x <- object[match(c('call', 'ELBO', 'alpha', 'omega', 'mu', 'Sigma',
+                        'na.action', 'iterations', 'n'), names(object), nomatch=0)]
+    x <- c(x, list(coefficients=coefficients, scale=scale))
+  }
 
   class(x) <- 'summary.survregVB'
   x

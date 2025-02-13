@@ -2,26 +2,23 @@
 % Please edit documentation in R/parameters.R
 \name{alpha_star}
 \alias{alpha_star}
-\title{Calculates parameter \eqn{\alpha^*} of the approximate posterior
-distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.fit} and \code{survregVB.frailty.fit}.}
+\title{Calculates parameter \eqn{\alpha^*} of \eqn{q^*(b)} to optimize the evidence
+based lower bound (ELBO) in \code{survregVB.fit} and \code{survregVB.frailty.fit}.}
 \usage{
 alpha_star(alpha_0, delta)
 }
 \arguments{
-\item{alpha_0}{Hyperparameter \eqn{\alpha_0} of the prior
-distribution of \emph{b}.}
+\item{alpha_0}{Hyperparameter \eqn{\alpha_0} of the prior distribution
+of \emph{b}.}
 
 \item{delta}{A binary vector indicating right censoring.}
 }
 \value{
-Parameter \eqn{\alpha^*} of the approximate posterior
-distribution of \emph{b}.
+Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
 }
 \description{
-Calculates parameter \eqn{\alpha^*} of the approximate posterior
-distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.fit} and \code{survregVB.frailty.fit}.
+Calculates parameter \eqn{\alpha^*} of \eqn{q^*(b)} to optimize the evidence
+based lower bound (ELBO) in \code{survregVB.fit} and \code{survregVB.frailty.fit}.
 }
 \seealso{
 \code{\link{survregVB.fit}}
