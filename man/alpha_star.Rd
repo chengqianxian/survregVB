@@ -4,7 +4,7 @@
 \alias{alpha_star}
 \title{Calculates parameter \eqn{\alpha^*} of the approximate posterior
 distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.fit}.}
+lower bound (ELBO) in \code{survregVB.fit} and \code{survregVB.frailty.fit}.}
 \usage{
 alpha_star(alpha_0, delta)
 }
@@ -21,10 +21,10 @@ distribution of \emph{b}.
 \description{
 Calculates parameter \eqn{\alpha^*} of the approximate posterior
 distribution of \emph{b} in order to optimize the evidence based
-lower bound (ELBO) in \code{survregVB.fit}.
+lower bound (ELBO) in \code{survregVB.fit} and \code{survregVB.frailty.fit}.
 }
 \seealso{
 \code{\link{survregVB.fit}}
 
-\code{\link{elbo}}
+\code{\link{survregVB.frailty.fit}}
 }

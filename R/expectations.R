@@ -55,3 +55,8 @@ expectation_log_b <- function(alpha, omega) {
   log_b <- log(omega) - digamma(alpha)
   log_b
 }
+
+expectation_inverse_sigma <- function(lambda, eta) {
+  inverse_sigma <- lambda / eta
+  inverse_sigma
+}

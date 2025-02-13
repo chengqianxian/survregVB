@@ -46,6 +46,4 @@ lower bound (ELBO) in \code{survregVB.fit}.
 }
 \seealso{
 \code{\link{survregVB.fit}}
-
-\code{\link{elbo}}
 }

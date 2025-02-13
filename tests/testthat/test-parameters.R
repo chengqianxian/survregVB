@@ -111,19 +111,19 @@ test_that("mu_star", {
 
 test_that("sigma_star", {
   expect_equal(
-    sigma_star(
+    Sigma_star(
       log(T), X, delta, v_0, alpha, omega, mu_0, expectation_b
     ),
     Sigma
   )
   expect_equal(
-    sigma_star(
+    Sigma_star(
       log(T.10), X, delta.10, v_0, alpha.10, omega.10, mu_0, expectation_b.10
     ),
     Sigma.10
   )
   expect_equal(
-    sigma_star(
+    Sigma_star(
       log(T.30), X, delta.30, v_0, alpha.30, omega.30, mu_0, expectation_b.30
     ),
     Sigma.30

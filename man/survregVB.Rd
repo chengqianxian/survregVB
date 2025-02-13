@@ -2,8 +2,6 @@
 % Please edit documentation in R/survregVB.R
 \name{survregVB}
 \alias{survregVB}
-\alias{print.survregVB}
-\alias{survregVB.object}
 \title{Variational Bayesian Analysis of Survival Data Using a Log-Logistic
 Accelerated Failure Time Model}
 \usage{
@@ -16,7 +14,10 @@ survregVB(
   v_0,
   na.action,
   max_iteration = 100,
-  threshold = 1e-04
+  threshold = 1e-04,
+  cluster = NULL,
+  lambda_0 = NULL,
+  eta_0 = NULL
 )
 }
 \arguments{
@@ -55,37 +56,15 @@ variational inference optimization. If reached, iteration stops.
 lower bound (ELBO) optimization. If the difference between the
 current and previous ELBO's is smaller than this threshold,
 iteration stops. (Default:0.0001)}
+
+\item{cluster}{An optional variable which clusters the observations to
+introduce shared frailty.}
+
+\item{lambda_0}{}
 }
 \value{
-An object of class \code{survregVB}.
-Objects of this class have methods for the functions \code{print} and
-\code{summary}. The components of this class are:
-\itemize{
-\item \code{ELBO}: The final value of the Evidence Lower Bound
-(ELBO) at the last iteration.
-\item \code{alpha}: The updated parameter \eqn{\alpha} of the
-approximate posterior distribution of \emph{b}.
-\item \code{omega}: The updated parameter \eqn{\omega} of the
-approximate posterior distribution of \emph{b}.
-\item \code{mu}: The updated vector of means \eqn{\mu} of the
-approximate posterior distribution of \emph{β}.
-\item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
-the approximate posterior distribution of \emph{β}.
-\item \code{na.action}: A missing-data filter function, applied to
-the model.frame, after any subset argument has been used.
-\item \code{iterations}: The number of iterations performed by the
-VB algorithm: before converging or reaching \code{max_iteration}.
-\item \code{n}: The number of observations.
-\item \code{call}: The function call used to invoke the
-\code{survregVB} method.
-\item \code{not_converged}: A boolean indicating if the algorithm
-converged.
-\itemize{
-\item \code{TRUE}: If the algorithm did not converge prior to
-achieving \code{max_iteration}.
-\item \code{NULL}: If the algorithm converged successfully.
-}
-}
+An object of class \code{survregVB}, \code{survregVB.object}
+or \code{survregVB.frailty.object}.
 }
 \description{
 Applies a mean-field Variational Bayes (VB) algorithm to infer the
@@ -93,9 +72,13 @@ parameters of an accelerated failure time (AFT) survival model with
 right-censored  survival times following a log-logistic distribution.
 }
 \details{
-The log-logistic AFT model is specified with the parameters:
 \emph{β}, the vector of coefficients for the fixed effects, and
 \emph{b}, a scale parameter.
+If shared frailty is introduced, the correlated AFT model is specified
+with the additional parameter:
+\eqn{\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)},
+a random intercept for the \eqn{i^{th}} cluster for \eqn{i=1,...,K}
+clusters.
 The goal is to maximize the evidence lower bound (ELBO) in order to
 approximate posterior distributions of the model parameters.
 
@@ -131,4 +114,9 @@ result <- survregVB(formula = example_formula,
                     v_0 = 0.2)
 # View results
 summary(result)
+}
+\seealso{
+\code{\link{survregVB.object}}
+
+\code{\link{survregVB.frailty.object}}
 }
