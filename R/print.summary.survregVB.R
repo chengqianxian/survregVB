@@ -2,8 +2,8 @@
 #' @export
 print.summary.survregVB <- function(x, digits =
                                       max(options()$digits - 4, 3),
-                                    signif.stars=FALSE, ...) {
-  if(is.null(digits))
+                                    signif.stars = FALSE, ...) {
+  if (is.null(digits))
     digits <- options()$digits
   cat("Call:\n")
   dput(x$call)
@@ -12,9 +12,8 @@ print.summary.survregVB <- function(x, digits =
   cat("\nNumber of iterations: ", x$iterations, "\n")
 
   cat("\nRegression Coefficients:\n")
-  printCoefmat(x$coefficients, digits = digits,
-               signif.stars=signif.stars, P.values=TRUE,
-               has.Pvalue=TRUE)
+  printCoefmat(x$coefficients, digits = digits, signif.stars = signif.stars,
+               P.values = TRUE, has.Pvalue = TRUE)
 
   cat("\nScale Parameter:\n")
   print(x$scale, digits = digits)
@@ -26,7 +25,7 @@ print.summary.survregVB <- function(x, digits =
 
   omit <- x$na.action
   if (length(omit))
-    cat("\nn=", x$n, " (", naprint(omit), ")\n", sep="")
+    cat("\nn=", x$n, " (", naprint(omit), ")\n", sep = "")
   else cat("\nn=", x$n, "\n")
 
   invisible(NULL)

@@ -56,8 +56,8 @@
 #'   \eqn{v_{0}=1/\sigma^2}, and
 #' - \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)},
 #' With shared frailty, we also assume prior distributions:
-#' - \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)},
-#'   and
+#' - \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}
+#'    N(0,\sigma^2_\gamma)}, and
 #' - \eqn{\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}.
 #'
 #' We obtain approximate posterior distributions:
@@ -102,9 +102,9 @@
 #'
 #' @export
 #' @seealso \code{\link{survregVB.object}}
-survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
-                       lambda_0, eta_0, na.action, cluster,
-                       max_iteration = 100, threshold = 0.0001) {
+survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
+                      lambda_0, eta_0, na.action, cluster,
+                      max_iteration = 100, threshold = 0.0001) {
   Call <- match.call()    # save a copy of the call
 
   if (missing(formula)) stop("a formula argument is required")
@@ -122,12 +122,12 @@ survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
                                                ", ")))
 
   Terms <- if (missing(data)) terms(formula) else
-    terms(formula, data=data)
+    terms(formula, data = data)
 
   indx <- match(c("formula", "data", "cluster", "na.action"),
-                names(Call), nomatch=0)
-  if (indx[1] ==0) stop("A formula argument is required")
-  temp <- Call[c(1,indx)]  # only keep the arguments we wanted
+                names(Call), nomatch = 0)
+  if (indx[1] == 0) stop("A formula argument is required")
+  temp <- Call[c(1, indx)]  # only keep the arguments we wanted
   temp[[1L]] <- quote(stats::model.frame)   # change the function called
 
   temp$formula <- if (missing(data))
@@ -156,15 +156,16 @@ survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
     result <- survregVB.frailty.fit(Y, X, alpha_0, omega_0, mu_0, v_0,
                                     lambda_0, eta_0, cluster,
                                     max_iteration, threshold)
+  } else {
+    result <- survregVB.fit(Y, X, alpha_0, omega_0, mu_0, v_0, max_iteration,
+                            threshold)
   }
-  else result <- survregVB.fit(Y, X, alpha_0, omega_0, mu_0, v_0,
-                               max_iteration, threshold)
 
   na.action <- attr(m, "na.action")
   if (length(na.action)) result$na.action <- na.action
   result$call <- Call
 
-  class(result) <- 'survregVB'
+  class(result) <- "survregVB"
   result
 }
 

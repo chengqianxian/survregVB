@@ -8,7 +8,8 @@
 #' @param delta A binary vector indicating right censoring.
 #' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
 #' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param curr_mu The current value of the parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
+#' @param curr_mu The current value of the parameter \eqn{\mu^*} of
+#'  \eqn{q^*(\beta)}.
 #' @param expectation_b The expected value of b.
 #' @returns The approximated log-likelihood \eqn{\log(p(D|\beta,b))}.
 #'
@@ -16,7 +17,7 @@
 expectation_log_likelihood <- function(y, X, delta, alpha, omega, curr_mu,
                                        expectation_b) {
   res <- 0
-  for (i in 1:nrow(X)) {
+  for (i in seq_len(nrow(X))) {
     bz_i <- y[i] - sum(X[i, ] * curr_mu)
     z_i <- bz_i / expectation_b
     phi_i <- get_phi(z_i)
@@ -36,9 +37,11 @@ expectation_log_likelihood <- function(y, X, delta, alpha, omega, curr_mu,
 #' Calculates the difference between the expectations of \eqn{\log(p(\beta))}
 #' and \eqn{\log(q^*(\beta))}.
 #'
-#' @param v_0 Precision hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.
+#' @param v_0 Precision hyperparameter \eqn{v_0} of the prior distribution
+#'  of \emph{β}.
 #' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of \emph{β}.
-#' @param curr_mu The current value of the parameter \eqn{\mu^*} of \eqn{q^*{\beta}}.
+#' @param curr_mu The current value of the parameter \eqn{\mu^*} of
+#'  \eqn{q^*{\beta}}.
 #' @param Sigma Parameter \eqn{\Sigma^*} of \eqn{q^*{\beta}}.
 #' @returns The difference between the expectations of \eqn{\log(p(\beta))}
 #'  and \eqn{\log(q^*(\beta))}.
@@ -59,7 +62,8 @@ diff_beta <- function(mu_0, v_0, curr_mu, Sigma) {
 #'  distribution of \emph{b}.
 #' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*{\b}}.
 #' @param omega Parameter \eqn{\omega^*} of \eqn{q^*{\b}}.
-#' @returns The difference between the expectations of \log(p(b)) and \log(q^*(b)).
+#' @returns The difference between the expectations of \log(p(b)) and
+#'  \log(q^*(b)).
 #'
 #' @noRd
 diff_b <- function(alpha_0, omega_0, alpha, omega) {
@@ -99,8 +103,8 @@ diff_gamma <- function(tau, sigma, lambda, eta, cluster) {
   diff_gamma
 }
 
-#' Calculates the difference between the expectations of \eqn{\log(p(\sigma^2_gamma))}
-#' and \eqn{\log(q^*(\sigma^2_gamma))}.
+#' Calculates the difference between the expectations of
+#' \eqn{\log(p(\sigma^2_gamma))} and \eqn{\log(q^*(\sigma^2_gamma))}.
 #'
 #' @param lambda_0 Hyperparameter \eqn{\lambda_0} of the prior distribution
 #'  of \eqn{sigma^2_{\gamma}}.
@@ -112,15 +116,16 @@ diff_gamma <- function(tau, sigma, lambda, eta, cluster) {
 #'  clusters.
 #' @param cluster A numeric vector indicating the cluster assignment for
 #'  each observation.
-#' @returns The difference between the expectations of \eqn{\log(p(\sigma^2_gamma))}
-#' and \eqn{\log(q^*(\sigma^2_gamma))}.
+#' @returns The difference between the expectations of
+#'  \eqn{\log(p(\sigma^2_gamma))} and \eqn{\log(q^*(\sigma^2_gamma))}.
 #'
 #' @noRd
 diff_sigma_gamma <- function(lambda_0, eta_0, lambda, eta) {
   expectation_log_sigma_gamma <- log(eta) - digamma(lambda)
   lambda_res <- (lambda - lambda_0) * expectation_log_sigma_gamma
   eta_res <- (eta - eta_0) * lambda
-  diff_sigmma_gamma <- (lambda_res + eta_res / eta) - lambda * log(eta)
+  diff_sigma_gamma <- (lambda_res + eta_res / eta) - lambda * log(eta)
+  diff_sigma_gamma
 }
 
 #' Calculates the variational Bayes convergence criteria, evidence lower
@@ -141,7 +146,8 @@ diff_sigma_gamma <- function(lambda_0, eta_0, lambda, eta) {
 #'  distribution of \emph{β}.
 #' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
 #' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param curr_mu The current value of the parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
+#' @param curr_mu The current value of the parameter \eqn{\mu^*} of
+#'  \eqn{q^*(\beta)}.
 #' @param Sigma Parameter \eqn{Sigma^*} of \eqn{q^*(\beta)}.
 #' @param expectation_b The expected value of b.
 #' @returns The evidence lower bound (ELBO).
@@ -214,5 +220,3 @@ elbo_cluster <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, lambda_0,
     diff_sigma_gamma
   elbo
 }
-
-

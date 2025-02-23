@@ -9,7 +9,7 @@
 #' @returns Matrix containing the credible intervals for \emph{β}.
 #'
 #' @noRd
-beta_ci <- function(mu, Sigma, ci = 0.95){
+beta_ci <- function(mu, Sigma, ci = 0.95) {
   k <- length(mu)
   lower_bounds <- numeric(k)
   upper_bounds <- numeric(k)
@@ -36,7 +36,7 @@ beta_ci <- function(mu, Sigma, ci = 0.95){
 #' @importFrom bayestestR hdi
 #' @importFrom invgamma rinvgamma
 #' @noRd
-b_ci <- function(alpha, omega, ci = 0.95){
+b_ci <- function(alpha, omega, ci = 0.95) {
   set.seed(100)
   posterior <- rinvgamma(100000, alpha, omega)
   lower <- hdi(posterior, ci = 0.95)$CI_low

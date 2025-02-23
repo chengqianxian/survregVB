@@ -1,4 +1,4 @@
-## Expectation Calculations ============================================
+## Expectation Calculations=============================================
 
 #' Calculates the expected value of an Inverse-Gamma distribution.
 #'
@@ -9,7 +9,7 @@
 #' @returns The expectation of b.
 #' @noRd
 expectation_b <- function(alpha, omega) {
-  b = omega / (alpha - 1)
+  b <- omega / (alpha - 1)
   b
 }
 
@@ -23,7 +23,7 @@ expectation_b <- function(alpha, omega) {
 #' @returns The expectation of \eqn{1/b}.
 #' @noRd
 expectation_inverse_b <- function(alpha, omega) {
-  inv_b = alpha / omega
+  inv_b <- alpha / omega
   inv_b
 }
 
@@ -37,7 +37,7 @@ expectation_inverse_b <- function(alpha, omega) {
 #' @return The expectation of \eqn{1/b^2}.
 #' @noRd
 expectation_inverse_b_2 <- function(alpha, omega) {
-  inv_b_2 = (alpha + alpha^2) / omega^2
+  inv_b_2 <- (alpha + alpha^2) / omega^2
   inv_b_2
 }
 

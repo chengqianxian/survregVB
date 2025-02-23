@@ -35,10 +35,8 @@ install.packages("survival")
 Once installed, you can load both libraries with the `library()` function:
 
 ```{r setup}
-#library(survregVB)
+library(survregVB)
 library(survival)
-library(devtools)
-load_all()
 ```
 
 # Preparing the Data

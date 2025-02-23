@@ -1,8 +1,8 @@
 #' @method print survregVB
 #' @export
 print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
-                            signif.stars=FALSE, ...) {
-  if(!is.null(cl <- x$call)) {
+                            signif.stars = FALSE, ...) {
+  if (!is.null(cl <- x$call)) {
     cat("Call:\n")
     dput(cl)
   }
@@ -17,8 +17,8 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
   cat("\nmu:\n")
   print(x$mu, digits = digits)
   cat("\nSigma:\n")
-  printCoefmat(x$Sigma, digits = digits, signif.stars=signif.stars,
-               P.values=TRUE, has.Pvalue=TRUE)
+  printCoefmat(x$Sigma, digits = digits, signif.stars = signif.stars,
+               P.values = TRUE, has.Pvalue = TRUE)
 
   cat("\nPosterior distribution of b (scale parameter):")
   cat("\nalpha: ", x$alpha, "  omega: ", x$omega, "\n")
@@ -30,13 +30,14 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
     cat("\nsigma squared:\n")
     print(x$sigma, digits = digits)
 
-    cat("\nPosterior distribution of sigma_gamma squared (variance of the random intercept):")
+    cat("\nPosterior distribution of sigma_gamma squared
+        (variance of the random intercept):")
     cat("\nlamda: ", x$lambda, "  eta: ", x$eta, "\n")
   }
 
   omit <- x$na.action
   if (length(omit))
-    cat("\nn=", x$n, " (", naprint(omit), ")\n", sep="")
+    cat("\nn=", x$n, " (", naprint(omit), ")\n", sep = "")
   else cat("\nn=", x$n, "\n")
 
   invisible(x)

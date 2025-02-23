@@ -87,25 +87,24 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
   coefficients[, 2] <-  beta_ci[, 1]
   coefficients[, 3] <-  beta_ci[, 2]
 
-  alpha <- object$alpha
-  omega <- object$omega
   scale <- summary_table(object$alpha, object$omega)
 
   # for models with shared frailty
   if (!is.null(object$clustered)) {
     intercept <- summary_table(object$lambda, object$eta)
-    x <- object[match(c('clustered', 'call', 'ELBO', 'alpha', 'omega',
-                        'mu', 'Sigma', 'tau', 'sigma', 'lambda', 'eta',
-                        'na.action', 'iterations', 'n'),
-                      names(object), nomatch=0)]
-    x <- c(x, list(coefficients=coefficients, scale=scale, intercept=intercept))
-  }
-  else {
-    x <- object[match(c('call', 'ELBO', 'alpha', 'omega', 'mu', 'Sigma',
-                        'na.action', 'iterations', 'n'), names(object), nomatch=0)]
-    x <- c(x, list(coefficients=coefficients, scale=scale))
+    x <- object[match(c("clustered", "call", "ELBO", "alpha", "omega",
+                        "mu", "Sigma", "tau", "sigma", "lambda", "eta",
+                        "na.action", "iterations", "n"),
+                      names(object), nomatch = 0)]
+    x <- c(x, list(coefficients = coefficients, scale = scale,
+                   intercept = intercept))
+  } else {
+    x <- object[match(c("call", "ELBO", "alpha", "omega", "mu", "Sigma",
+                        "na.action", "iterations", "n"),
+                      names(object), nomatch = 0)]
+    x <- c(x, list(coefficients = coefficients, scale = scale))
   }
 
-  class(x) <- 'summary.survregVB'
+  class(x) <- "summary.survregVB"
   x
 }

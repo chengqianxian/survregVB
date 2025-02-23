@@ -46,8 +46,8 @@
 #' @seealso \code{\link{survregVB}}
 survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
                           max_iteration = 100, threshold = 0.0001) {
-  y <- log(Y[,1])
-  delta <- Y[,2]
+  y <- log(Y[, 1])
+  delta <- Y[, 2]
   n <- nrow(X)
 
   alpha <- alpha_star(alpha_0, delta)
@@ -61,10 +61,11 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
   curr_mu <- mu_0
   curr_elbo <- 0
 
-  while (!converged & iteration < max_iteration) {
+  while (!converged && iteration < max_iteration) {
     iteration <- iteration + 1
     Sigma <- Sigma_star(y, X, delta, v_0, alpha, omega, curr_mu, expectation_b)
-    mu <- mu_star(y, X, delta, mu_0, v_0, alpha, omega, curr_mu, Sigma, expectation_b)
+    mu <- mu_star(y, X, delta, mu_0, v_0, alpha, omega, curr_mu, Sigma,
+                  expectation_b)
     omega <- omega_star(y, X, delta, omega_0, mu, expectation_b)
 
     elbo <- elbo(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
@@ -72,7 +73,7 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
 
     elbo_diff <- abs(elbo - curr_elbo)
     mu_diff <- sum(abs(mu - curr_mu))
-    if (elbo_diff > threshold & mu_diff > threshold) {
+    if (elbo_diff > threshold && mu_diff > threshold) {
       converged <- FALSE
     } else {
       converged <- TRUE
@@ -102,7 +103,7 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
       "The max iteration has been achieved and the algorithm has not
       converged\n"
     )
-    return_list$not_converged = TRUE
+    return_list$not_converged <- TRUE
   }
 
   return_list

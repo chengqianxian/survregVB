@@ -1,5 +1,5 @@
-#' Variational Bayesian Analysis of Correlated Survival Data Using a Log-Logistic
-#' Accelerated Failure Time Model
+#' Variational Bayesian Analysis of Correlated Survival Data Using a
+#' Log-Logistic Accelerated Failure Time Model
 #'
 #' Called by \code{survregVB} to do the actual parameter and ELBO computations
 #' for correlated survival data with shared frailty (a random intercept).
@@ -39,8 +39,8 @@
 #' as follows:
 #'
 #' \eqn{\log(T_{ij})=\gamma_i+X_{ij}^T\beta+b\epsilon_{ij}}, where
-#' - \eqn{X_{ij}} is a column vector of length \eqn{p, p\ge2} containing \eqn{p-1}
-#' covariates and a constant one to incorporate the intercept
+#' - \eqn{X_{ij}} is a column vector of length \eqn{p, p\ge2} containing
+#'    \eqn{p-1} covariates and a constant one to incorporate the intercept
 #' (i.e., \eqn{X_i=(1,x_{ij1},...,x_{ij(p-1)})^T}),
 #' - \emph{β} is the corresponding vector of coefficients for the fixed effects,
 #' - \eqn{\gamma_i} is a random intercept for the \eqn{i_{th}} cluster,
@@ -53,12 +53,11 @@
 survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
                                   eta_0, cluster, max_iteration = 100,
                                   threshold = 0.0001) {
-  y <- log(Y[,1])
-  delta <- Y[,2]
+  y <- log(Y[, 1])
+  delta <- Y[, 2]
   cluster_names <- unique(cluster)
   cluster <- as.numeric(as.factor(cluster))
   n <- nrow(X)
-  p <- ncol(X)
   K <- length(unique(cluster))
 
   alpha <- alpha_star(alpha_0, delta) # fixed always
@@ -75,7 +74,7 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
   curr_tau <- rep(0, K)
   curr_elbo <- 0
 
-  while (!converged & iteration < max_iteration) {
+  while (!converged && iteration < max_iteration) {
     iteration <- iteration + 1
     Sigma <- Sigma_star_cluster(y, X, delta, v_0, alpha, omega, curr_mu,
                                 curr_tau, expectation_b, cluster)
@@ -96,7 +95,7 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
     elbo_diff <- abs(elbo - curr_elbo)
     mu_diff <- sum(abs(mu - curr_mu))
 
-    if (elbo_diff > threshold & mu_diff > threshold) {
+    if (elbo_diff > threshold && mu_diff > threshold) {
       converged <- FALSE
     } else {
       converged <- TRUE
@@ -134,7 +133,7 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
       "The max iteration has been achieved and the algorithm has not
       converged\n"
     )
-    return_list$not_converged = TRUE
+    return_list$not_converged <- TRUE
   }
 
   return_list

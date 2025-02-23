@@ -1,7 +1,8 @@
 ## Parameter Calculations ==============================================
 
 #' Calculates parameter \eqn{\alpha^*} of \eqn{q^*(b)} to optimize the evidence
-#' based lower bound (ELBO) in \code{survregVB.fit} and \code{survregVB.frailty.fit}.
+#' based lower bound (ELBO) in \code{survregVB.fit} and
+#' \code{survregVB.frailty.fit}.
 #'
 #' @param alpha_0 Hyperparameter \eqn{\alpha_0} of the prior distribution
 #' of \emph{b}.
@@ -34,7 +35,7 @@ alpha_star <- function(alpha_0, delta) {
 #' @seealso \code{\link{survregVB.fit}}
 omega_star <- function(y, X, delta, omega_0, mu, expectation_b) {
   res <- 0
-  for (i in 1:nrow(X)) {
+  for (i in seq_len(nrow(X))) {
     bz_i <- y[i] - sum(X[i, ] * mu)
     z_i <- bz_i / expectation_b
     phi_i <- get_phi(z_i)
@@ -62,13 +63,14 @@ omega_star <- function(y, X, delta, omega_0, mu, expectation_b) {
 #'
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
-mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma, expectation_b) {
+mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
+                    expectation_b) {
   p <- ncol(X)
   expectation_inverse_b <- expectation_inverse_b(alpha, omega)
   expectation_inverse_b_2 <- expectation_inverse_b_2(alpha, omega)
 
   yX_matrix <- matrix(0, nrow = 1, ncol = p)
-  for (i in 1:nrow(X)) {
+  for (i in seq_len(nrow(X))) {
     z_i <- (y[i] - sum(X[i, ] * mu)) / expectation_b
     rho_i <- get_rho(z_i)
     zeta_i <- get_zeta(z_i)
@@ -105,7 +107,7 @@ mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma, expectation
 Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu, expectation_b) {
   p <- ncol(X)
   X_matrix <- matrix(0, nrow = p, ncol = p)
-  for (i in 1:nrow(X)) {
+  for (i in seq_len(nrow(X))) {
     z_i <- (y[i] - sum(X[i, ] * mu)) / expectation_b
     zeta_i <- get_zeta(z_i)
     X_matrix_i <- (1 + delta[i]) * zeta_i * (X[i, ] %*% t(X[i, ]))
@@ -139,8 +141,8 @@ Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu, expectation_b) {
 #'
 #' @noRd
 get_cluster_y <- function(y, tau, cluster) {
-  for (i in 1:length(y)) {
-    y[i] = y[i] - tau[cluster[i]]
+  for (i in seq_along(y)) {
+    y[i] <- y[i] - tau[cluster[i]]
   }
   y
 }
@@ -168,7 +170,7 @@ omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
                                cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   res <- 0
-  for (i in 1:nrow(X)) {
+  for (i in seq_len(nrow(X))) {
     z_i <- (y_cluster[i] - sum(X[i, ] * mu)) / expectation_b
     phi_i <- get_phi(z_i)
     bz_i <- y[i] - sum(X[i, ] * mu)
@@ -203,7 +205,8 @@ omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
 mu_star_cluster <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
                             tau, expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
-  mu_star(y_cluster, X, delta, mu_0, v_0, alpha, omega, mu, Sigma, expectation_b)
+  mu_star(y_cluster, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
+          expectation_b)
 }
 
 #' Calculates parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)} to optimize the
@@ -232,7 +235,8 @@ Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
 }
 
 #' Calculates parameter \eqn{sigma^{2*}} of \eqn{q^*(\gamma)} for all clusters
-#' to optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
+#' to optimize the evidence based lower bound (ELBO) in
+#' \code{survregVB.frailty.fit}.
 #'
 #' @param y A vector of observed log-transformed survival times.
 #' @param X A matrix of predictors (covariates), including an intercept.
@@ -252,19 +256,19 @@ Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
-sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda, eta,
-                       expectation_b, cluster) {
+sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
+                               eta, expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   expectation_inverse_b_2 <- expectation_inverse_b_2(alpha, omega)
   expectation_inverse_sigma <- expectation_inverse_b(lambda, eta)
   zeta <- numeric(nrow(X))
 
-  for (i in 1:nrow(X)) {
+  for (i in seq_len(nrow(X))) {
     z_i <- (y_cluster[i] - sum(X[i, ] * mu)) / expectation_b
     zeta[i] <- get_zeta(z_i)
   }
 
-  K = length(unique(cluster))
+  K <- length(unique(cluster))
   sigma <- numeric(K)
   for (k in 1:K) {
     delta_k <- delta[cluster == k]
@@ -301,7 +305,7 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
   y_cluster <- get_cluster_y(y, tau, cluster)
   expectation_inverse_b <- expectation_inverse_b(alpha, omega)
   expectation_inverse_b_2 <- expectation_inverse_b_2(alpha, omega)
-  n = nrow(X)
+  n <- nrow(X)
   zeta <- numeric(n)
   rho <- numeric(n)
 
@@ -312,7 +316,7 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
     rho[i] <- get_rho(z_i)
   }
 
-  K = length(unique(cluster))
+  K <- length(unique(cluster))
   tau <- numeric(K)
   for (k in 1:K) {
     delta_k <- delta[cluster == k]
@@ -322,7 +326,7 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
     X_k <- X[cluster == k, , drop = FALSE]
     tau_k <- 0
 
-    for (i in 1:nrow(X_k)) {
+    for (i in seq_len(nrow(X_k))) {
       res_i_a <- expectation_inverse_b *
         (-delta_k[i] + (1 + delta_k[i]) * rho_k[i])
       res_i_b <- expectation_inverse_b_2 * (1 + delta_k[i]) *
