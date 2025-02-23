@@ -21,66 +21,6 @@ knitr::opts_chunk$set(
 
 This vignette demonstrates how to use the `survregVB` function from the **survregVB** package to fit a log-logistic Accelerated Failure Time (AFT) model. This function uses Variational Bayes (VB) to infer the model parameters by maximizing the Evidence Lower Bound (ELBO). We will use the `rhDNase` dataset from the **survival** package to illustrate the process. Specifically, we will show you how to prepare the data, set prior distributions, fit the model, and interpret the results.
 
-## Background
-
-The goal of this vignette is to demonstrate how to use the `survregVB` function to fit it a log-logistic AFT regression model for right-censored survival time. For time $T_i$ of the $i^{th}$ subject in a sample with $i=1,...,n$ subjects:
-
-$$
-log(T_i):=Y=X_i^T+bz_i
-$$
-
-where $X_i$ is column vector of $p-1$ covariates and a constant one to incorporate the intercept (i.e. $X_i=(1,x_{i1},...,x_{i(p-1)})^T$), $\beta$ is a vector of coefficients, $z_i$ is a random variable following a standard logistic distribution and $b$ is a scale parameter [@xian2024].
-
-`survregVB` uses a Bayesian framework to obtain the optimal variational densities of parameters $\beta$ and $b$ by maximizing the evidence based lower bound (ELBO) [@jordan1999; @blei2017]. In order to do so, we assume prior distributions:
-
--   $\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})$, with precision $v_0=1/\sigma^2$, and
-
--   $b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)$
-
-where $\mu_0,v_0,\alpha_0$ and $\omega_0$ are known hyperparameters [@nedelman2005; @faes2011].
-
-At the end of the model fitting process, the `survregVB` function obtains the approximated posterior distributions given as follows:
-
--   $q^*(\beta)$ is a $N_p(\mu,\Sigma)$ density function, and
-
--   $q^*(b)$ is an $\text{Inverse-Gamma}(\alpha,\omega)$ density function,
-
-where the parameters $\mu,\Sigma,\alpha$ and $\omega$ are obtained via the VB algorithm [@xian2024].
-
-### With Shared Frailty
-
-We can also use the `survregVB` function is to fit it a shared frailty log-logistic AFT regression model that accounts for intra-cluster correlation through a cluster-specific random intercept. For time $T_{ij}$ of the $j_{th}$ subject from the $i_{th}$ cluster in the sample, in a sample with $i=1,...,K$ clusters and $j=1,...,n_i$ subjects:
-
-$$
-\log(T_{ij})=\gamma_i+X_{ij}^T\beta+b\epsilon_{ij}
-$$
-
-where $X_{ij}$ is column vector of $p-1$ covariates and a constant one (i.e. $X_{ij}=(1,x_{ij1},...,x_{ij(p-1)})^T$), $\beta$ is a vector of coefficients, $\gamma_i$ is a random intercept for the $i^{th}$ cluster, $\epsilon_{ij}$ is a variable following a standard logistic distribution and $b$ is a scale parameter (@xian2024a).
-
-`survregVB` uses a Bayesian framework to obtain the optimal variational densities of parameters $\beta,b,\gamma$ and $\sigma^2_\gamma$ by maximizing the evidence based lower bound (ELBO) [@jordan1999; @blei2017]. In order to do so, we assume prior distributions:
-
--   $\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})$, with precision $v_0=1/\sigma^2$,
-
--   $\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)$,
-
--   $b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)$, and
-
--   $\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)$,
-
-where $\mu_0,v_0,\alpha_0$, $\omega_0$, $\lambda_0$ and $\eta_0$ are known hyperparameters [@xian2024a].
-
-At the end of the model fitting process, the `survregVB` function obtains the approximated posterior distributions given as follows:
-
--   $q^*(\beta)$ is a $N_p(\mu,\Sigma)$ density function,
-
--   $q^*(b)$ is a $\text{Inverse-Gamma}(\alpha,\omega)$ density function,
-
--   $q^*(\gamma_i)$ is a $N_l(\tau^*_i,\sigma^{2*}_i))$ density function, and
-
--   $q^*(\sigma^2_\gamma)$ is a $\text{Inverse-Gamma}(\lambda^*,\eta^*)$ density function,
-
-where the parameters $\mu,\Sigma,\alpha,\omega,\tau_i, \sigma_i, \lambda$ and $\eta$ are obtained via the VB algorithm [@xian2024a].
-
 # Installation
 
 First, install the **survregVB** package if not already installed. Since we'll be using the `rhDNase` dataset, install the **survival** package as well:
@@ -114,7 +54,7 @@ Here is a preview of the `rhDNase` dataset:
 head(rhDNase)
 ```
 
-Next, we need to prepare the data for modeling via the example code provided in the survival package (@survival):
+Next, we need to prepare the data for modeling via the example code provided in the survival package [@survival]:
 
 ```{r}
 # Extract the first row for each subject
@@ -154,7 +94,7 @@ $${\log(T):=Y=\beta_0+\beta_1x_1+\beta_2x_2+bz}$$ where:
 
 -   $x_2$ is `fev`, and
 
--   $z$ is a random variable following a standard logistic distribution with scale parameter *b (*\@xian2024).
+-   $z$ is a random variable following a standard logistic distribution with scale parameter *b* [@xian2024].
 
 The event of interest is whether or not the subject experienced infection, `infect`.
 
@@ -168,7 +108,11 @@ formula <- Surv(time, infect) ~ trt + fev
 
 # Setting Prior Distributions
 
-Next we define the prior distributions of the model parameters, *β* and *b*.
+Next we define the prior distributions of the model parameters:
+
+-   $\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})$, with precision $v_0=1/\sigma^2$, and
+
+-   $b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)$ [@xian2024]
 
 We set hyperparameters $\alpha_0=501$ and $\omega_0=500$ to achieve a mean scale of one.
 
@@ -227,7 +171,11 @@ survregVB(formula = Surv(time, infect) ~ trt + fev,
 
 # Interpreting the Results
 
-At the end of the model fitting process, the VB algorithm obtains the approximated posterior distributions of *b* and *β*:
+At the end of the model fitting process, the VB algorithm obtains the approximated posterior distributions:
+
+-   $q^*(\beta)$, a $N_p(\mu,\Sigma)$ density function, and
+
+-   $q^*(b)$, an $\text{Inverse-Gamma}(\alpha,\omega)$ density function [@xian2024]
 
 ```{r}
 print(fit)
@@ -313,11 +261,17 @@ where:
 
 -   $\gamma_i$ is the random intercept,
 
--   $\epsilon_i$ is a random variable following a standard logistic distribution with scale parameter *b*.
+-   $\epsilon_i$ is a random variable following a standard logistic distribution with scale parameter *b* [@xian2024a].
 
 ## Setting Prior Distributions
 
-The formula and values for hyperparameters $\alpha_0,\omega_0,\mu_0$ and $v_0$ are the same as above. We also set hyperparameters $\lambda_0=501$ and $\eta_0=500$ to achieve a mean scale of one.
+The formula and values for hyperparameters $\alpha_0,\omega_0,\mu_0$ and $v_0$ are the same as above. We also need to define the prior distributions of:
+
+-   $\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)$, and
+
+-   $\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)$ [@xian2024a]
+
+We set hyperparameters $\lambda_0=501$ and $\eta_0=500$ to achieve a mean scale of one.
 
 ```{r}
 lambda_0 <- 501
@@ -345,7 +299,11 @@ We specify that we want to introduce shared frailty by setting the `cluster` par
 
 ## Interpreting the Results
 
-At the end of the model fitting process, the VB algorithm obtains the approximated posterior distributions of *b*, *β*, $\gamma_i$ and $\sigma^2_\gamma$:
+At the end of the model fitting process, the VB algorithm obtains the approximated posterior distributions $q^*(b),q^*(\beta)$ ,
+
+-   $q^*(\gamma_i)$, a $N_l(\tau^*_i,\sigma^{2*}_i))$ density function, and
+
+-   $q^*(\sigma^2_\gamma)$, a $\text{Inverse-Gamma}(\lambda^*,\eta^*)$ density function [@xian2024a]
 
 ```{r}
 print(fit)
@@ -353,12 +311,10 @@ print(fit)
 
 The `survreg` object returned includes additional results for:
 
+-   `clustered`: A boolean that indicates the model has shared frailty.
 -   `tau`: The parameter $\tau$ of the approximate posterior distribution of the random intercept $\gamma_i$*.*
-
 -   `sigma`: The parameter $\sigma^2$ of the approximate posterior distribution of the random intercept $\gamma_i$*.*
-
 -   `lambda`: The parameter $\lambda$ of the approximate posterior distribution of the variance of the random intercept $\sigma^2_\gamma$.
-
 -   `eta`: The parameter $\eta$ of the approximate posterior distribution of the variance of the random intercept $\sigma^2_\gamma$.
 
 # References
