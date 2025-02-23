@@ -20,7 +20,7 @@ print.summary.survregVB <- function(x, digits =
   print(x$scale, digits = digits)
 
   if (!is.null(x$clustered)) {
-    cat("\nRandom Intercept:\n")
+    cat("\nVariance of the Random Intercept:\n")
     print(x$intercept, digits = digits)
   }
 

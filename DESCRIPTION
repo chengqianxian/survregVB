@@ -4,9 +4,8 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Alison", "Zhang", , "alisonxzhang@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: This package implements an alternative approach to MCMC methods and infers the parameters of the log-
-    logistic AFT model via a mean-field variational Bayes (VB) algorithm. A piecewise approximation technique is 
-    embedded in deriving the VB algorithm to achieve conjugacy. 
+Description: This package implements an alternative approach to MCMC methods and infers the parameters     of the log-logistic AFT model via a mean-field variational Bayes (VB) algorithm. A piecewise           approximation technique is embedded in deriving the VB algorithm to achieve conjugacy. 
+URL: https://github.com/chengqianxian/survregVB
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -28,7 +28,7 @@ expectation_inverse_b <- function(alpha, omega) {
 }
 
 #' Calculates the expected value of the squared inverse of
-#'\eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
+#' \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
 #'
 #' @param alpha Parameter \eqn{\alpha^*} of the distribution of
 #'  \emph{b}.
@@ -42,7 +42,7 @@ expectation_inverse_b_2 <- function(alpha, omega) {
 }
 
 #' Calculates the expected value of the log of
-#'\eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
+#' \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
 #'
 #' @param alpha Parameter \eqn{\alpha^*} of the distribution of
 #'  \emph{b}.
@@ -53,9 +53,4 @@ expectation_inverse_b_2 <- function(alpha, omega) {
 expectation_log_b <- function(alpha, omega) {
   log_b <- log(omega) - digamma(alpha)
   log_b
-}
-
-expectation_inverse_sigma <- function(lambda, eta) {
-  inverse_sigma <- lambda / eta
-  inverse_sigma
 }

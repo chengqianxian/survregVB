@@ -54,6 +54,5 @@ for \eqn{i=1,...,K} clusters.
 \item \code{eta}: The updated scale parameter \eqn{\eta_i} of the
 approximated posterior distribution of \eqn{omega^2_{\gamma_i}} for
 \eqn{i=1,...,K} clusters.
-\item \code{K}: The number of clusters.
 }
 }

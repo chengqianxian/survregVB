@@ -31,6 +31,14 @@ approximate posterior distribution of the regression coefficients.
 \item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
 the approximate posterior distribution of the regression
 coefficients.
+\item \code{tau}: The updated parameter \eqn{\tau} of the approximate
+posterior distribution of the random intercept.
+\item \code{sigma}: The updated parameter \eqn{\sigma^2} of the approximate
+posterior distribution of the random intercept.
+\item \code{lambda}: The updated parameter \eqn{\lambda} of the approximate
+posterior distribution of the variance of the random intercept.
+\item \code{eta}: The updated parameter \eqn{\eta} of the approximate
+posterior distribution of the variance of the random intercept.
 \item \code{na.action}: A missing-data filter function, applied to
 the model.frame, after any subset argument has been used.
 \item \code{iterations}: The number of iterations performed by the

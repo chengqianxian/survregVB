@@ -3,12 +3,14 @@ set.seed(1)
 x1 <- rnorm(300, 1, 0.2)
 x2 <- rbinom(300, 1, 0.5)
 z <- rlogis(300)
+
+# generate survival times
 beta0 <- 0.5
 beta1 <- 0.2
 beta2 <- 0.8
 b <- 0.8
-y <- beta0 + beta1 * x1 + beta2 * x2 + b * z
-T <- exp(y)
+Y <- beta0 + beta1 * x1 + beta2 * x2 + b * z
+T <- exp(Y)
 
 # generate censoring times
 set.seed(1)

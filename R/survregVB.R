@@ -44,26 +44,28 @@
 #' @details
 #' The log-logistic AFT model without shared frailty is specified with the
 #' parameters:
-#' \emph{β}, the vector of coefficients for the fixed effects, and
-#' \emph{b}, a scale parameter.
+#' - \emph{β}, the vector of coefficients for the fixed effects, and
+#' - \emph{b}, a scale parameter.
 #' With shared frailty, the model is specified with an additional parameter:
-#' \eqn{\sigma^2_\gamma}, the random intercept.
+#' - \eqn{\sigma^2_\gamma}, the random intercept.
 #' The goal is to maximize the evidence lower bound (ELBO) in order to
 #' approximate posterior distributions of the model parameters.
 #'
-#' The prior distributions are:
+#' We assume prior distributions:
 #' - \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} where precision,
-#'   \eqn{v_{0}=1/\sigma^2},
+#'   \eqn{v_{0}=1/\sigma^2}, and
 #' - \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)},
+#' With shared frailty, we also assume prior distributions:
 #' - \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)},
 #'   and
 #' - \eqn{\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}.
 #'
-#' The approximate posterior distributions are:
-#' - \eqn{\beta\sim N_p(\mu,\Sigma)},
-#' - \eqn{q^*(b)\sim\text{Inverse-Gamma}(\alpha,\omega)},
-#' - \eqn{q^*(\gamma_i)~N_l(\tau^*_i,\sigma^{2*}_i))}, and
-#' - \eqn{q^*(\sigma^2_\gamma)\sim\text{Inverse-Gamma}(\lambda^*,\eta^*)}.
+#' We obtain approximate posterior distributions:
+#' - \eqn{\beta\sim N_p(\mu,\Sigma)}, and
+#' - \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}
+#' With shared frailty, we also obtain posterior distributions:
+#' - \eqn{\gamma_i~N_l(\tau^*_i,\sigma^{2*}_i))}, and
+#' - \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda^*,\eta^*)}.
 #'
 #' @examples
 #' # Data frame containing survival data
@@ -220,7 +222,6 @@ survregVB <- function (formula, data, alpha_0, omega_0, mu_0, v_0,
 #'   \item \code{eta}: The updated scale parameter \eqn{\eta_i} of the
 #'    approximated posterior distribution of \eqn{omega^2_{\gamma_i}} for
 #'    \eqn{i=1,...,K} clusters.
-#'   \item \code{K}: The number of clusters.
 #'  }
 #'
 NULL

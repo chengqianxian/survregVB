@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Alison Zhang" />
 
 
 <title>survregVB: Variational Bayesian Analysis of Survival Data Using a Log-Logistic Accelerated Failure Time Model</title>
@@ -373,42 +374,49 @@ display: none;
 
 <h1 class="title toc-ignore">survregVB: Variational Bayesian Analysis of
 Survival Data Using a Log-Logistic Accelerated Failure Time Model</h1>
+<h4 class="author">Alison Zhang</h4>
 
 </div>
 
 
 <div id="summary" class="section level1">
 <h1>Summary</h1>
+<div id="background" class="section level2">
+<h2>Background</h2>
 <p>A commonly used survival regression model is the accelerated failure
 time (AFT) model, which assumes an accelerative effect of the covariates
-directly on survival time (<span class="citation">Webber et al.
-(2022)</span>). There are several possible distributions for the AFT
-model, including exponential, Weibull, log-logistic, log-normal or
-gamma. In particular, the log-logistic distribution is suitable for
-modelling a wide variety of survival data (<span class="citation">Rivas-López et al. (2022)</span>). In cases where
-correlated survival data arises from clusters of individuals with shared
-environmental factors, a shared frailty AFT model can be used to account
-for correlations amongst survival data (<span class="citation">Hougaard
-(1995)</span>; <span class="citation">Hanagal (2011)</span>; <span class="citation">Gorfine &amp; Zucker (2023)</span>). Since the choice
-of distribution is not critical, the log-logistic AFT model can be used
-(<span class="citation">Lambert et al. (2004)</span>).</p>
+directly on survival time <span class="citation">(<a href="#ref-webber2022">Webber et al., 2022</a>)</span>. There are
+several possible distributions for the AFT model, including exponential,
+Weibull, log-logistic, log-normal or gamma. In particular, the
+log-logistic distribution is suitable for modelling a wide variety of
+survival data <span class="citation">(<a href="#ref-rivas-l%C3%B3pez2022">Rivas-López et al., 2022</a>)</span>.
+In cases where correlated survival data arises from clusters of
+individuals with shared environmental factors, a shared frailty AFT
+model can be used to account for correlations among survival data <span class="citation">(<a href="#ref-gorfine2023">Gorfine &amp; Zucker,
+2023</a>; <a href="#ref-hanagal2011">Hanagal, 2011</a>; <a href="#ref-hougaard1995">Hougaard, 1995</a>)</span>. Since the choice of
+distribution is not critical, the log-logistic AFT model can be used
+<span class="citation">(<a href="#ref-lambert2004">Lambert et al.,
+2004</a>)</span>.</p>
 <p>Bayesian inference is a technique used to derive the posterior
 distribution of model parameters based on Bayes’ theorem. Markov Chain
 Monte Carlo (MCMC) algorithms are typically used to approximate the
-posterior (<span class="citation">Geman &amp; Geman (1984)</span>). Due
-to high computational costs, research has been done to explore
-alternative methods such as variational inference (VI) developed from
-machine learning (<span class="citation">Jordan et al. (1999)</span>).
-VI uses optimization to approximate the parameters of Bayesian models,
-providing similar estimations to MCMC techniques at a much lower
-computational cost (<span class="citation">Blei et al.
-(2017)</span>).</p>
+posterior <span class="citation">(<a href="#ref-geman1984">Geman &amp;
+Geman, 1984</a>)</span>. Due to high computational costs, research has
+been done to explore alternative methods such as variational inference
+(VI) developed from machine learning <span class="citation">(<a href="#ref-jordan1999">Jordan et al., 1999</a>)</span>. VI uses
+optimization to approximate the parameters of Bayesian models, providing
+similar estimations to MCMC techniques at a much lower computational
+cost <span class="citation">(<a href="#ref-blei2017">Blei et al.,
+2017</a>)</span>.</p>
 <p>Mean-field variational Bayes (VB) is a case of mean-field VI that
 arises from minimizing Kullback-Leibler (KL) divergence, the
 dissimilarity between the approximated and exact posterior densities
-(<span class="citation">Bishop (2006)</span>). Minimizing KL divergence
-can also be thought of as maximizing the evidence lower-bound (ELBO)
-(<span class="citation">Jordan et al. (1999)</span>; <span class="citation">Blei et al. (2017)</span>).</p>
+<span class="citation">(<a href="#ref-bishop2006">Bishop,
+2006</a>)</span>. Minimizing KL divergence can also be thought of as
+maximizing the evidence lower-bound (ELBO) <span class="citation">(<a href="#ref-blei2017">Blei et al., 2017</a>; <a href="#ref-jordan1999">Jordan et al., 1999</a>)</span>.</p>
+</div>
+<div id="the-survregvb-package" class="section level2">
+<h2>The survregVB Package</h2>
 <p>The <strong>survregVB</strong> package is an R package for the
 implementation of Bayesian inference for accelerated failure time
 (models) used in survival analysis. As an alternative to Markov chain
@@ -418,10 +426,10 @@ parameters of a log-logistic AFT model. A piecewise approximation
 technique is embedded into the VB algorithm to achieve conjugacy.
 Compared to MCMC, the VB algorithm has similar performance and
 significantly reduced computation cost, with an average speed-up of 300
-times (<span class="citation">Xian et al. (2024)</span>). The survregVB
-package includes two methods, <code>survregVB</code> and
-<code>survregVB_frailty</code> for analyzing AFT survival data under a
-log-logistic distribution with and without frailty respectively.</p>
+times [<span class="citation">Xian et al. (<a href="#ref-xian2024">2024b</a>)</span>). The survregVB package includes
+two methods, <code>survregVB</code> and <code>survregVB_frailty</code>
+for analyzing AFT survival data under a log-logistic distribution with
+and without frailty respectively.</p>
 <p>The goal of the <code>survregVB</code> function is to fit it a
 log-logistic AFT regression model of the following form for
 right-censored survival time <span class="math inline">\(T_i\)</span>:</p>
@@ -436,8 +444,9 @@ log(T_i):=Y=X_i^T+bz_i
 a standard logistic distribution and <span class="math inline">\(b\)</span> is a scale parameter. In particular,
 <code>survregVB</code> uses a Bayesian framework to obtain the optimal
 variational densities of parameters <span class="math inline">\(\beta\)</span> and <span class="math inline">\(b\)</span> by maximizing the evidence based lower
-bound (ELBO) (<span class="citation">Jordan et al. (1999)</span>; <span class="citation">Blei et al. (2017)</span>). In order to do so, we
-assume prior distributions:</p>
+bound (ELBO) <span class="citation">(<a href="#ref-blei2017">Blei et
+al., 2017</a>; <a href="#ref-jordan1999">Jordan et al.,
+1999</a>)</span>. In order to do so, we assume prior distributions:</p>
 <ul>
 <li><p><span class="math inline">\(\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})\)</span>,
 with precision <span class="math inline">\(v_0=1/\sigma^2\)</span>,
@@ -446,7 +455,8 @@ and</p></li>
 </ul>
 <p>where <span class="math inline">\(\mu_0,v_0,\alpha_0\)</span> and
 <span class="math inline">\(\omega_0\)</span> are known hyperparameters
-(<span class="citation">Nedelman (2005)</span>; <span class="citation">Faes et al. (2011)</span>).</p>
+<span class="citation">(<a href="#ref-faes2011">Faes et al., 2011</a>;
+<a href="#ref-nedelman2005">Nedelman, 2005</a>)</span>.</p>
 <p>At the end of the model fitting process, the <code>survregVB</code>
 function obtains the approximated posterior distributions given as
 follows:</p>
@@ -457,29 +467,78 @@ and</p></li>
 density function,</p></li>
 </ul>
 <p>where the parameters <span class="math inline">\(\mu,\Sigma,\alpha\)</span> and <span class="math inline">\(\omega\)</span> are obtained via the VB algorithm
-(<span class="citation">Xian et al. (2024)</span>).</p>
+<span class="citation">(<a href="#ref-xian2024">Xian et al.,
+2024b</a>)</span>.</p>
+<p>We can also use the <code>survregVB</code> function is to fit it a
+shared frailty log-logistic AFT regression model that accounts for
+intra-cluster correlation through a cluster-specific random intercept.
+For time <span class="math inline">\(T_{ij}\)</span> of the <span class="math inline">\(j_{th}\)</span> subject from the <span class="math inline">\(i_{th}\)</span> cluster in the sample, in a sample
+with <span class="math inline">\(i=1,...,K\)</span> clusters and <span class="math inline">\(j=1,...,n_i\)</span> subjects:</p>
+<p><span class="math display">\[
+\log(T_{ij})=\gamma_i+X_{ij}^T\beta+b\epsilon_{ij}
+\]</span></p>
+<p>where <span class="math inline">\(X_{ij}\)</span> is column vector of
+<span class="math inline">\(p-1\)</span> covariates and a constant one
+(i.e. <span class="math inline">\(X_{ij}=(1,x_{ij1},...,x_{ij(p-1)})^T\)</span>),
+<span class="math inline">\(\beta\)</span> is a vector of coefficients,
+<span class="math inline">\(\gamma_i\)</span> is a random intercept for
+the <span class="math inline">\(i^{th}\)</span> cluster, <span class="math inline">\(\epsilon_{ij}\)</span> is a variable following a
+standard logistic distribution and <span class="math inline">\(b\)</span> is a scale parameter <span class="citation">(<a href="#ref-xian2024a">Xian et al.,
+2024a</a>)</span>.</p>
+<p>To obtain the optimal variational densities of parameters <span class="math inline">\(\beta,b,\gamma\)</span> and <span class="math inline">\(\sigma^2_\gamma\)</span>, we assume prior
+distributions:</p>
+<ul>
+<li><p><span class="math inline">\(\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})\)</span>,
+with precision <span class="math inline">\(v_0=1/\sigma^2\)</span>,</p></li>
+<li><p><span class="math inline">\(\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)\)</span>,</p></li>
+<li><p><span class="math inline">\(b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)\)</span>,
+and</p></li>
+<li><p><span class="math inline">\(\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)\)</span>,</p></li>
+</ul>
+<p>where <span class="math inline">\(\mu_0,v_0,\alpha_0\)</span>, <span class="math inline">\(\omega_0\)</span>, <span class="math inline">\(\lambda_0\)</span> and <span class="math inline">\(\eta_0\)</span> are known hyperparameters <span class="citation">(<a href="#ref-xian2024a">Xian et al.,
+2024a</a>)</span>.</p>
+<p>At the end of the model fitting process, the <code>survregVB</code>
+function obtains the approximated posterior distributions given as
+follows:</p>
+<ul>
+<li><p><span class="math inline">\(q^*(\beta)\)</span> is a <span class="math inline">\(N_p(\mu,\Sigma)\)</span> density
+function,</p></li>
+<li><p><span class="math inline">\(q^*(b)\)</span> is a <span class="math inline">\(\text{Inverse-Gamma}(\alpha,\omega)\)</span>
+density function,</p></li>
+<li><p><span class="math inline">\(q^*(\gamma_i)\)</span> is a <span class="math inline">\(N_l(\tau^*_i,\sigma^{2*}_i))\)</span> density
+function, and</p></li>
+<li><p><span class="math inline">\(q^*(\sigma^2_\gamma)\)</span> is a
+<span class="math inline">\(\text{Inverse-Gamma}(\lambda^*,\eta^*)\)</span>
+density function,</p></li>
+</ul>
+<p>where the parameters <span class="math inline">\(\mu,\Sigma,\alpha,\omega,\tau_i, \sigma_i,
+\lambda\)</span> and <span class="math inline">\(\eta\)</span> are
+obtained via the VB algorithm <span class="citation">(<a href="#ref-xian2024a">Xian et al., 2024a</a>)</span>.</p>
+</div>
 </div>
 <div id="statement-of-need" class="section level1">
 <h1>Statement of Need</h1>
 <p>Several R packages, such as the likelihood-based survival regression
 <code>survreg</code> function from the <strong>survival</strong> package
-(<span class="citation">Therneau (2024)</span>) and the MCMC-based
-Hamiltonian Monte Carlo (HMC) algorithm in the <strong>rstan</strong>
-package (<span class="citation"> (2024)</span>), provide methods for AFT
-model estimation. However, there is currently no integrated software
-solution for implementing variational inference (VI) for AFT models.</p>
+<span class="citation">(<a href="#ref-survival">Therneau,
+2024</a>)</span> and the MCMC-based Hamiltonian Monte Carlo (HMC)
+algorithm in the <strong>rstan</strong> package <span class="citation">(<a href="#ref-rstan">2024</a>)</span>, provide methods
+for AFT model estimation. However, there is currently no integrated
+software solution for implementing variational inference (VI) for AFT
+models.</p>
 <p>In comparison to MCMC techniques, VI has several advantages. These
-include computational efficiency (<span class="citation">Blei et al.
-(2017)</span>), the ability to make use of prior information from
-similar studies, and the ability to conduct inference for small sample
-sizes as it does not rely on asymptotics (<span class="citation">Ibrahim
-et al. (2001)</span>). Research has been done to compare estimation
+include computational efficiency <span class="citation">(<a href="#ref-blei2017">Blei et al., 2017</a>)</span>, the ability to make
+use of prior information from similar studies, and the ability to
+conduct inference for small sample sizes as it does not rely on
+asymptotics <span class="citation">(<a href="#ref-ibrahim2001">Ibrahim
+et al., 2001</a>)</span>. Research has been done to compare estimation
 results for a log-logistic AFT model with right censoring from the VB
 algorithm to those from the HMC algorithm, and <code>survreg</code>. The
 three methods provide similar estimates of the posterior model
 parameters. However, the VB method offers a significantly reduced
 computational cost compared to MCMC, with an average speedup of 300
-times. (<span class="citation">Xian et al. (2024)</span>).</p>
+times. <span class="citation">(<a href="#ref-xian2024">Xian et al.,
+2024b</a>)</span>.</p>
 <p>Bayesian variational methods for accelerated failure time (AFT)
 models are still relatively new, and to date, there is no integrated
 software solution for their practical implementation. Developing a
@@ -502,11 +561,12 @@ time, <em>T</em>, is defined as the time until the first pulmonary
 exacerbation. <em>T</em> is calculated as the difference between the
 date of entry into the study (<code>entry.dt</code>) and date of last
 follow-up (<code>end.dt</code>), with the follow-up period capped at 169
-days (<span class="citation">Therneau (2024)</span>). The covariates of
-interest are:</p>
+days [<span class="citation">Therneau (<a href="#ref-survival">2024</a>)</span>). The covariates of interest
+are:</p>
 <ul>
 <li>Treatment (<code>trt</code>: 0=placebo, 1=rhDNase), and</li>
-<li>Forced expiratory volume (<code>fev</code>) (<span class="citation">Therneau (2024)</span>)</li>
+<li>Forced expiratory volume (<code>fev</code>) <span class="citation">(<a href="#ref-survival">Therneau,
+2024</a>)</span></li>
 </ul>
 <p>Our goal is to fit it a log-logistic AFT regression model of the
 form:</p>
@@ -519,7 +579,8 @@ where:</p>
 and</p></li>
 <li><p><span class="math inline">\(z\)</span> is a random variable
 following a standard logistic distribution with scale parameter
-<em>b</em> (<span class="citation">Xian et al. (2024)</span>).</p></li>
+<em>b</em> <span class="citation">(<a href="#ref-xian2024">Xian et al.,
+2024b</a>)</span>.</p></li>
 </ul>
 <p>The event of interest is whether or not the subject experienced
 infection, <code>infect</code>.</p>
@@ -528,7 +589,8 @@ infection, <code>infect</code>.</p>
 <p>First, we prepare the data for modeling so the dataset is ready with
 the survival time (<code>time</code>) and event indicator
 (<code>infect</code>) via the example code provided in the survival
-package (<span class="citation">Therneau (2024)</span>):</p>
+package <span class="citation">(<a href="#ref-survival">Therneau,
+2024</a>)</span>:</p>
 <pre class="r"><code>library(survival)
 # Extract the first row for each subject
 first &lt;- subset(rhDNase, !duplicated(id)) 
@@ -563,11 +625,13 @@ data:</p>
 we use <span class="math inline">\(\log(169/2)\approx4.4\)</span> (half
 the follow-up period),</p></li>
 <li><p>for <span class="math inline">\(\beta_1\)</span>
-(<code>trt</code>), we use <span class="math inline">\(\log(1.28)\approx0.25\)</span> (<span class="citation">Shah &amp; Hodson (1996)</span>)</p></li>
+(<code>trt</code>), we use <span class="math inline">\(\log(1.28)\approx0.25\)</span> <span class="citation">(<a href="#ref-shah1996">Shah &amp; Hodson,
+1996</a>)</span></p></li>
 <li><p>for <span class="math inline">\(\beta_2\)</span>
-(<code>fev</code>) we use <span class="math inline">\(\log(1.04)\approx0.04\)</span> (<span class="citation">Block et al. (2006)</span>)</p></li>
+(<code>fev</code>) we use <span class="math inline">\(\log(1.04)\approx0.04\)</span> <span class="citation">(<a href="#ref-block2006">Block et al.,
+2006</a>)</span></p></li>
 </ul>
-<p>For the precision hyperparameter, we use a low precision <span class="math inline">\(v_0=1\)</span> to obtain a flat prior (<span class="citation">Xian et al. (2024)</span>).</p>
+<p>For the precision hyperparameter, we use a low precision <span class="math inline">\(v_0=1\)</span> to obtain a flat prior [<span class="citation">Xian et al. (<a href="#ref-xian2024">2024b</a>)</span>).</p>
 </div>
 <div id="applying-the-survregvb-function" class="section level3">
 <h3>Applying the <code>survregVB</code> function</h3>
@@ -590,6 +654,12 @@ the credible intervals by altering the <code>ci</code> argument:</p>
 <pre class="r"><code>summary(fit, ci=0.9)</code></pre>
 </div>
 </div>
+</div>
+<div id="code-availability" class="section level1">
+<h1>Code Availability</h1>
+<p>The <strong>survregVB</strong> is available at the following GitHub
+repository: <a href="https://github.com/chengqianxian/survregVB" class="uri">https://github.com/chengqianxian/survregVB</a>, along with
+tutorials as vignettes in R Markdown notebooks.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="unnumbered">References</h1>
@@ -683,9 +753,15 @@ regional variations in colon cancer survival in Ontario, Canada: a
 population-based retrospective cohort study. <em>BMJ Open</em>,
 <em>12</em>(9), e059597. <a href="https://doi.org/10.1136/bmjopen-2021-059597">https://doi.org/10.1136/bmjopen-2021-059597</a>
 </div>
+<div id="ref-xian2024a" class="csl-entry">
+Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F., &amp; Tian, R.
+(2024a). <em>Fast variational bayesian inference for correlated survival
+data: An application to invasive mechanical ventilation duration
+analysis</em>. <a href="https://doi.org/10.48550/ARXIV.2408.00177">https://doi.org/10.48550/ARXIV.2408.00177</a>
+</div>
 <div id="ref-xian2024" class="csl-entry">
 Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F., &amp; Tian, R.
-(2024). Variational Bayesian analysis of survival data using a
+(2024b). Variational Bayesian analysis of survival data using a
 log-logistic accelerated failure time model. <em>Statistics and
 Computing</em>, <em>34</em>(2). <a href="https://doi.org/10.1007/s11222-023-10365-6">https://doi.org/10.1007/s11222-023-10365-6</a>
 </div>

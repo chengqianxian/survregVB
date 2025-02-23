@@ -75,29 +75,33 @@ right-censored  survival times following a log-logistic distribution.
 \details{
 The log-logistic AFT model without shared frailty is specified with the
 parameters:
-\emph{β}, the vector of coefficients for the fixed effects, and
-\emph{b}, a scale parameter.
+\itemize{
+\item \emph{β}, the vector of coefficients for the fixed effects, and
+\item \emph{b}, a scale parameter.
 With shared frailty, the model is specified with an additional parameter:
-\eqn{\sigma^2_\gamma}, the random intercept.
+\item \eqn{\sigma^2_\gamma}, the random intercept.
 The goal is to maximize the evidence lower bound (ELBO) in order to
 approximate posterior distributions of the model parameters.
+}
 
-The prior distributions are:
+We assume prior distributions:
 \itemize{
 \item \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} where precision,
-\eqn{v_{0}=1/\sigma^2},
+\eqn{v_{0}=1/\sigma^2}, and
 \item \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)},
+With shared frailty, we also assume prior distributions:
 \item \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)},
 and
 \item \eqn{\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}.
 }
 
-The approximate posterior distributions are:
+We obtain approximate posterior distributions:
 \itemize{
-\item \eqn{\beta\sim N_p(\mu,\Sigma)},
-\item \eqn{q^*(b)\sim\text{Inverse-Gamma}(\alpha,\omega)},
-\item \eqn{q^*(\gamma_i)~N_l(\tau^*_i,\sigma^{2*}_i))}, and
-\item \eqn{q^*(\sigma^2_\gamma)\sim\text{Inverse-Gamma}(\lambda^*,\eta^*)}.
+\item \eqn{\beta\sim N_p(\mu,\Sigma)}, and
+\item \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}
+With shared frailty, we also obtain posterior distributions:
+\item \eqn{\gamma_i~N_l(\tau^*_i,\sigma^{2*}_i))}, and
+\item \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda^*,\eta^*)}.
 }
 }
 \examples{

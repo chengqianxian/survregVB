@@ -24,14 +24,14 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
   cat("\nalpha: ", x$alpha, "  omega: ", x$omega, "\n")
 
   if (!is.null(x$clustered)) {
-    cat("\nPosterior distribution of sigma_gamma squared (random intercept):")
-    cat("\nlamda: ", x$lambda, "  eta: ", x$eta, "\n")
-
-    cat("\nPosterior distribution of gamma (variance of the random intercept):")
+    cat("\nPosterior distribution of gamma (random intercept):")
     cat("\ntau:\n")
     print(x$tau, digits = digits)
     cat("\nsigma squared:\n")
     print(x$sigma, digits = digits)
+
+    cat("\nPosterior distribution of sigma_gamma squared (variance of the random intercept):")
+    cat("\nlamda: ", x$lambda, "  eta: ", x$eta, "\n")
   }
 
   omit <- x$na.action

@@ -256,7 +256,7 @@ sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda, eta,
                        expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   expectation_inverse_b_2 <- expectation_inverse_b_2(alpha, omega)
-  expectation_inverse_sigma <- expectation_inverse_sigma(lambda, eta)
+  expectation_inverse_sigma <- expectation_inverse_b(lambda, eta)
   zeta <- numeric(nrow(X))
 
   for (i in 1:nrow(X)) {

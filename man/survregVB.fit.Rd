@@ -54,15 +54,18 @@ proper length or type.
 For right-censored survival time \eqn{T_i} of the \eqn{i_{th}} subject
 in a sample, \eqn{i=1,...,n}, the log-logistic AFT model is specified
 as follows:
+
 \eqn{\log(T_i)=X_i^T\beta+bz_i}, where
-\eqn{X_i} is a column vector of length \eqn{p, p\ge2} containing
+\itemize{
+\item \eqn{X_i} is a column vector of length \eqn{p, p\ge2} containing
 \eqn{p-1} covariates and a constant one to incorporate the intercept
 (i.e., \eqn{X_i=(1,x_{i1},...,x_{i(p-1)})^T}),
-\emph{β} is the corresponding vector of coefficients for the fixed
+\item \emph{β} is the corresponding vector of coefficients for the fixed
 effects,
-\eqn{z_i} is a random variable following a standard logistic
+\item \eqn{z_i} is a random variable following a standard logistic
 distribution, and
-\emph{b} is a scale parameter.
+\item \emph{b} is a scale parameter.
+}
 }
 \seealso{
 \code{\link{survregVB}}
