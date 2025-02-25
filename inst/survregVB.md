@@ -18,16 +18,12 @@ editor_options:
 
 A commonly used survival regression model is the accelerated failure
 time (AFT) model, which assumes an accelerative effect of the covariates
-directly on survival time [@webber2022]. There are several possible
-distributions for the AFT model, including exponential, Weibull,
-log-logistic, log-normal or gamma. In particular, the log-logistic
+directly on survival time [@webber2022]. In particular, the log-logistic
 distribution is suitable for modelling a wide variety of survival data
 [@rivas-lópez2022]. In cases where correlated survival data arises from
 clusters of individuals with shared environmental factors, a shared
 frailty AFT model can be used to account for correlations among survival
-data [@hougaard1995; @hanagal2011; @gorfine2023]. Since the choice of
-distribution is not critical, the log-logistic AFT model can be used
-[@lambert2004].
+data [@hougaard1995; @hanagal2011; @gorfine2023].
 
 Bayesian inference is a technique used to derive the posterior
 distribution of model parameters based on Bayes’ theorem. Markov Chain
@@ -48,14 +44,14 @@ evidence lower-bound (ELBO) [@jordan1999; @blei2017].
 ## The survregVB Package
 
 The **survregVB** package is an R package for the implementation of
-Bayesian inference for accelerated failure time (models) used in
+Bayesian inference for accelerated failure time (AFT) models used in
 survival analysis. As an alternative to Markov chain Monte Carlo (MCMC)
 methods, the **survregVB** package implements a mean-field variational
 Bayes (VB) algorithm to infer the parameters of a log-logistic AFT
 model. A piecewise approximation technique is embedded into the VB
 algorithm to achieve conjugacy. Compared to MCMC, the VB algorithm has
 similar performance and significantly reduced computation cost, with an
-average speed-up of 300 times [@xian2024). The survregVB package
+average speed-up of 300 times [@xian2024]. The survregVB package
 includes two methods, `survregVB` and `survregVB_frailty` for analyzing
 AFT survival data under a log-logistic distribution with and without
 frailty respectively.

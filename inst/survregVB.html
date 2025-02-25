@@ -385,18 +385,13 @@ Survival Data Using a Log-Logistic Accelerated Failure Time Model</h1>
 <h2>Background</h2>
 <p>A commonly used survival regression model is the accelerated failure
 time (AFT) model, which assumes an accelerative effect of the covariates
-directly on survival time <span class="citation">(<a href="#ref-webber2022">Webber et al., 2022</a>)</span>. There are
-several possible distributions for the AFT model, including exponential,
-Weibull, log-logistic, log-normal or gamma. In particular, the
-log-logistic distribution is suitable for modelling a wide variety of
-survival data <span class="citation">(<a href="#ref-rivas-l%C3%B3pez2022">Rivas-López et al., 2022</a>)</span>.
+directly on survival time <span class="citation">(<a href="#ref-webber2022">Webber et al., 2022</a>)</span>. In particular,
+the log-logistic distribution is suitable for modelling a wide variety
+of survival data <span class="citation">(<a href="#ref-rivas-l%C3%B3pez2022">Rivas-López et al., 2022</a>)</span>.
 In cases where correlated survival data arises from clusters of
 individuals with shared environmental factors, a shared frailty AFT
 model can be used to account for correlations among survival data <span class="citation">(<a href="#ref-gorfine2023">Gorfine &amp; Zucker,
-2023</a>; <a href="#ref-hanagal2011">Hanagal, 2011</a>; <a href="#ref-hougaard1995">Hougaard, 1995</a>)</span>. Since the choice of
-distribution is not critical, the log-logistic AFT model can be used
-<span class="citation">(<a href="#ref-lambert2004">Lambert et al.,
-2004</a>)</span>.</p>
+2023</a>; <a href="#ref-hanagal2011">Hanagal, 2011</a>; <a href="#ref-hougaard1995">Hougaard, 1995</a>)</span>.</p>
 <p>Bayesian inference is a technique used to derive the posterior
 distribution of model parameters based on Bayes’ theorem. Markov Chain
 Monte Carlo (MCMC) algorithms are typically used to approximate the
@@ -418,18 +413,19 @@ maximizing the evidence lower-bound (ELBO) <span class="citation">(<a href="#ref
 <div id="the-survregvb-package" class="section level2">
 <h2>The survregVB Package</h2>
 <p>The <strong>survregVB</strong> package is an R package for the
-implementation of Bayesian inference for accelerated failure time
-(models) used in survival analysis. As an alternative to Markov chain
+implementation of Bayesian inference for accelerated failure time (AFT)
+models used in survival analysis. As an alternative to Markov chain
 Monte Carlo (MCMC) methods, the <strong>survregVB</strong> package
 implements a mean-field variational Bayes (VB) algorithm to infer the
 parameters of a log-logistic AFT model. A piecewise approximation
 technique is embedded into the VB algorithm to achieve conjugacy.
 Compared to MCMC, the VB algorithm has similar performance and
 significantly reduced computation cost, with an average speed-up of 300
-times [<span class="citation">Xian et al. (<a href="#ref-xian2024">2024b</a>)</span>). The survregVB package includes
-two methods, <code>survregVB</code> and <code>survregVB_frailty</code>
-for analyzing AFT survival data under a log-logistic distribution with
-and without frailty respectively.</p>
+times <span class="citation">(<a href="#ref-xian2024">Xian et al.,
+2024b</a>)</span>. The survregVB package includes two methods,
+<code>survregVB</code> and <code>survregVB_frailty</code> for analyzing
+AFT survival data under a log-logistic distribution with and without
+frailty respectively.</p>
 <p>The goal of the <code>survregVB</code> function is to fit it a
 log-logistic AFT regression model of the following form for
 right-censored survival time <span class="math inline">\(T_i\)</span>:</p>
@@ -713,12 +709,6 @@ Survival Analysis</em>. Springer New York. <a href="https://doi.org/10.1007/978-
 <div id="ref-jordan1999" class="csl-entry">
 Jordan, M. I., Ghahramani, Z., Jaakkola, T. S., &amp; Saul, L. K.
 (1999). <em>Machine Learning</em>, <em>37</em>(2), 183–233. <a href="https://doi.org/10.1023/a:1007665907178">https://doi.org/10.1023/a:1007665907178</a>
-</div>
-<div id="ref-lambert2004" class="csl-entry">
-Lambert, P., Collett, D., Kimber, A., &amp; Johnson, R. (2004).
-Parametric accelerated failure time models with random effects and an
-application to kidney transplant survival. <em>Statistics in
-Medicine</em>, <em>23</em>(20), 3177–3192. <a href="https://doi.org/10.1002/sim.1876">https://doi.org/10.1002/sim.1876</a>
 </div>
 <div id="ref-nedelman2005" class="csl-entry">
 Nedelman, J. R. (2005). Book review: <span>“</span>Bayesian Data
