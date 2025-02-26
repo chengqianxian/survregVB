@@ -8,20 +8,11 @@ print.summary.survregVB <- function(x, digits =
   cat("Call:\n")
   dput(x$call)
 
-  cat("\nELBO: ", round(x$ELBO, digits), "\n")
-  cat("\nNumber of iterations: ", x$iterations, "\n")
-
-  cat("\nRegression Coefficients:\n")
-  printCoefmat(x$coefficients, digits = digits, signif.stars = signif.stars,
+  printCoefmat(x$posteriors, digits = digits, signif.stars = signif.stars,
                P.values = TRUE, has.Pvalue = TRUE)
 
-  cat("\nScale Parameter:\n")
-  print(x$scale, digits = digits)
-
-  if (!is.null(x$clustered)) {
-    cat("\nVariance of the Random Intercept:\n")
-    print(x$intercept, digits = digits)
-  }
+  cat("\nELBO= ", round(x$ELBO, digits), "\n")
+  cat("\nNumber of iterations= ", x$iterations, "\n")
 
   omit <- x$na.action
   if (length(omit))

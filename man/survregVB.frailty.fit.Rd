@@ -2,8 +2,8 @@
 % Please edit documentation in R/survregVB.frailty.fit.R
 \name{survregVB.frailty.fit}
 \alias{survregVB.frailty.fit}
-\title{Variational Bayesian Analysis of Correlated Survival Data Using a Log-Logistic
-Accelerated Failure Time Model}
+\title{Variational Bayesian Analysis of Correlated Survival Data Using a
+Log-Logistic Accelerated Failure Time Model}
 \usage{
 survregVB.frailty.fit(
   Y,
@@ -24,25 +24,26 @@ survregVB.frailty.fit(
 
 \item{X}{A matrix of predictors (covariates), including an intercept.}
 
-\item{alpha_0}{Hyperparameter \eqn{\alpha_0} of the prior distribution
-of \emph{b}.}
+\item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
+distribution of \emph{b}.}
 
-\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior distribution
-of \emph{b}.}
+\item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
+distribution of \emph{b}.}
 
-\item{mu_0}{Hyperparameter \eqn{\mu_0} of the prior distribution of \emph{β}.}
+\item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
+distribution of \emph{β}.}
 
-\item{v_0}{Precision hyperparameter \eqn{v_0} of the prior distribution
-of \emph{β}.}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{lambda_0}{Hyperparameter \eqn{\lambda_0} of the prior distribution
+\item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
+distribution of \eqn{\sigma_\gamma^2}.}
+
+\item{eta_0}{The scale hyperparameter \eqn{\eta_0} of the prior distribution
 of \eqn{\sigma_\gamma^2}.}
 
-\item{eta_0}{Hyperparameter \eqn{\eta_0} of the prior distribution of
-\eqn{\sigma_\gamma^2}.}
-
-\item{cluster}{A named list indicating the group membership for each
-observation, where each cluster is assumed to have shared frailty.}
+\item{cluster}{An optional variable which clusters the observations to
+introduce shared frailty for correlated survival data.}
 
 \item{max_iteration}{The maximum number of iterations for the variational
 inference optimization. If reached, iteration stops. (Default:100)}
@@ -69,8 +70,8 @@ as follows:
 
 \eqn{\log(T_{ij})=\gamma_i+X_{ij}^T\beta+b\epsilon_{ij}}, where
 \itemize{
-\item \eqn{X_{ij}} is a column vector of length \eqn{p, p\ge2} containing \eqn{p-1}
-covariates and a constant one to incorporate the intercept
+\item \eqn{X_{ij}} is a column vector of length \eqn{p, p\ge2} containing
+\eqn{p-1} covariates and a constant one to incorporate the intercept
 (i.e., \eqn{X_i=(1,x_{ij1},...,x_{ij(p-1)})^T}),
 \item \emph{β} is the corresponding vector of coefficients for the fixed effects,
 \item \eqn{\gamma_i} is a random intercept for the \eqn{i_{th}} cluster,

@@ -2,9 +2,9 @@
 % Please edit documentation in R/parameters.R
 \name{tau_star}
 \alias{tau_star}
-\title{Calculates parameter \eqn{tau^*_i} of \eqn{q^*(\gamma)} for all clusters
-to optimize the evidence based lower bound (ELBO) in
-\code{survregVB.frailty.fit}.}
+\title{Calculates parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
+\eqn{i=1,...,K} clusters to optimize the evidence based lower bound
+(ELBO) in \code{survregVB.frailty.fit}.}
 \usage{
 tau_star(y, X, delta, alpha, omega, mu, tau, sigma, expectation_b, cluster)
 }
@@ -15,29 +15,31 @@ tau_star(y, X, delta, alpha, omega, mu, tau, sigma, expectation_b, cluster)
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{alpha}{Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
+\item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 
-\item{omega}{Parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
+\item{omega}{The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
 
-\item{mu}{The parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.}
+\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
+means.}
 
-\item{sigma}{Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all
-clusters.}
+\item{sigma}{Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)}, a
+vector of variance.}
 
-\item{expectation_b}{The expected value of b.}
+\item{expectation_b}{The expected value of \emph{b}.}
 
 \item{cluster}{A numeric vector indicating the cluster assignment for
 each observation.}
 }
 \value{
-Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
+Parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
+\eqn{i=1,...,K} clusters.
 }
 \description{
-Calculates parameter \eqn{tau^*_i} of \eqn{q^*(\gamma)} for all clusters
-to optimize the evidence based lower bound (ELBO) in
-\code{survregVB.frailty.fit}.
+Calculates parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
+\eqn{i=1,...,K} clusters to optimize the evidence based lower bound
+(ELBO) in \code{survregVB.frailty.fit}.
 }
 \seealso{
 \code{\link{survregVB.frailty.fit}}

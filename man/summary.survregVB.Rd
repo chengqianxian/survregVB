@@ -10,57 +10,40 @@
 \arguments{
 \item{object}{The result of a \code{survregVB} fit.}
 
-\item{ci}{The significance level for the credible intervals.
-(Default:0.95).}
+\item{ci}{The significance level for the credible intervals. (Default:0.95).}
 
 \item{\dots}{For future arguments.}
 }
 \value{
 An object of class \code{summary.survregVB} with components:
 \itemize{
-\item \code{call}: The function call used to invoke the
-\code{survregVB} method.
-\item \code{ELBO}: The final value of the Evidence Lower Bound
-(ELBO) at the last iteration.
-\item \code{alpha}: The updated parameter \eqn{\alpha} of the
-approximate posterior distribution of the scale parameter.
-\item \code{omega}: The updated parameter \eqn{\omega} of the
-approximate posterior distribution of the scale parameter.
-\item \code{mu}: The updated vector of means \eqn{\mu} of the
-approximate posterior distribution of the regression coefficients.
-\item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of
-the approximate posterior distribution of the regression
-coefficients.
-\item \code{tau}: The updated parameter \eqn{\tau} of the approximate
-posterior distribution of the random intercept.
-\item \code{sigma}: The updated parameter \eqn{\sigma^2} of the approximate
-posterior distribution of the random intercept.
-\item \code{lambda}: The updated parameter \eqn{\lambda} of the approximate
-posterior distribution of the variance of the random intercept.
-\item \code{eta}: The updated parameter \eqn{\eta} of the approximate
-posterior distribution of the variance of the random intercept.
-\item \code{na.action}: A missing-data filter function, applied to
-the model.frame, after any subset argument has been used.
-\item \code{iterations}: The number of iterations performed by the
-VB algorithm: before converging or reaching \code{max_iteration}.
+\item \code{ELBO}: The final value of the Evidence Lower Bound (ELBO)
+at the last iteration.
+\item \code{alpha}: The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
+\item \code{omega}: The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.
+\item \code{mu}: Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector
+of means.
+\item \code{Sigma}: Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a
+covariance matrix.
+\item \code{na.action}: A missing-data filter function, applied to the
+\code{model.frame}, after any subset argument has been used.
+\item \code{iterations}: The number of iterations performed by the VB
+algorithm: before converging or reaching \code{max_iteration}.
 \item \code{n}: The number of observations.
-\item \code{coefficients}: A matrix with one row for each
-coefficient, and columns containing:
+\item \code{call}: The function call used to invoke the \code{survregVB}
+method.
+\item \code{not_converged}: A boolean indicating if the algorithm converged.
 \itemize{
-\item \code{Value}: The estimated value of the coefficient.
-\item \code{Lower CI}: The lower bound of the credible interval
-associated with the coefficient.
-\item \code{Upper CI}: The upper bound of the credible interval
-associated with the coefficient.
+\item \code{TRUE}: If the algorithm did not converge prior to
+achieving \code{max_iteration}.
+\item \code{NULL}: If the algorithm converged successfully.
 }
-\item \code{scale}: A vector containing:
+\item \code{posteriors}: A matrix with one row for each coefficient,
+and one row for the scale parameter, and columns containing:
 \itemize{
-\item \code{Value}: The estimated value of the scale parameter.
-\item \code{Lower CI}: The lower bound of the credible interval
-associated with the scale parameter.
-\item \code{Upper CI}: The upper bound of the credible interval
-associated with the scale parameter.
-}
+\item \code{Value}: The estimated value
+\item \code{Lower CI}: The lower bound of the credible interval.
+\item \code{Upper CI}: The upper bound of the credible interval.
 }
 }
 \description{

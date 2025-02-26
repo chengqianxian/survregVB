@@ -2,26 +2,23 @@
 % Please edit documentation in R/parameters.R
 \name{lambda_star}
 \alias{lambda_star}
-\title{Calculates parameter \eqn{lambda^*} of \eqn{q^*(sigma^2_{\gamma})} for
-all clusters to optimize the evidence based lower bound (ELBO) in
-\code{survregVB.frailty.fit}.}
+\title{Calculates parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})} to
+optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.}
 \usage{
 lambda_star(lambda_0, K)
 }
 \arguments{
-\item{lambda_0}{Hyperparameter \eqn{\lambda_0} of the prior distribution
-of \eqn{sigma^2_{\gamma}}.}
+\item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
+distribution of \eqn{\sigma_\gamma^2}.}
 
 \item{K}{The number of clusters.}
 }
 \value{
-Parameter \eqn{lambda^*} of \eqn{q^*(sigma^2_{\gamma})} for all
-clusters.
+Parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})}.
 }
 \description{
-Calculates parameter \eqn{lambda^*} of \eqn{q^*(sigma^2_{\gamma})} for
-all clusters to optimize the evidence based lower bound (ELBO) in
-\code{survregVB.frailty.fit}.
+Calculates parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})} to
+optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
 }
 \seealso{
 \code{\link{survregVB.frailty.fit}}

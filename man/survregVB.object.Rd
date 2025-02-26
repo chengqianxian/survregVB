@@ -11,18 +11,23 @@ model. Objects of this class have methods for the functions \code{print}
 and \code{summary}.
 }
 \details{
-The components of this class are:
+For approximate posterior distributions:
+\itemize{
+\item \eqn{q^*(\beta)}, a \eqn{N_p(\mu^*,\Sigma^*)} density function, and
+\item \eqn{q^*(b)}, an \eqn{\text{Inverse-Gamma}(\alpha^*,\omega^*)}
+density function,
+}
+
+the components of this class are:
 \itemize{
 \item \code{ELBO}: The final value of the Evidence Lower Bound (ELBO)
 at the last iteration.
-\item \code{alpha}: The updated shape parameter \eqn{\alpha} of the
-approximate posterior distribution of \emph{b}.
-\item \code{omega}: The updated scale parameter \eqn{\omega} of the
-approximate posterior distribution of \emph{b}.
-\item \code{mu}: The updated vector of means \eqn{\mu} of the
-approximate posterior distribution of \emph{β}.
-\item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of the
-approximate posterior distribution of \emph{β}.
+\item \code{alpha}: The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
+\item \code{omega}: The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.
+\item \code{mu}: Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector
+of means.
+\item \code{Sigma}: Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a
+covariance matrix.
 \item \code{na.action}: A missing-data filter function, applied to the
 \code{model.frame}, after any subset argument has been used.
 \item \code{iterations}: The number of iterations performed by the VB
@@ -38,21 +43,25 @@ achieving \code{max_iteration}.
 }
 }
 
-The following components are present if \code{survregVB} was called with
-the cluster argument (shared frailty):
+If \code{survregVB} was called with shared frailty (with the \code{cluster}
+argument), for approximate posterior distributions:
 \itemize{
-\item \code{clustered}: A boolean indicating that the model was clustered.
-\item \code{tau}: The updated vector of variance \eqn{\tau} of the
-approximate posterior distribution of \eqn{\gamma_i} for \eqn{i=1,...,K}
-clusters.
-\item \code{sigma}: The updated vector of means \eqn{\sigma^2_i}
-of the approximate posterior distribution of \eqn{\gamma_i} for
-\eqn{i=1,...,K} clusters.
-\item \code{lambda}: The updated shape parameter \eqn{\lambda_i} of
-the approximate posterior distribution of \eqn{omega^2_{\gamma_i}}
-for \eqn{i=1,...,K} clusters.
-\item \code{eta}: The updated scale parameter \eqn{\eta_i} of the
-approximated posterior distribution of \eqn{omega^2_{\gamma_i}} for
-\eqn{i=1,...,K} clusters.
+\item \eqn{q^*(\sigma^2_\gamma)}, an \eqn{\text{Inverse-Gamma}(\lambda^*,\eta^*)}
+density function,
+\item \eqn{q^*(\gamma_i)}, a \eqn{N_l(\tau^*_i,\sigma^{2*}_i))} density function,
+for \eqn{i=1,...,K} clusters, and
+}
+
+the additional components are present:
+
+\itemize{
+\item \code{lambda}: The shape parameter \eqn{\lambda^*} of
+\eqn{q^*(\sigma^2_\gamma)}.
+\item \code{eta}: The scale parameter \eqn{\eta^*} of
+\eqn{q^*(\sigma^2_\gamma)}.
+\item \code{tau}: Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a
+vector of means.
+\item \code{sigma}: Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)},
+a vector of variance.
 }
 }

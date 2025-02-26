@@ -2,8 +2,9 @@
 % Please edit documentation in R/parameters.R
 \name{sigma_squared_star}
 \alias{sigma_squared_star}
-\title{Calculates parameter \eqn{sigma^{2*}} of \eqn{q^*(\gamma)} for all clusters
-to optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.}
+\title{Calculates parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for
+\eqn{i=1,...,K} clusters to optimize the evidence based lower bound
+(ELBO) in \code{survregVB.frailty.fit}.}
 \usage{
 sigma_squared_star(
   y,
@@ -26,31 +27,32 @@ sigma_squared_star(
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{alpha}{Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
+\item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 
-\item{omega}{Parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
+\item{omega}{The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
 
-\item{mu}{The parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.}
+\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
+means.}
 
-\item{lambda}{Parameter \eqn{\lambda^*} of \eqn{q^*(sigma^2_{\gamma})}
-for all clusters.}
+\item{lambda}{The shape parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_\gamma)}.}
 
-\item{eta}{Parameter \eqn{\eta^*} of \eqn{q^*(sigma^2_{\gamma})} for
-all clusters.}
+\item{eta}{The scale parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_\gamma)}.}
 
-\item{expectation_b}{The expected value of b.}
+\item{expectation_b}{The expected value of \emph{b}.}
 
 \item{cluster}{A numeric vector indicating the cluster assignment for
 each observation.}
 }
 \value{
-Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all clusters.
+Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for all
+clusters.
 }
 \description{
-Calculates parameter \eqn{sigma^{2*}} of \eqn{q^*(\gamma)} for all clusters
-to optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
+Calculates parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for
+\eqn{i=1,...,K} clusters to optimize the evidence based lower bound
+(ELBO) in \code{survregVB.frailty.fit}.
 }
 \seealso{
 \code{\link{survregVB.frailty.fit}}

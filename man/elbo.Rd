@@ -15,7 +15,7 @@ elbo(
   v_0,
   alpha,
   omega,
-  curr_mu,
+  mu,
   Sigma,
   expectation_b
 )
@@ -27,30 +27,28 @@ elbo(
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{alpha_0}{Hyperparameter \eqn{\alpha_0} of the prior
+\item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
 distribution of \emph{b}.}
 
-\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior
+\item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
 distribution of \emph{b}.}
 
-\item{mu_0}{Hyperparameter \eqn{\mu_0} of the prior distribution of
-\emph{β}.}
-
-\item{v_0}{Precision hyperparameter \eqn{v_0} of the prior
+\item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
 distribution of \emph{β}.}
 
-\item{alpha}{Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{omega}{Parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
+\item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 
-\item{curr_mu}{The current value of the parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{omega}{The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
 
-\item{Sigma}{Parameter \eqn{Sigma^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{expectation_b}{The expected value of b.}
-}
-\value{
-The evidence lower bound (ELBO).
+\item{Sigma}{Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a covariance
+matrix.}
+
+\item{expectation_b}{The expected value of \emph{b}.}
 }
 \description{
 Calculates the variational Bayes convergence criteria, evidence lower

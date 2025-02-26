@@ -1,11 +1,9 @@
 ## Expectation Calculations=============================================
 
-#' Calculates the expected value of an Inverse-Gamma distribution.
+#' Calculates the expected value of \eqn{q^*(b)}, an
+#' \eqn{\text{Inverse-Gamma}(\alpha,\omega)} density function.
 #'
-#' @param alpha Parameter \eqn{\alpha^*} of the distribution of
-#'  \emph{b}.
-#' @param omega Parameter \eqn{\omega^*} of the distribution of
-#'  \emph{b}.
+#' @inheritParams elbo
 #' @returns The expectation of b.
 #' @noRd
 expectation_b <- function(alpha, omega) {
@@ -13,13 +11,10 @@ expectation_b <- function(alpha, omega) {
   b
 }
 
-#' Calculates the expected value of the inverse of
-#' \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
+#' Calculates the expected value of the inverse of \eqn{q^*(b)}, an
+#' \eqn{\text{Inverse-Gamma}(\alpha,\omega)} density function.
 #'
-#' @param alpha Parameter \eqn{\alpha^*} of the distribution of
-#'  \emph{b}.
-#' @param omega Parameter \eqn{\omega^*} of the distribution of
-#'  \emph{b}.
+#' @inheritParams elbo
 #' @returns The expectation of \eqn{1/b}.
 #' @noRd
 expectation_inverse_b <- function(alpha, omega) {
@@ -27,13 +22,10 @@ expectation_inverse_b <- function(alpha, omega) {
   inv_b
 }
 
-#' Calculates the expected value of the squared inverse of
-#' \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
+#' Calculates the expected value of the squared inverse of \eqn{q^*(b)}, an
+#' \eqn{\text{Inverse-Gamma}(\alpha,\omega)} density function.
 #'
-#' @param alpha Parameter \eqn{\alpha^*} of the distribution of
-#'  \emph{b}.
-#' @param omega Parameter \eqn{\omega^*} of the distribution of
-#'  \emph{b}.
+#' @inheritParams elbo
 #' @return The expectation of \eqn{1/b^2}.
 #' @noRd
 expectation_inverse_b_2 <- function(alpha, omega) {
@@ -41,13 +33,10 @@ expectation_inverse_b_2 <- function(alpha, omega) {
   inv_b_2
 }
 
-#' Calculates the expected value of the log of
-#' \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}.
+#' Calculates the expected value of the log of \eqn{q^*(b)}, an
+#' \eqn{\text{Inverse-Gamma}(\alpha,\omega)} density function.
 #'
-#' @param alpha Parameter \eqn{\alpha^*} of the distribution of
-#'  \emph{b}.
-#' @param omega Parameter \eqn{\omega^*} of the distribution of
-#'  \emph{b}.
+#' @inheritParams elbo
 #' @return The expectations of \eqn{\log(b)}.
 #' @noRd
 expectation_log_b <- function(alpha, omega) {

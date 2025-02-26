@@ -34,44 +34,44 @@ elbo_cluster(
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{alpha_0}{Hyperparameter \eqn{\alpha_0} of the prior
+\item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
 distribution of \emph{b}.}
 
-\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior
+\item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
 distribution of \emph{b}.}
 
-\item{mu_0}{Hyperparameter \eqn{\mu_0} of the prior distribution of
-\emph{β}.}
-
-\item{v_0}{Precision hyperparameter \eqn{v_0} of the prior
+\item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
 distribution of \emph{β}.}
 
-\item{lambda_0}{Hyperparameter \eqn{\lambda_0} of the prior distribution
-of \eqn{sigma^2_{\gamma}}.}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{eta_0}{Hyperparameter \eqn{\eta_0} of the prior distribution of
-\eqn{sigma^2_{\gamma}}.}
+\item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
+distribution of \eqn{\sigma_\gamma^2}.}
 
-\item{alpha}{Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
+\item{eta_0}{The scale hyperparameter \eqn{\eta_0} of the prior distribution
+of \eqn{\sigma_\gamma^2}.}
 
-\item{omega}{Parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
+\item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 
-\item{mu}{The current value of the parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{omega}{The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
 
-\item{Sigma}{Parameter \eqn{Sigma^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.}
+\item{Sigma}{Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a covariance
+matrix.}
 
-\item{sigma}{Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all
-clusters.}
+\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
+means.}
 
-\item{lambda}{Parameter \eqn{\lambda^*} of \eqn{q^*(sigma^2_{\gamma})}
-for all clusters.}
+\item{sigma}{Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)}, a
+vector of variance.}
 
-\item{eta}{Parameter \eqn{\eta^*} of \eqn{q^*(sigma^2_{\gamma})} for
-all clusters.}
+\item{lambda}{The shape parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_\gamma)}.}
 
-\item{expectation_b}{The expected value of b.}
+\item{eta}{The scale parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_\gamma)}.}
+
+\item{expectation_b}{The expected value of \emph{b}.}
 
 \item{cluster}{A numeric vector indicating the cluster assignment for
 each observation.}

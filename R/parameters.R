@@ -1,12 +1,10 @@
 ## Parameter Calculations ==============================================
 
-#' Calculates parameter \eqn{\alpha^*} of \eqn{q^*(b)} to optimize the evidence
-#' based lower bound (ELBO) in \code{survregVB.fit} and
+#' Calculates parameter \eqn{\alpha^*} of \eqn{q^*(b)} to optimize the
+#' evidence based lower bound (ELBO) in \code{survregVB.fit} and
 #' \code{survregVB.frailty.fit}.
 #'
-#' @param alpha_0 Hyperparameter \eqn{\alpha_0} of the prior distribution
-#' of \emph{b}.
-#' @param delta A binary vector indicating right censoring.
+#' @inheritParams elbo
 #' @returns Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
 #'
 #' @export
@@ -18,17 +16,10 @@ alpha_star <- function(alpha_0, delta) {
   alpha
 }
 
-#' Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the evidence
-#' based lower bound (ELBO) in \code{survregVB.fit}.
+#' Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the
+#' evidence based lower bound (ELBO) in \code{survregVB.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param omega_0 Hyperparameter \eqn{\omega_0} of the prior distribution
-#'  of \emph{b}.
-#' @param mu Parameter \eqn{\mu^*} of the approximate posterior distribution
-#'  of \emph{β}. \eqn{q}
-#' @param expectation_b The expected value of b.
+#' @inheritParams elbo
 #' @returns Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 #'
 #' @export
@@ -49,16 +40,7 @@ omega_star <- function(y, X, delta, omega_0, mu, expectation_b) {
 #' Calculates parameter \eqn{\mu^*} of \eqn{q^*(\beta)} to optimize the
 #' evidence based lower bound (ELBO) in \code{survregVB.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of \emph{β}.
-#' @param v_0 Hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param mu Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param Sigma Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.
-#' @param expectation_b The expected value of b.
+#' @inheritParams elbo
 #' @returns Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
 #'
 #' @export
@@ -91,14 +73,7 @@ mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
 #' Calculates parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)} to optimize the
 #' evidence based lower bound (ELBO) in \code{survregVB.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param v_0 Hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param mu Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param expectation_b The expected value of b.
+#' @inheritParams elbo
 #' @returns Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.
 #'
 #' @importFrom matlib inv
@@ -130,12 +105,7 @@ Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu, expectation_b) {
 #' Calculates the clustered survival times by adjusting the survival times
 #' to account for shared frailty.
 
-#' @param y A vector of observed log-transformed survival times.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#'  all clusters.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
-#'
+#' @inheritParams elbo_cluster
 #' @returns A vector of log-transformed survival time adjusted for the frailty
 #' of the corresponding cluster.
 #'
@@ -150,19 +120,8 @@ get_cluster_y <- function(y, tau, cluster) {
 #' Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the evidence
 #' based lower bound (ELBO) in \code{survregVB.frailty.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param omega_0 Hyperparameter \eqn{\omega_0} of the prior distribution
-#'  of \emph{b}.
-#' @param mu Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#'  all clusters.
-#' @param expectation_b The expected value of b.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
-#' @returns Parameter \eqn{\omega^*} of the approximate posterior distribution
-#'  of \emph{b}.
+#' @inheritParams elbo_cluster
+#' @returns Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
@@ -184,20 +143,7 @@ omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
 #' Calculates parameter \eqn{\mu^*} of \eqn{q^*(\beta)} to optimize the
 #' evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of \emph{β}.
-#' @param v_0 Hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param mu Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param Sigma Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#'  all clusters.
-#' @param expectation_b The expected value of b.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
+#' @inheritParams elbo_cluster
 #' @returns Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}
 #'
 #' @export
@@ -212,18 +158,7 @@ mu_star_cluster <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
 #' Calculates parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)} to optimize the
 #' evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param v_0 Hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param mu Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#'  all clusters.
-#' @param expectation_b The expected value of b.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
+#' @inheritParams elbo_cluster
 #' @returns Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.
 #'
 #' @export
@@ -234,25 +169,13 @@ Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
   Sigma_star(y_cluster, X, delta, v_0, alpha, omega, mu, expectation_b)
 }
 
-#' Calculates parameter \eqn{sigma^{2*}} of \eqn{q^*(\gamma)} for all clusters
-#' to optimize the evidence based lower bound (ELBO) in
-#' \code{survregVB.frailty.fit}.
+#' Calculates parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for
+#' \eqn{i=1,...,K} clusters to optimize the evidence based lower bound
+#' (ELBO) in \code{survregVB.frailty.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param mu The parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
-#' @param lambda Parameter \eqn{\lambda^*} of \eqn{q^*(sigma^2_{\gamma})}
-#'  for all clusters.
-#' @param eta Parameter \eqn{\eta^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#'  all clusters.
-#' @param expectation_b The expected value of b.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
-#' @returns Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all clusters.
+#' @inheritParams elbo_cluster
+#' @returns Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for all
+#'  clusters.
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
@@ -280,23 +203,13 @@ sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
   sigma
 }
 
-#' Calculates parameter \eqn{tau^*_i} of \eqn{q^*(\gamma)} for all clusters
-#' to optimize the evidence based lower bound (ELBO) in
-#' \code{survregVB.frailty.fit}.
+#' Calculates parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
+#' \eqn{i=1,...,K} clusters to optimize the evidence based lower bound
+#' (ELBO) in \code{survregVB.frailty.fit}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param mu The parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
-#' @param sigma Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all
-#'  clusters.
-#' @param expectation_b The expected value of b.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
-#' @returns Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
+#' @inheritParams elbo_cluster
+#' @returns Parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
+#'  \eqn{i=1,...,K} clusters.
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
@@ -338,15 +251,12 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
   tau
 }
 
-#' Calculates parameter \eqn{lambda^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#' all clusters to optimize the evidence based lower bound (ELBO) in
-#' \code{survregVB.frailty.fit}.
+#' Calculates parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})} to
+#' optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
 #'
-#' @param lambda_0 Hyperparameter \eqn{\lambda_0} of the prior distribution
-#'  of \eqn{sigma^2_{\gamma}}.
+#' @inheritParams elbo_cluster
 #' @param K The number of clusters.
-#' @return Parameter \eqn{lambda^*} of \eqn{q^*(sigma^2_{\gamma})} for all
-#'  clusters.
+#' @return Parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})}.
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
@@ -355,17 +265,11 @@ lambda_star <- function(lambda_0, K) {
   lambda
 }
 
-#' Calculates parameter \eqn{eta^*} of \eqn{q^*(sigma^2_{\gamma})} for all
-#' clusters to optimize the evidence based lower bound (ELBO) in
-#' \code{survregVB.frailty.fit}.
+#' Calculates parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_{\gamma})} to
+#' optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
 #'
-#' @param eta_0 Hyperparameter \eqn{\eta_0} of the prior distribution of
-#'  \eqn{sigma^2_{\gamma}}.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
-#' @param sigma Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all
-#'  clusters.
-#' @return Parameter \eqn{eta^*} of \eqn{q^*(sigma^2_{\gamma})} for all
-#'  clusters.
+#' @inheritParams elbo_cluster
+#' @return Parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_{\gamma})}.
 #'
 #' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}

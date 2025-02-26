@@ -14,15 +14,16 @@ Sigma_star(y, X, delta, v_0, alpha, omega, mu, expectation_b)
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{v_0}{Hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{alpha}{Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
+\item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 
-\item{omega}{Parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
+\item{omega}{The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
 
-\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{expectation_b}{The expected value of b.}
+\item{expectation_b}{The expected value of \emph{b}.}
 }
 \value{
 Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.

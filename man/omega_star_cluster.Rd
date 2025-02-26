@@ -14,22 +14,21 @@ omega_star_cluster(y, X, delta, omega_0, mu, tau, expectation_b, cluster)
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior distribution
-of \emph{b}.}
+\item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
+distribution of \emph{b}.}
 
-\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(sigma^2_{\gamma})} for
-all clusters.}
+\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
+means.}
 
-\item{expectation_b}{The expected value of b.}
+\item{expectation_b}{The expected value of \emph{b}.}
 
 \item{cluster}{A numeric vector indicating the cluster assignment for
 each observation.}
 }
 \value{
-Parameter \eqn{\omega^*} of the approximate posterior distribution
-of \emph{b}.
+Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 }
 \description{
 Calculates parameter \eqn{\omega^*} of \eqn{q^*(b)} to optimize the evidence

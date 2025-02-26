@@ -12,21 +12,18 @@
 #'  object of type `right`, as returned by the \code{Surv} function.
 #' @param data A `data.frame` in which to interpret the variables named in
 #'  the formula`.
-#' @param alpha_0 A numeric scalar specifying the shape hyperparameter
-#'  \eqn{\alpha_0} of the prior Inverse-Gamma distribution for \emph{b}.
-#' @param omega_0 A numeric scalar specifying the scale hyperparameter
-#'  \eqn{\omega_0} of the prior Inverse-Gamma distribution for \emph{b}.
-#' @param mu_0 A numeric vector containing the mean hyperparameters
-#'  \eqn{\mu_0} for the prior multivariate normal distributions of the
-#'  intercept (\eqn{\beta_0}) and the coefficients (\eqn{\beta_i})
-#'  corresponding to the covariates.
-#' @param v_0 A numeric scalar specifying the precision (inverse variance)
-#'  hyperparameter \eqn{v_0} of the prior multivariate normal prior
-#'  distribution for \emph{β}.
-#' @param lambda_0 Hyperparameter \eqn{\lambda_0} of the prior distribution
+#' @param alpha_0 The shape hyperparameter \eqn{\alpha_0} of the prior
+#'  distribution of \emph{b}.
+#' @param omega_0 The shape hyperparameter \eqn{\omega_0} of the prior
+#'  distribution of \emph{b}.
+#' @param mu_0 Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
+#'  distribution of \emph{β}.
+#' @param v_0 The precision (inverse variance) hyperparameter \eqn{v_0},
+#'  of the prior distribution of \emph{β}.
+#' @param lambda_0 The shape hyperparameter \eqn{\lambda_0} of the prior
+#'  distribution of \eqn{\sigma_\gamma^2}.
+#' @param eta_0 The scale hyperparameter \eqn{\eta_0} of the prior distribution
 #'  of \eqn{\sigma_\gamma^2}.
-#' @param eta_0 Hyperparameter \eqn{\eta_0} of the prior distribution of
-#'  \eqn{\sigma_\gamma^2}.
 #' @param na.action A missing-data filter function, applied to the
 #'  \code{model.frame}, after any subset argument has been used.
 #'  (Default:\code{options()$na.action}).
@@ -42,30 +39,38 @@
 #' @returns An object of class \code{survregVB}.
 #'
 #' @details
+#' The goal of \code{survregVB} is to maximize the evidence lower bound
+#' (ELBO) to approximate posterior distributions of the model parameters.
+#'
 #' The log-logistic AFT model without shared frailty is specified with the
 #' parameters:
 #' - \emph{β}, the vector of coefficients for the fixed effects, and
 #' - \emph{b}, a scale parameter.
-#' With shared frailty, the model is specified with an additional parameter:
-#' - \eqn{\sigma^2_\gamma}, the random intercept.
-#' The goal is to maximize the evidence lower bound (ELBO) in order to
-#' approximate posterior distributions of the model parameters.
 #'
 #' We assume prior distributions:
-#' - \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} where precision,
+#' - \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} with precision
 #'   \eqn{v_{0}=1/\sigma^2}, and
 #' - \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)},
-#' With shared frailty, we also assume prior distributions:
-#' - \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}
-#'    N(0,\sigma^2_\gamma)}, and
-#' - \eqn{\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}.
 #'
-#' We obtain approximate posterior distributions:
-#' - \eqn{\beta\sim N_p(\mu,\Sigma)}, and
-#' - \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}
-#' With shared frailty, we also obtain posterior distributions:
-#' - \eqn{\gamma_i~N_l(\tau^*_i,\sigma^{2*}_i))}, and
-#' - \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda^*,\eta^*)}.
+#' and obtain approximate posterior distributions:
+#' - \eqn{q^*(\beta)}, a \eqn{N_p(\mu^*,\Sigma^*)} density function, and
+#' - \eqn{q^*(b)}, an \eqn{\text{Inverse-Gamma}(\alpha^*,\omega^*)}
+#'    density function.
+#'
+#' With shared frailty, a model with \eqn{i=1,...,K} clusters is specified
+#' with additional parameters:
+#' - \eqn{\sigma^2_\gamma}, the random intercept, and
+#' - \eqn{\gamma_i|\sigma^2_\gamma} the random effects.
+#'
+#' We additionally assume prior distributions:
+#' - \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}, and
+#' - \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}
+#'    N(0,\sigma^2_\gamma)}.
+#'
+#' and obtain posterior distributions:
+#' - \eqn{q^*(\sigma^2_\gamma)}, an \eqn{\text{Inverse-Gamma}(\lambda^*,\eta^*)}
+#'   density function, and
+#' - \eqn{q^*(\gamma_i)}, a \eqn{N_l(\tau^*_i,\sigma^{2*}_i))} density function.
 #'
 #' @examples
 #' # Data frame containing survival data
@@ -164,8 +169,8 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
   na.action <- attr(m, "na.action")
   if (length(na.action)) result$na.action <- na.action
   result$call <- Call
-
   class(result) <- "survregVB"
+
   result
 }
 
@@ -180,18 +185,21 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
 #' @aliases print.survregVB
 #'
 #' @details
-#' The components of this class are:
+#' For approximate posterior distributions:
+#' - \eqn{q^*(\beta)}, a \eqn{N_p(\mu^*,\Sigma^*)} density function, and
+#' - \eqn{q^*(b)}, an \eqn{\text{Inverse-Gamma}(\alpha^*,\omega^*)}
+#'    density function,
+#'
+#' the components of this class are:
 #' \itemize{
 #'   \item \code{ELBO}: The final value of the Evidence Lower Bound (ELBO)
 #'    at the last iteration.
-#'   \item \code{alpha}: The updated shape parameter \eqn{\alpha} of the
-#'    approximate posterior distribution of \emph{b}.
-#'   \item \code{omega}: The updated scale parameter \eqn{\omega} of the
-#'    approximate posterior distribution of \emph{b}.
-#'   \item \code{mu}: The updated vector of means \eqn{\mu} of the
-#'    approximate posterior distribution of \emph{β}.
-#'   \item \code{Sigma}: The updated covariance matrix \eqn{\Sigma} of the
-#'    approximate posterior distribution of \emph{β}.
+#'   \item \code{alpha}: The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
+#'   \item \code{omega}: The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.
+#'   \item \code{mu}: Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector
+#'    of means.
+#'   \item \code{Sigma}: Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a
+#'    covariance matrix.
 #'   \item \code{na.action}: A missing-data filter function, applied to the
 #'    \code{model.frame}, after any subset argument has been used.
 #'   \item \code{iterations}: The number of iterations performed by the VB
@@ -207,22 +215,24 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
 #'   }
 #' }
 #'
-#' The following components are present if \code{survregVB} was called with
-#' the cluster argument (shared frailty):
+#' If \code{survregVB} was called with shared frailty (with the `cluster`
+#' argument), for approximate posterior distributions:
+#' - \eqn{q^*(\sigma^2_\gamma)}, an \eqn{\text{Inverse-Gamma}(\lambda^*,\eta^*)}
+#'   density function,
+#' - \eqn{q^*(\gamma_i)}, a \eqn{N_l(\tau^*_i,\sigma^{2*}_i))} density function,
+#'   for \eqn{i=1,...,K} clusters, and
+#'
+#' the additional components are present:
+#'
 #' \itemize{
-#'   \item \code{clustered}: A boolean indicating that the model was clustered.
-#'   \item \code{tau}: The updated vector of variance \eqn{\tau} of the
-#'    approximate posterior distribution of \eqn{\gamma_i} for \eqn{i=1,...,K}
-#'    clusters.
-#'   \item \code{sigma}: The updated vector of means \eqn{\sigma^2_i}
-#'    of the approximate posterior distribution of \eqn{\gamma_i} for
-#'    \eqn{i=1,...,K} clusters.
-#'   \item \code{lambda}: The updated shape parameter \eqn{\lambda_i} of
-#'    the approximate posterior distribution of \eqn{omega^2_{\gamma_i}}
-#'    for \eqn{i=1,...,K} clusters.
-#'   \item \code{eta}: The updated scale parameter \eqn{\eta_i} of the
-#'    approximated posterior distribution of \eqn{omega^2_{\gamma_i}} for
-#'    \eqn{i=1,...,K} clusters.
+#'   \item \code{lambda}: The shape parameter \eqn{\lambda^*} of
+#'    \eqn{q^*(\sigma^2_\gamma)}.
+#'   \item \code{eta}: The scale parameter \eqn{\eta^*} of
+#'    \eqn{q^*(\sigma^2_\gamma)}.
+#'   \item \code{tau}: Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a
+#'    vector of means.
+#'   \item \code{sigma}: Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)},
+#'    a vector of variance.
 #'  }
 #'
 NULL

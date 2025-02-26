@@ -28,26 +28,23 @@ object of type \code{right}, as returned by the \code{Surv} function.}
 \item{data}{A \code{data.frame} in which to interpret the variables named in
 the formula`.}
 
-\item{alpha_0}{A numeric scalar specifying the shape hyperparameter
-\eqn{\alpha_0} of the prior Inverse-Gamma distribution for \emph{b}.}
+\item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
+distribution of \emph{b}.}
 
-\item{omega_0}{A numeric scalar specifying the scale hyperparameter
-\eqn{\omega_0} of the prior Inverse-Gamma distribution for \emph{b}.}
+\item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
+distribution of \emph{b}.}
 
-\item{mu_0}{A numeric vector containing the mean hyperparameters
-\eqn{\mu_0} for the prior multivariate normal distributions of the
-intercept (\eqn{\beta_0}) and the coefficients (\eqn{\beta_i})
-corresponding to the covariates.}
+\item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
+distribution of \emph{β}.}
 
-\item{v_0}{A numeric scalar specifying the precision (inverse variance)
-hyperparameter \eqn{v_0} of the prior multivariate normal prior
-distribution for \emph{β}.}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{lambda_0}{Hyperparameter \eqn{\lambda_0} of the prior distribution
+\item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
+distribution of \eqn{\sigma_\gamma^2}.}
+
+\item{eta_0}{The scale hyperparameter \eqn{\eta_0} of the prior distribution
 of \eqn{\sigma_\gamma^2}.}
-
-\item{eta_0}{Hyperparameter \eqn{\eta_0} of the prior distribution of
-\eqn{\sigma_\gamma^2}.}
 
 \item{na.action}{A missing-data filter function, applied to the
 \code{model.frame}, after any subset argument has been used.
@@ -73,35 +70,49 @@ parameters of an accelerated failure time (AFT) survival model with
 right-censored  survival times following a log-logistic distribution.
 }
 \details{
+The goal of \code{survregVB} is to maximize the evidence lower bound
+(ELBO) to approximate posterior distributions of the model parameters.
+
 The log-logistic AFT model without shared frailty is specified with the
 parameters:
 \itemize{
 \item \emph{β}, the vector of coefficients for the fixed effects, and
 \item \emph{b}, a scale parameter.
-With shared frailty, the model is specified with an additional parameter:
-\item \eqn{\sigma^2_\gamma}, the random intercept.
-The goal is to maximize the evidence lower bound (ELBO) in order to
-approximate posterior distributions of the model parameters.
 }
 
 We assume prior distributions:
 \itemize{
-\item \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} where precision,
+\item \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} with precision
 \eqn{v_{0}=1/\sigma^2}, and
 \item \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)},
-With shared frailty, we also assume prior distributions:
-\item \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)},
-and
-\item \eqn{\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}.
 }
 
-We obtain approximate posterior distributions:
+and obtain approximate posterior distributions:
 \itemize{
-\item \eqn{\beta\sim N_p(\mu,\Sigma)}, and
-\item \eqn{b\sim\text{Inverse-Gamma}(\alpha,\omega)}
-With shared frailty, we also obtain posterior distributions:
-\item \eqn{\gamma_i~N_l(\tau^*_i,\sigma^{2*}_i))}, and
-\item \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda^*,\eta^*)}.
+\item \eqn{q^*(\beta)}, a \eqn{N_p(\mu^*,\Sigma^*)} density function, and
+\item \eqn{q^*(b)}, an \eqn{\text{Inverse-Gamma}(\alpha^*,\omega^*)}
+density function.
+}
+
+With shared frailty, a model with \eqn{i=1,...,K} clusters is specified
+with additional parameters:
+\itemize{
+\item \eqn{\sigma^2_\gamma}, the random intercept, and
+\item \eqn{\gamma_i|\sigma^2_\gamma} the random effects.
+}
+
+We additionally assume prior distributions:
+\itemize{
+\item \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}, and
+\item \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}
+   N(0,\sigma^2_\gamma)}.
+}
+
+and obtain posterior distributions:
+\itemize{
+\item \eqn{q^*(\sigma^2_\gamma)}, an \eqn{\text{Inverse-Gamma}(\lambda^*,\eta^*)}
+density function, and
+\item \eqn{q^*(\gamma_i)}, a \eqn{N_l(\tau^*_i,\sigma^{2*}_i))} density function.
 }
 }
 \examples{

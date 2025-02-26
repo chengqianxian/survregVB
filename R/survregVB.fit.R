@@ -7,24 +7,9 @@
 #'
 #' @name survregVB.fit
 #'
+#' @inheritParams survregVB
 #' @param Y A `Surv` object containing 2 columns: time and event.
 #' @param X A matrix of predictors (covariates), including an intercept.
-#' @param alpha_0 Hyperparameter \eqn{\alpha_0} of the prior
-#'  distribution of \emph{b}.
-#' @param omega_0 Hyperparameter \eqn{\omega_0} of the prior
-#'  distribution of \emph{b}.
-#' @param v_0 Precision hyperparameter \eqn{v_0} of the prior
-#'  distribution of \emph{β}.
-#' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of
-#'  \emph{β}.
-#' @param max_iteration The maximum number of iterations for the
-#'  variational  inference optimization. If reached, iteration stops.
-#'  (Default:100)
-#' @param threshold The convergence threshold for the evidence based
-#'  lower bound (ELBO) optimization. If the difference between the
-#'  current and previous ELBO's is smaller than this threshold,
-#'  iteration stops. (Default:0.0001)
-#'
 #' @returns A list containing results of the fit.
 #'
 #' @details

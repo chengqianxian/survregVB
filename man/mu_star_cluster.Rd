@@ -27,22 +27,25 @@ mu_star_cluster(
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{mu_0}{Hyperparameter \eqn{\mu_0} of the prior distribution of \emph{β}.}
+\item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
+distribution of \emph{β}.}
 
-\item{v_0}{Hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{alpha}{Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
+\item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 
-\item{omega}{Parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
+\item{omega}{The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
 
-\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{Sigma}{Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.}
+\item{Sigma}{Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a covariance
+matrix.}
 
-\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(sigma^2_{\gamma})} for
-all clusters.}
+\item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
+means.}
 
-\item{expectation_b}{The expected value of b.}
+\item{expectation_b}{The expected value of \emph{b}.}
 
 \item{cluster}{A numeric vector indicating the cluster assignment for
 each observation.}

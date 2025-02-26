@@ -1,12 +1,9 @@
-#' Calculates the credible interval for the regression coefficient
-#' \emph{β}.
+#' Calculates the credible interval for a posterior distribution,
+#' \eqn{q^*(\beta)}, a \eqn{N_p(\mu,\Sigma)} density function.
 #'
-#' @param mu The vector of means \eqn{\mu} of the posterior distribution
-#'  of \emph{β}.
-#' @param Sigma The covariance matrix \eqn{\Sigma} of the posterior
-#'  distribution \emph{β}.
+#' @inheritParams elbo
 #' @param ci The significance level. (Default:0.95).
-#' @returns Matrix containing the credible intervals for \emph{β}.
+#' @returns Matrix containing the credible intervals for \eqn{q^*(\beta)}.
 #'
 #' @noRd
 beta_ci <- function(mu, Sigma, ci = 0.95) {
@@ -23,13 +20,11 @@ beta_ci <- function(mu, Sigma, ci = 0.95) {
   return(ci_matrix)
 }
 
-#' Calculates the credible interval for the scale parameter \emph{b}
-#' using the highest density intervals (HDI) for b.
+#' Calculates the credible interval for a posterior distribution,
+#' \eqn{q^*(b)}, an \eqn{\text{Inverse-Gamma}(\alpha,\omega)} density
+#' function.
 #'
-#' @param alpha The parameter \eqn{\alpha} of the posterior distribution
-#'  of \emph{b}.
-#' @param omega The parameter \eqn{\omega} of the posterior
-#'  distribution \emph{b}.
+#' @inheritParams elbo
 #' @param ci The significance level. (Default:0.95).
 #' @returns The credible interval for \emph{b}.
 #'
@@ -39,7 +34,7 @@ beta_ci <- function(mu, Sigma, ci = 0.95) {
 b_ci <- function(alpha, omega, ci = 0.95) {
   set.seed(100)
   posterior <- rinvgamma(100000, alpha, omega)
-  lower <- hdi(posterior, ci = 0.95)$CI_low
-  upper <- hdi(posterior, ci = 0.95)$CI_high
+  lower <- hdi(posterior, ci)$CI_low
+  upper <- hdi(posterior, ci)$CI_high
   return(c(lower, upper))
 }

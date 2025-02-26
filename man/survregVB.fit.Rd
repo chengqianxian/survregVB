@@ -21,26 +21,25 @@ survregVB.fit(
 
 \item{X}{A matrix of predictors (covariates), including an intercept.}
 
-\item{alpha_0}{Hyperparameter \eqn{\alpha_0} of the prior
+\item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
 distribution of \emph{b}.}
 
-\item{omega_0}{Hyperparameter \eqn{\omega_0} of the prior
+\item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
 distribution of \emph{b}.}
 
-\item{mu_0}{Hyperparameter \eqn{\mu_0} of the prior distribution of
-\emph{β}.}
-
-\item{v_0}{Precision hyperparameter \eqn{v_0} of the prior
+\item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
 distribution of \emph{β}.}
 
-\item{max_iteration}{The maximum number of iterations for the
-variational  inference optimization. If reached, iteration stops.
-(Default:100)}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{threshold}{The convergence threshold for the evidence based
-lower bound (ELBO) optimization. If the difference between the
-current and previous ELBO's is smaller than this threshold,
-iteration stops. (Default:0.0001)}
+\item{max_iteration}{The maximum number of iterations for the variational
+inference optimization. If reached, iteration stops. (Default:100)}
+
+\item{threshold}{The convergence threshold for the evidence based lower
+bound (ELBO) optimization. If the difference between the current and
+previous ELBO's is smaller than this threshold, iteration stops.
+(Default:0.0001)}
 }
 \value{
 A list containing results of the fit.

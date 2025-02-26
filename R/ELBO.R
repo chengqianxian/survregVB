@@ -3,22 +3,15 @@
 #' Calculates the approximated expectation over the density of observed data
 #' \emph{D} given parameters \emph{β} and \emph{b}, \eqn{\log(p(D|\beta,b))}.
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param curr_mu The current value of the parameter \eqn{\mu^*} of
-#'  \eqn{q^*(\beta)}.
-#' @param expectation_b The expected value of b.
+#' @inheritParams elbo
 #' @returns The approximated log-likelihood \eqn{\log(p(D|\beta,b))}.
 #'
 #' @noRd
-expectation_log_likelihood <- function(y, X, delta, alpha, omega, curr_mu,
+expectation_log_likelihood <- function(y, X, delta, alpha, omega, mu,
                                        expectation_b) {
   res <- 0
   for (i in seq_len(nrow(X))) {
-    bz_i <- y[i] - sum(X[i, ] * curr_mu)
+    bz_i <- y[i] - sum(X[i, ] * mu)
     z_i <- bz_i / expectation_b
     phi_i <- get_phi(z_i)
     res_i <- (delta[i] - phi_i * (1 + delta[i])) * bz_i
@@ -37,18 +30,13 @@ expectation_log_likelihood <- function(y, X, delta, alpha, omega, curr_mu,
 #' Calculates the difference between the expectations of \eqn{\log(p(\beta))}
 #' and \eqn{\log(q^*(\beta))}.
 #'
-#' @param v_0 Precision hyperparameter \eqn{v_0} of the prior distribution
-#'  of \emph{β}.
-#' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of \emph{β}.
-#' @param curr_mu The current value of the parameter \eqn{\mu^*} of
-#'  \eqn{q^*{\beta}}.
-#' @param Sigma Parameter \eqn{\Sigma^*} of \eqn{q^*{\beta}}.
+#' @inheritParams elbo
 #' @returns The difference between the expectations of \eqn{\log(p(\beta))}
 #'  and \eqn{\log(q^*(\beta))}.
 #'
 #' @noRd
-diff_beta <- function(mu_0, v_0, curr_mu, Sigma) {
-  res <- sum(diag(Sigma)) + sum((curr_mu - mu_0) * (curr_mu - mu_0))
+diff_beta <- function(mu_0, v_0, mu, Sigma) {
+  res <- sum(diag(Sigma)) + sum((mu - mu_0) * (mu - mu_0))
   diff_beta <- (-v_0 * res + log(det(Sigma))) / 2
   diff_beta
 }
@@ -56,12 +44,7 @@ diff_beta <- function(mu_0, v_0, curr_mu, Sigma) {
 #' Calculate the difference between the expectations of \eqn{\log(p(b))}
 #' and \eqn{\log(q^*(b))}.
 #'
-#' @param alpha_0 Hyperparameter \eqn{\alpha_0} of the prior
-#'  distribution of \emph{b}.
-#' @param omega_0 Hyperparameter \eqn{\omega_0} of the prior
-#'  distribution of \emph{b}.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*{\b}}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*{\b}}.
+#' @inheritParams elbo
 #' @returns The difference between the expectations of \log(p(b)) and
 #'  \log(q^*(b)).
 #'
@@ -80,15 +63,7 @@ diff_b <- function(alpha_0, omega_0, alpha, omega) {
 #' Calculates the difference between the expectations of \eqn{\log(p(\gamma))}
 #' and \eqn{\log(q^*(\gamma))}.
 #'
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
-#' @param sigma Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all
-#'  clusters.
-#' @param lambda Parameter \eqn{\lambda^*} of \eqn{q^*(sigma^2_{\gamma})}
-#'  for all clusters.
-#' @param eta Parameter \eqn{\eta^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#'  all clusters.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
+#' @inheritParams elbo_cluster
 #' @returns The difference between the expectations of \eqn{\log(p(\gamma))}
 #'  and \eqn{\log(q^*(\gamma))}.
 #'
@@ -106,16 +81,7 @@ diff_gamma <- function(tau, sigma, lambda, eta, cluster) {
 #' Calculates the difference between the expectations of
 #' \eqn{\log(p(\sigma^2_gamma))} and \eqn{\log(q^*(\sigma^2_gamma))}.
 #'
-#' @param lambda_0 Hyperparameter \eqn{\lambda_0} of the prior distribution
-#'  of \eqn{sigma^2_{\gamma}}.
-#' @param eta_0 Hyperparameter \eqn{\eta_0} of the prior distribution of
-#'  \eqn{sigma^2_{\gamma}}.
-#' @param lambda Parameter \eqn{\lambda^*} of \eqn{q^*(sigma^2_{\gamma})}
-#'  for all clusters.
-#' @param eta Parameter \eqn{\eta^*} of \eqn{q^*(sigma^2_{\gamma})} for all
-#'  clusters.
-#' @param cluster A numeric vector indicating the cluster assignment for
-#'  each observation.
+#' @inheritParams elbo_cluster
 #' @returns The difference between the expectations of
 #'  \eqn{\log(p(\sigma^2_gamma))} and \eqn{\log(q^*(\sigma^2_gamma))}.
 #'
@@ -133,33 +99,15 @@ diff_sigma_gamma <- function(lambda_0, eta_0, lambda, eta) {
 #'
 #' @name elbo
 #'
-#' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
-#' @param delta A binary vector indicating right censoring.
-#' @param alpha_0 Hyperparameter \eqn{\alpha_0} of the prior
-#'  distribution of \emph{b}.
-#' @param omega_0 Hyperparameter \eqn{\omega_0} of the prior
-#'  distribution of \emph{b}.
-#' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of
-#'  \emph{β}.
-#' @param v_0 Precision hyperparameter \eqn{v_0} of the prior
-#'  distribution of \emph{β}.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param curr_mu The current value of the parameter \eqn{\mu^*} of
-#'  \eqn{q^*(\beta)}.
-#' @param Sigma Parameter \eqn{Sigma^*} of \eqn{q^*(\beta)}.
-#' @param expectation_b The expected value of b.
-#' @returns The evidence lower bound (ELBO).
+#' @inheritParams elbo_cluster
 #'
 #' @export
 #' @seealso \code{\link{survregVB.fit}}
 elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
-                 curr_mu, Sigma, expectation_b) {
+                 mu, Sigma, expectation_b) {
   expectation_log_likelihood <-
-    expectation_log_likelihood(y, X, delta, alpha, omega, curr_mu,
-                               expectation_b)
-  diff_beta <- diff_beta(mu_0, v_0, curr_mu, Sigma)
+    expectation_log_likelihood(y, X, delta, alpha, omega, mu, expectation_b)
+  diff_beta <- diff_beta(mu_0, v_0, mu, Sigma)
   diff_b <- diff_b(alpha_0, omega_0, alpha,  omega)
 
   elbo <- expectation_log_likelihood + diff_beta + diff_b
@@ -171,33 +119,21 @@ elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
 #'
 #' @name elbo_cluster
 #'
+#' @inheritParams survregVB.frailty.fit
 #' @param y A vector of observed log-transformed survival times.
-#' @param X A matrix of predictors (covariates), including an intercept.
 #' @param delta A binary vector indicating right censoring.
-#' @param alpha_0 Hyperparameter \eqn{\alpha_0} of the prior
-#'  distribution of \emph{b}.
-#' @param omega_0 Hyperparameter \eqn{\omega_0} of the prior
-#'  distribution of \emph{b}.
-#' @param mu_0 Hyperparameter \eqn{\mu_0} of the prior distribution of
-#'  \emph{β}.
-#' @param v_0 Precision hyperparameter \eqn{v_0} of the prior
-#'  distribution of \emph{β}.
-#' @param lambda_0 Hyperparameter \eqn{\lambda_0} of the prior distribution
-#'  of \eqn{sigma^2_{\gamma}}.
-#' @param eta_0 Hyperparameter \eqn{\eta_0} of the prior distribution of
-#'  \eqn{sigma^2_{\gamma}}.
-#' @param alpha Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
-#' @param omega Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
-#' @param mu The current value of the parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
-#' @param Sigma Parameter \eqn{Sigma^*} of \eqn{q^*(\beta)}.
-#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(\gamma)} for all clusters.
-#' @param sigma Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma)} for all
-#'  clusters.
-#' @param lambda Parameter \eqn{\lambda^*} of \eqn{q^*(sigma^2_{\gamma})}
-#'  for all clusters.
-#' @param eta Parameter \eqn{\eta^*} of \eqn{q^*(sigma^2_{\gamma})} for
-#'  all clusters.
-#' @param expectation_b The expected value of b.
+#' @param alpha The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
+#' @param omega The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.
+#' @param mu Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.
+#' @param Sigma  Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a covariance
+#'  matrix.
+#' @param tau Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
+#'  means.
+#' @param sigma Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)}, a
+#'  vector of variance.
+#' @param lambda The shape parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_\gamma)}.
+#' @param eta The scale parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_\gamma)}.
+#' @param expectation_b The expected value of \emph{b}.
 #' @param cluster A numeric vector indicating the cluster assignment for
 #'  each observation.
 #' @returns The evidence lower bound (ELBO).

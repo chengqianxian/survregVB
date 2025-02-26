@@ -14,19 +14,22 @@ mu_star(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma, expectation_b)
 
 \item{delta}{A binary vector indicating right censoring.}
 
-\item{mu_0}{Hyperparameter \eqn{\mu_0} of the prior distribution of \emph{β}.}
+\item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
+distribution of \emph{β}.}
 
-\item{v_0}{Hyperparameter \eqn{v_0} of the prior distribution of \emph{β}.}
+\item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
+of the prior distribution of \emph{β}.}
 
-\item{alpha}{Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
+\item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 
-\item{omega}{Parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
+\item{omega}{The scale parameter \eqn{\omega^*} of \eqn{q^*(b)}.}
 
-\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.}
+\item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 
-\item{Sigma}{Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.}
+\item{Sigma}{Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}, a covariance
+matrix.}
 
-\item{expectation_b}{The expected value of b.}
+\item{expectation_b}{The expected value of \emph{b}.}
 }
 \value{
 Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
