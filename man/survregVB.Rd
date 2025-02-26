@@ -127,25 +127,29 @@ example_data <- data.frame(
 # Formula for the survival model
 example_formula <- survival::Surv(time, status) ~ age + gender
 # Call the survregVB function
-result1 <- survregVB(formula = example_formula,
-                     data = example_data,
-                     alpha_0 = 10,
-                     omega_0 = 11,
-                     mu_0 = c(5,0,0),
-                     v_0 = 0.2)
+result1 <- survregVB(
+  formula = example_formula,
+  data = example_data,
+  alpha_0 = 10,
+  omega_0 = 11,
+  mu_0 = c(5, 0, 0),
+  v_0 = 0.2
+)
 # View results
 summary(result1)
 
 # Call the survregVB function with shared frailty
-result2 <- survregVB(formula = example_formula,
-                     data = example_data,
-                     alpha_0 = 10,
-                     omega_0 = 11,
-                     mu_0 = c(5,0,0),
-                     v_0 = 0.2,
-                     lambda_0 = 3,
-                     eta_0 = 2,
-                     cluster = group)
+result2 <- survregVB(
+  formula = example_formula,
+  data = example_data,
+  alpha_0 = 10,
+  omega_0 = 11,
+  mu_0 = c(5, 0, 0),
+  v_0 = 0.2,
+  lambda_0 = 3,
+  eta_0 = 2,
+  cluster = group
+)
 }
 \seealso{
 \code{\link{survregVB.object}}

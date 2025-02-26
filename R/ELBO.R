@@ -108,7 +108,7 @@ elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
   expectation_log_likelihood <-
     expectation_log_likelihood(y, X, delta, alpha, omega, mu, expectation_b)
   diff_beta <- diff_beta(mu_0, v_0, mu, Sigma)
-  diff_b <- diff_b(alpha_0, omega_0, alpha,  omega)
+  diff_b <- diff_b(alpha_0, omega_0, alpha, omega)
 
   elbo <- expectation_log_likelihood + diff_beta + diff_b
   elbo
@@ -145,8 +145,10 @@ elbo_cluster <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, lambda_0,
                          eta, expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
   expectation_log_likelihood <-
-    expectation_log_likelihood(y_cluster, X, delta, alpha, omega, mu,
-                               expectation_b)
+    expectation_log_likelihood(
+      y_cluster, X, delta, alpha, omega, mu,
+      expectation_b
+    )
   diff_beta <- diff_beta(mu_0, v_0, mu, Sigma)
   diff_gamma <- diff_gamma(tau, sigma, lambda, eta, cluster)
   diff_b <- diff_b(alpha_0, omega_0, alpha, omega)

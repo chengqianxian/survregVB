@@ -39,6 +39,7 @@
 #'     \item \code{Value}: The estimated value
 #'     \item \code{Lower CI}: The lower bound of the credible interval.
 #'     \item \code{Upper CI}: The upper bound of the credible interval.
+#'   }
 #' }
 #'
 #' @method summary survregVB
@@ -62,8 +63,8 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
 
   # Cred. Int
   beta_ci <- beta_ci(mu, object$Sigma, ci)
-  coefficients[, 2] <-  beta_ci[, 1]
-  coefficients[, 3] <-  beta_ci[, 2]
+  coefficients[, 2] <- beta_ci[, 1]
+  coefficients[, 3] <- beta_ci[, 2]
 
   # scale parameter (b)
   alpha <- object$alpha
@@ -84,10 +85,15 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
 
     dimnames(posteriors) <- list(row_names, col_names)
 
-    x <- object[match(c("clustered", "call", "ELBO", "alpha", "omega",
-                        "mu", "Sigma", "tau", "sigma", "lambda", "eta",
-                        "na.action", "iterations", "n"),
-                      names(object), nomatch = 0)]
+    x <- object[match(
+      c(
+        "clustered", "call", "ELBO", "alpha", "omega",
+        "mu", "Sigma", "tau", "sigma", "lambda", "eta",
+        "na.action", "iterations", "n"
+      ),
+      names(object),
+      nomatch = 0
+    )]
   } else {
     # for models without shared frailty
     posteriors <- rbind(coefficients, scale)
@@ -95,9 +101,14 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
 
     dimnames(posteriors) <- list(row_names, col_names)
 
-    x <- object[match(c("call", "ELBO", "alpha", "omega", "mu", "Sigma",
-                        "na.action", "iterations", "n"),
-                      names(object), nomatch = 0)]
+    x <- object[match(
+      c(
+        "call", "ELBO", "alpha", "omega", "mu", "Sigma",
+        "na.action", "iterations", "n"
+      ),
+      names(object),
+      nomatch = 0
+    )]
   }
 
   x <- c(x, list(posteriors = posteriors))

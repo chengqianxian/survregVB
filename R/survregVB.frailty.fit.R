@@ -58,21 +58,33 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
 
   while (!converged && iteration < max_iteration) {
     iteration <- iteration + 1
-    Sigma <- Sigma_star_cluster(y, X, delta, v_0, alpha, omega, curr_mu,
-                                curr_tau, expectation_b, cluster)
-    mu <- mu_star_cluster(y, X, delta, mu_0, v_0, alpha, omega, curr_mu,
-                          Sigma, curr_tau, expectation_b, cluster)
-    sigma <- sigma_squared_star(y, X, delta, alpha, omega, mu, curr_tau,
-                                lambda, eta, expectation_b, cluster)
-    tau <- tau_star(y, X, delta, alpha, omega, mu, curr_tau, sigma,
-                    expectation_b, cluster)
-    omega <- omega_star_cluster(y, X, delta, omega_0, mu, tau,
-                                expectation_b, cluster)
+    Sigma <- Sigma_star_cluster(
+      y, X, delta, v_0, alpha, omega, curr_mu,
+      curr_tau, expectation_b, cluster
+    )
+    mu <- mu_star_cluster(
+      y, X, delta, mu_0, v_0, alpha, omega, curr_mu,
+      Sigma, curr_tau, expectation_b, cluster
+    )
+    sigma <- sigma_squared_star(
+      y, X, delta, alpha, omega, mu, curr_tau,
+      lambda, eta, expectation_b, cluster
+    )
+    tau <- tau_star(
+      y, X, delta, alpha, omega, mu, curr_tau, sigma,
+      expectation_b, cluster
+    )
+    omega <- omega_star_cluster(
+      y, X, delta, omega_0, mu, tau,
+      expectation_b, cluster
+    )
     eta <- eta_star(eta_0, tau, sigma)
 
-    elbo <- elbo_cluster(y, X, delta, alpha_0, omega_0, mu_0, v_0,
-                         lambda_0, eta_0, alpha, omega, mu, Sigma, tau,
-                         sigma, lambda, eta, expectation_b, cluster)
+    elbo <- elbo_cluster(
+      y, X, delta, alpha_0, omega_0, mu_0, v_0,
+      lambda_0, eta_0, alpha, omega, mu, Sigma, tau,
+      sigma, lambda, eta, expectation_b, cluster
+    )
 
     elbo_diff <- abs(elbo - curr_elbo)
     mu_diff <- sum(abs(mu - curr_mu))

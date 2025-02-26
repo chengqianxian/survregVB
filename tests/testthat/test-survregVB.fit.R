@@ -31,61 +31,76 @@ X <- matrix(c(rep(1, 300), x1, x2), nrow = 300)
 
 # priors, use non-informative priors
 mu_0 <- c(0, 0, 0)
-v_0 <-  0.1
+v_0 <- 0.1
 alpha_0 <- 11
 omega_0 <- 10
 
 test_that("survregVB.fit", {
   result <- survregVB.fit(Surv(T, delta), X, alpha_0, omega_0, mu_0, v_0,
-                         max_iteration = 100, threshold = 0.01)
+    max_iteration = 100, threshold = 0.01
+  )
   expected <- list(
     ELBO = -1723.49313,
     alpha = 311,
     omega = 250.808607,
     mu = c(0.05739117, 0.52733610, 0.84186673),
-    Sigma = matrix(c(0.18803590, -0.17354666, -0.01347363,
-                     -0.17354666, 0.17261785, -0.00006534,
-                     -0.01347363, -0.00006534, 0.02541609),
-                   nrow = 3, ncol = 3, byrow = FALSE,
-                   dimnames = list(NULL, NULL)),
+    Sigma = matrix(
+      c(
+        0.18803590, -0.17354666, -0.01347363,
+        -0.17354666, 0.17261785, -0.00006534,
+        -0.01347363, -0.00006534, 0.02541609
+      ),
+      nrow = 3, ncol = 3, byrow = FALSE,
+      dimnames = list(NULL, NULL)
+    ),
     iterations = 8,
     n = 300
   )
   expect_equal(result, expected)
 
   result <- survregVB.fit(Surv(T.10, delta.10), X, alpha_0, omega_0,
-                            mu_0, v_0, max_iteration = 100,
-                            threshold = 0.01)
+    mu_0, v_0,
+    max_iteration = 100,
+    threshold = 0.01
+  )
   expected <- list(
     ELBO = -1509.54706,
     alpha = 279,
     omega = 220.24649,
     mu = c(-0.02694604, 0.58702326, 0.88834972),
-    Sigma = matrix(c(
-      0.18618723, -0.17209913, -0.01362264,
-      -0.17209913, 0.17137950, 0.00027204,
-      -0.01362264, 0.00027204, 0.02529148),
+    Sigma = matrix(
+      c(
+        0.18618723, -0.17209913, -0.01362264,
+        -0.17209913, 0.17137950, 0.00027204,
+        -0.01362264, 0.00027204, 0.02529148
+      ),
       nrow = 3, ncol = 3, byrow = FALSE,
-      dimnames = list(NULL, NULL)),
+      dimnames = list(NULL, NULL)
+    ),
     iterations = 8,
     n = 300
   )
   expect_equal(result, expected)
 
   result <- survregVB.fit(Surv(T.30, delta.30), X, alpha_0, omega_0,
-                          mu_0, v_0, max_iteration = 100,
-                          threshold = 0.01)
+    mu_0, v_0,
+    max_iteration = 100,
+    threshold = 0.01
+  )
   expected <- list(
     ELBO = -1149.4328,
     alpha = 220,
     omega = 181.545475,
     mu = c(0.14789765, 0.44725114, 0.87358818),
-    Sigma = matrix(c(
-      0.22110740, -0.20505044, -0.01636788,
-      -0.20505044, 0.20381168, 0.00156902,
-      -0.01636788, 0.00156902, 0.02919876
-    ), nrow = 3, ncol = 3, byrow = FALSE,
-    dimnames = list(NULL, NULL)),
+    Sigma = matrix(
+      c(
+        0.22110740, -0.20505044, -0.01636788,
+        -0.20505044, 0.20381168, 0.00156902,
+        -0.01636788, 0.00156902, 0.02919876
+      ),
+      nrow = 3, ncol = 3, byrow = FALSE,
+      dimnames = list(NULL, NULL)
+    ),
     iterations = 8,
     n = 300
   )

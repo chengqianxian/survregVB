@@ -46,6 +46,7 @@ and one row for the scale parameter, and columns containing:
 \item \code{Upper CI}: The upper bound of the credible interval.
 }
 }
+}
 \description{
 Produces a summary of a fitted Variational Bayes Parametric Survival
 Regression Model for a Log-Logistic AFT Model

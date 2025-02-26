@@ -28,7 +28,7 @@ X <- matrix(c(rep(1, 300), x1, x2), nrow = 300)
 
 # priors, use non-informative priors
 mu_0 <- c(0, 0, 0)
-v_0 <-  0.1
+v_0 <- 0.1
 alpha_0 <- 11
 omega_0 <- 10
 
@@ -45,24 +45,39 @@ omega.10 <- 413.84352
 omega.30 <- 353.663491
 
 mu <- matrix(c(-20.62301047, 44.3987726, 95.92464991),
-             nrow = 1, ncol = 3, byrow = TRUE)
+  nrow = 1, ncol = 3, byrow = TRUE
+)
 mu.10 <- matrix(c(-21.7328379, 42.5781894, 93.9974693),
-                nrow = 1, ncol = 3, byrow = TRUE)
+  nrow = 1, ncol = 3, byrow = TRUE
+)
 mu.30 <- matrix(c(-18.3334498, 33.0593043, 77.6065367),
-                nrow = 1, ncol = 3, byrow = TRUE)
+  nrow = 1, ncol = 3, byrow = TRUE
+)
 
-Sigma <- matrix(c(4.27891521, -3.68461398, -1.01811326,
-                  -3.68461398, 3.66446482, 0.52146029,
-                  -1.01811326, 0.52146029, 1.89703518),
-                nrow = 3, ncol = 3, byrow = TRUE)
-Sigma.10 <- matrix(c(4.1924680, -3.6686962, -0.9334673,
-                     -3.6686962, 3.6716640, 0.4800017,
-                     -0.9334673, 0.4800017, 1.8374859),
-                   nrow = 3, ncol = 3, byrow = TRUE)
-Sigma.30 <- matrix(c(3.8369890, -3.46719200, -0.7512178,
-                     -3.4671920, 3.50225856, 0.40271576,
-                     -0.7512178, 0.40271576, 1.6385013),
-                   nrow = 3, ncol = 3, byrow = TRUE)
+Sigma <- matrix(
+  c(
+    4.27891521, -3.68461398, -1.01811326,
+    -3.68461398, 3.66446482, 0.52146029,
+    -1.01811326, 0.52146029, 1.89703518
+  ),
+  nrow = 3, ncol = 3, byrow = TRUE
+)
+Sigma.10 <- matrix(
+  c(
+    4.1924680, -3.6686962, -0.9334673,
+    -3.6686962, 3.6716640, 0.4800017,
+    -0.9334673, 0.4800017, 1.8374859
+  ),
+  nrow = 3, ncol = 3, byrow = TRUE
+)
+Sigma.30 <- matrix(
+  c(
+    3.8369890, -3.46719200, -0.7512178,
+    -3.4671920, 3.50225856, 0.40271576,
+    -0.7512178, 0.40271576, 1.6385013
+  ),
+  nrow = 3, ncol = 3, byrow = TRUE
+)
 
 # expected values
 expectation_log_likelihood <- -14671.7188
@@ -115,8 +130,10 @@ test_that("diff_b", {
 })
 
 test_that("elbo", {
-  expected <- elbo(log(T), X, delta, alpha_0, omega_0, mu_0, v_0, alpha,
-                   omega, mu, Sigma, expectation_b)
+  expected <- elbo(
+    log(T), X, delta, alpha_0, omega_0, mu_0, v_0, alpha,
+    omega, mu, Sigma, expectation_b
+  )
   result <- -16736.1527
   expect_equal(expected, result)
 

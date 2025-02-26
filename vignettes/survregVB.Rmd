@@ -56,25 +56,27 @@ Next, we need to prepare the data for modeling via the example code provided in 
 
 ```{r}
 # Extract the first row for each subject
-first <- subset(rhDNase, !duplicated(id)) 
-dnase <- tmerge(first, first, id=id, tstop=as.numeric(end.dt -entry.dt))
+first <- subset(rhDNase, !duplicated(id))
+dnase <- tmerge(first, first, id = id, tstop = as.numeric(end.dt - entry.dt))
 
-# Subject whose fu ended during the 6 day window after finishing their 
+# Subject whose fu ended during the 6 day window after finishing their
 # antibiotics are not counted as new infections
-temp.end <- with(rhDNase, pmin(ivstop+6, end.dt-entry.dt))
+temp.end <- with(rhDNase, pmin(ivstop + 6, end.dt - entry.dt))
 
 # Create the event indicator
-dnase <- tmerge(dnase, rhDNase, id=id,
-                infect=event(ivstart),
-                end=  event(temp.end))
+dnase <- tmerge(dnase, rhDNase,
+  id = id,
+  infect = event(ivstart),
+  end = event(temp.end)
+)
 
 # Toss out the non-at-risk intervals, and extra variables
-dnase <- subset(dnase, (infect==1 | end==0), c(id:trt, fev:infect))
+dnase <- subset(dnase, (infect == 1 | end == 0), c(id:trt, fev:infect))
 
 # Remove duplicated subjects
 dnase <- subset(dnase, !duplicated(id))
 
-# Set the survival time 
+# Set the survival time
 dnase$time <- dnase$tstop - dnase$tstart
 
 head(dnase)
@@ -143,28 +145,32 @@ Now that we have set up the formula and prior distributions, we can fit the `rhD
 -   `na.action`: A filter function that specifies how to deal with missing data in the provided data-set with default `options()$na.action`. In this case, we set it to `na.omit` to omit any missing values if present.
 
 ```{r}
-fit <- survregVB(formula = Surv(time, infect) ~ trt + fev, 
-                 data = dnase, 
-                 alpha_0 = 501,
-                 omega_0 = 500,
-                 mu_0 = c(4.4, 0.25, 0.04), 
-                 v_0 = 1, 
-                 max_iteration = 10000, 
-                 threshold = 0.0005,
-                 na.action = na.omit)
+fit <- survregVB(
+  formula = Surv(time, infect) ~ trt + fev,
+  data = dnase,
+  alpha_0 = 501,
+  omega_0 = 500,
+  mu_0 = c(4.4, 0.25, 0.04),
+  v_0 = 1,
+  max_iteration = 10000,
+  threshold = 0.0005,
+  na.action = na.omit
+)
 ```
 
 If the VB algorithm reaches the maximum number of iterations before converging, we will receive a warning message:
 
 ```{r}
-survregVB(formula = Surv(time, infect) ~ trt + fev, 
-          data = dnase, 
-          alpha_0 = 501,
-          omega_0 = 500,
-          mu_0 = c(4.4, 0.25, 0.04), 
-          v_0 = 1, 
-          max_iteration = 9, 
-          threshold = 0.0005)
+survregVB(
+  formula = Surv(time, infect) ~ trt + fev,
+  data = dnase,
+  alpha_0 = 501,
+  omega_0 = 500,
+  mu_0 = c(4.4, 0.25, 0.04),
+  v_0 = 1,
+  max_iteration = 9,
+  threshold = 0.0005
+)
 ```
 
 # Interpreting the Results
@@ -240,7 +246,7 @@ We can also view summary statistics for the results of the fit via the `summary`
 We can adjust the significance level for the credible intervals by altering the `ci` argument. The default is set to `0.95`.
 
 ```{r}
-summary(fit, ci=0.9)
+summary(fit, ci = 0.9)
 ```
 
 # Using `survregVB` with Shared Frailty
@@ -281,16 +287,16 @@ eta_0 <- 500
 We specify that we want to introduce shared frailty by setting the `cluster` parameter. In this case, we set it to `inst` so that the observations are clustered based on the enrolling institution:
 
 ```{r}
-# fit2 <- survregVB(formula = Surv(time, infect) ~ trt + fev, 
-#                   data = dnase, 
+# fit2 <- survregVB(formula = Surv(time, infect) ~ trt + fev,
+#                   data = dnase,
 #                   alpha_0 = 501,
 #                   omega_0 = 500,
-#                   mu_0 = c(4.4, 0.25, 0.04), 
-#                   v_0 = 1, 
+#                   mu_0 = c(4.4, 0.25, 0.04),
+#                   v_0 = 1,
 #                   lambda_0 = 501,
 #                   eta_0 = 500,
 #                   cluster = inst,
-#                   max_iteration = 10000, 
+#                   max_iteration = 10000,
 #                   threshold = 0.0005,
 #                   na.action = na.omit)
 ```

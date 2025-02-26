@@ -14,8 +14,10 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
   cat("\nmu=\n")
   print(x$mu, digits = digits)
   cat("\nSigma=\n")
-  printCoefmat(x$Sigma, digits = digits, signif.stars = signif.stars,
-               P.values = TRUE, has.Pvalue = TRUE)
+  printCoefmat(x$Sigma,
+    digits = digits, signif.stars = signif.stars,
+    P.values = TRUE, has.Pvalue = TRUE
+  )
 
   cat("\nPosterior distribution of the scale parameter (b):")
   cat("\nalpha= ", x$alpha, "  omega= ", x$omega, "\n")
@@ -36,9 +38,11 @@ print.survregVB <- function(x, digits = max(options()$digits - 4, 3),
   cat("\nNumber of iterations= ", x$iterations, "\n")
 
   omit <- x$na.action
-  if (length(omit))
+  if (length(omit)) {
     cat("\nn=", x$n, " (", naprint(omit), ")\n", sep = "")
-  else cat("\nn=", x$n, "\n")
+  } else {
+    cat("\nn=", x$n, "\n")
+  }
 
   invisible(x)
 }

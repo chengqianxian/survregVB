@@ -151,8 +151,10 @@ omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
 mu_star_cluster <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
                             tau, expectation_b, cluster) {
   y_cluster <- get_cluster_y(y, tau, cluster)
-  mu_star(y_cluster, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
-          expectation_b)
+  mu_star(
+    y_cluster, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
+    expectation_b
+  )
 }
 
 #' Calculates parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)} to optimize the
@@ -196,7 +198,7 @@ sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
   for (k in 1:K) {
     delta_k <- delta[cluster == k]
     zeta_k <- zeta[cluster == k]
-    sigma[k] <-  expectation_inverse_sigma + 2 *
+    sigma[k] <- expectation_inverse_sigma + 2 *
       expectation_inverse_b_2 * sum((1 + delta_k) * zeta_k)
     sigma[k] <- 1 / sigma[k]
   }

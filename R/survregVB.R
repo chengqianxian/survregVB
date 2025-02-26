@@ -84,25 +84,29 @@
 #' # Formula for the survival model
 #' example_formula <- survival::Surv(time, status) ~ age + gender
 #' # Call the survregVB function
-#' result1 <- survregVB(formula = example_formula,
-#'                      data = example_data,
-#'                      alpha_0 = 10,
-#'                      omega_0 = 11,
-#'                      mu_0 = c(5,0,0),
-#'                      v_0 = 0.2)
+#' result1 <- survregVB(
+#'   formula = example_formula,
+#'   data = example_data,
+#'   alpha_0 = 10,
+#'   omega_0 = 11,
+#'   mu_0 = c(5, 0, 0),
+#'   v_0 = 0.2
+#' )
 #' # View results
 #' summary(result1)
 #'
 #' # Call the survregVB function with shared frailty
-#' result2 <- survregVB(formula = example_formula,
-#'                      data = example_data,
-#'                      alpha_0 = 10,
-#'                      omega_0 = 11,
-#'                      mu_0 = c(5,0,0),
-#'                      v_0 = 0.2,
-#'                      lambda_0 = 3,
-#'                      eta_0 = 2,
-#'                      cluster = group)
+#' result2 <- survregVB(
+#'   formula = example_formula,
+#'   data = example_data,
+#'   alpha_0 = 10,
+#'   omega_0 = 11,
+#'   mu_0 = c(5, 0, 0),
+#'   v_0 = 0.2,
+#'   lambda_0 = 3,
+#'   eta_0 = 2,
+#'   cluster = group
+#' )
 #' @import stats
 #'
 #' @export
@@ -110,60 +114,77 @@
 survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
                       lambda_0, eta_0, na.action, cluster,
                       max_iteration = 100, threshold = 0.0001) {
-  Call <- match.call()    # save a copy of the call
+  Call <- match.call() # save a copy of the call
 
   if (missing(formula)) stop("a formula argument is required")
-  if (is.list(formula))
+  if (is.list(formula)) {
     stop("formula argument cannot be a list")
+  }
 
-  defined <- if (missing(cluster))
+  defined <- if (missing(cluster)) {
     c("alpha_0", "omega_0", "mu_0", "v_0")
-  else
+  } else {
     c("alpha_0", "omega_0", "mu_0", "v_0", "lambda_0", "eta_0")
+  }
   passed <- names(as.list(Call)[-1])
-  if (any(!defined %in% passed))
+  if (any(!defined %in% passed)) {
     stop(paste("Missing value(s) for", paste(setdiff(defined, passed),
-                                             collapse =
-                                               ", ")))
+      collapse =
+        ", "
+    )))
+  }
 
-  Terms <- if (missing(data)) terms(formula) else
+  Terms <- if (missing(data)) {
+    terms(formula)
+  } else {
     terms(formula, data = data)
+  }
 
   indx <- match(c("formula", "data", "cluster", "na.action"),
-                names(Call), nomatch = 0)
+    names(Call),
+    nomatch = 0
+  )
   if (indx[1] == 0) stop("A formula argument is required")
-  temp <- Call[c(1, indx)]  # only keep the arguments we wanted
-  temp[[1L]] <- quote(stats::model.frame)   # change the function called
+  temp <- Call[c(1, indx)] # only keep the arguments we wanted
+  temp[[1L]] <- quote(stats::model.frame) # change the function called
 
-  temp$formula <- if (missing(data))
+  temp$formula <- if (missing(data)) {
     terms(formula)
-  else
+  } else {
     terms(formula, data = data)
+  }
 
   m <- eval(temp, parent.frame())
 
   Terms <- attr(m, "terms")
   Y <- model.extract(m, "response")
 
-  if (!inherits(Y, "Surv"))
+  if (!inherits(Y, "Surv")) {
     stop("response must be a survival object")
+  }
   type <- attr(Y, "type")
-  if (type != "right")
+  if (type != "right") {
     stop("only Survival objects of type right are supported")
+  }
 
   X <- model.matrix(Terms, m)
-  if (!all(is.finite(X)) || !all(is.finite(Y)))
+  if (!all(is.finite(X)) || !all(is.finite(Y))) {
     stop("data contains an infinite predictor")
+  }
 
   cluster <- model.extract(m, "cluster")
 
   if (length(cluster)) {
-    result <- survregVB.frailty.fit(Y, X, alpha_0, omega_0, mu_0, v_0,
-                                    lambda_0, eta_0, cluster,
-                                    max_iteration, threshold)
+    result <- survregVB.frailty.fit(
+      Y, X, alpha_0, omega_0, mu_0, v_0,
+      lambda_0, eta_0, cluster,
+      max_iteration, threshold
+    )
   } else {
-    result <- survregVB.fit(Y, X, alpha_0, omega_0, mu_0, v_0, max_iteration,
-                            threshold)
+    result <- survregVB.fit(
+      Y, X, alpha_0, omega_0, mu_0, v_0, max_iteration,
+      threshold
+    )
   }
 
   na.action <- attr(m, "na.action")

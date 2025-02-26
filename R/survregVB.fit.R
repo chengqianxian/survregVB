@@ -49,12 +49,16 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
   while (!converged && iteration < max_iteration) {
     iteration <- iteration + 1
     Sigma <- Sigma_star(y, X, delta, v_0, alpha, omega, curr_mu, expectation_b)
-    mu <- mu_star(y, X, delta, mu_0, v_0, alpha, omega, curr_mu, Sigma,
-                  expectation_b)
+    mu <- mu_star(
+      y, X, delta, mu_0, v_0, alpha, omega, curr_mu, Sigma,
+      expectation_b
+    )
     omega <- omega_star(y, X, delta, omega_0, mu, expectation_b)
 
-    elbo <- elbo(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
-                 curr_mu, Sigma, expectation_b)
+    elbo <- elbo(
+      y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
+      curr_mu, Sigma, expectation_b
+    )
 
     elbo_diff <- abs(elbo - curr_elbo)
     mu_diff <- sum(abs(mu - curr_mu))
