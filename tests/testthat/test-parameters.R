@@ -7,7 +7,7 @@ beta1 <- 0.2
 beta2 <- 0.8
 b <- 0.8
 y <- beta0 + beta1 * x1 + beta2 * x2 + b * z
-T <- exp(y)
+Time <- exp(y)
 
 # generate censoring times
 set.seed(1)
@@ -15,13 +15,13 @@ cen.time.10 <- runif(300, 0, 48)
 cen.time.30 <- runif(300, 0, 17)
 
 # obtain observed time
-T.10 <- pmin(T, cen.time.10)
-T.30 <- pmin(T, cen.time.30)
+Time.10 <- pmin(Time, cen.time.10)
+Time.30 <- pmin(Time, cen.time.30)
 
 # obtain censoring indicator
 delta <- rep(1, 300)
-delta.10 <- ifelse(T == T.10, 1, 0)
-delta.30 <- ifelse(T == T.30, 1, 0)
+delta.10 <- ifelse(Time == Time.10, 1, 0)
+delta.30 <- ifelse(Time == Time.30, 1, 0)
 
 # create X matrix
 X <- matrix(c(rep(1, 300), x1, x2), nrow = 300)
@@ -88,15 +88,15 @@ test_that("alpha_star", {
 
 test_that("omega_star", {
   expect_equal(
-    omega_star(log(T), X, delta, omega_0, mu_0, expectation_b),
+    omega_star(log(Time), X, delta, omega_0, mu_0, expectation_b),
     omega
   )
   expect_equal(
-    omega_star(log(T.10), X, delta.10, omega_0, mu_0, expectation_b.10),
+    omega_star(log(Time.10), X, delta.10, omega_0, mu_0, expectation_b.10),
     omega.10
   )
   expect_equal(
-    omega_star(log(T.30), X, delta.30, omega_0, mu_0, expectation_b.30),
+    omega_star(log(Time.30), X, delta.30, omega_0, mu_0, expectation_b.30),
     omega.30
   )
 })
@@ -104,20 +104,20 @@ test_that("omega_star", {
 test_that("mu_star", {
   expect_equal(
     mu_star(
-      log(T), X, delta, mu_0, v_0, alpha, omega, mu_0, Sigma, expectation_b
+      log(Time), X, delta, mu_0, v_0, alpha, omega, mu_0, Sigma, expectation_b
     ),
     mu
   )
   expect_equal(
     mu_star(
-      log(T.10), X, delta.10, mu_0, v_0, alpha.10, omega.10, mu_0, Sigma.10,
+      log(Time.10), X, delta.10, mu_0, v_0, alpha.10, omega.10, mu_0, Sigma.10,
       expectation_b.10
     ),
     mu.10
   )
   expect_equal(
     mu_star(
-      log(T.30), X, delta.30, mu_0, v_0, alpha.30, omega.30, mu_0, Sigma.30,
+      log(Time.30), X, delta.30, mu_0, v_0, alpha.30, omega.30, mu_0, Sigma.30,
       expectation_b.30
     ),
     mu.30
@@ -127,19 +127,19 @@ test_that("mu_star", {
 test_that("sigma_star", {
   expect_equal(
     Sigma_star(
-      log(T), X, delta, v_0, alpha, omega, mu_0, expectation_b
+      log(Time), X, delta, v_0, alpha, omega, mu_0, expectation_b
     ),
     Sigma
   )
   expect_equal(
     Sigma_star(
-      log(T.10), X, delta.10, v_0, alpha.10, omega.10, mu_0, expectation_b.10
+      log(Time.10), X, delta.10, v_0, alpha.10, omega.10, mu_0, expectation_b.10
     ),
     Sigma.10
   )
   expect_equal(
     Sigma_star(
-      log(T.30), X, delta.30, v_0, alpha.30, omega.30, mu_0, expectation_b.30
+      log(Time.30), X, delta.30, v_0, alpha.30, omega.30, mu_0, expectation_b.30
     ),
     Sigma.30
   )

@@ -67,7 +67,8 @@ means.}
 \item{sigma}{Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)}, a
 vector of variance.}
 
-\item{lambda}{The shape parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_\gamma)}.}
+\item{lambda}{The shape parameter \eqn{\lambda^*} of
+\eqn{q^*(\sigma^2_\gamma)}.}
 
 \item{eta}{The scale parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_\gamma)}.}
 

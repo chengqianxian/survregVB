@@ -14,16 +14,17 @@ b <- 0.8
 Y <- numeric(50)
 random.int <- rnorm(15, 0, 1)
 for (l in 1:75) {
-  Y[l] <- beta0 + beta1 * x1[l] + beta2 * x2[l] + random.int[(l - 1) %/% 5 + 1] + b * epsilon[l]
+  Y[l] <- beta0 + beta1 * x1[l] + beta2 * x2[l] +
+    random.int[(l - 1) %/% 5 + 1] + b * epsilon[l]
 }
-T <- exp(Y)
+Time <- exp(Y)
 
 # obtain observed time
-T.15 <- pmin(T, cen.time.15)
+Time.15 <- pmin(Time, cen.time.15)
 
 # obtain censoring indicator
 delta <- rep(1, 75)
-delta.15 <- ifelse(T == T.15, 1, 0)
+delta.15 <- ifelse(Time == Time.15, 1, 0)
 
 # prepare for the data structure
 X <- matrix(0, nrow = 75, ncol = 3)
@@ -52,9 +53,11 @@ omega.15 <- 413.84352
 # expected values
 
 Sigma <- matrix(
-  c(0.0380393981, -0.0293161433, -0.0076677526,
+  c(
+    0.0380393981, -0.0293161433, -0.0076677526,
     -0.0293161434, 0.0226395403, 0.0058614865,
-    -0.0076677526, 0.0058614865, 0.0016728902),
+    -0.0076677526, 0.0058614865, 0.0016728902
+  ),
   nrow = 3, byrow = TRUE
 )
 Sigma.15 <- matrix(
@@ -105,7 +108,7 @@ test_that("test Sigma_star_cluster", {
   )
   expect_equal(
     Sigma_star_cluster(
-      log(T.15), X, delta, v_0, alpha.15, omega_0, mu_0, tau_0,
+      log(Time.15), X, delta, v_0, alpha.15, omega_0, mu_0, tau_0,
       expectation_b.15, cluster
     ),
     Sigma.15
@@ -122,7 +125,7 @@ test_that("test mu_star_cluster", {
   )
   expect_equal(
     mu_star_cluster(
-      log(T.15), X, delta, mu_0, v_0, alpha.15, omega.15,
+      log(Time.15), X, delta, mu_0, v_0, alpha.15, omega.15,
       mu_0, Sigma.15, tau_0, expectation_b.15, cluster
     ),
     mu.15
@@ -139,7 +142,7 @@ test_that("test sigma_star_cluster", {
   )
   expect_equal(
     sigma_squared_star(
-      log(T.15), X, delta, alpha.15, omega.15,
+      log(Time.15), X, delta, alpha.15, omega.15,
       mu.15, tau_0, lambda_0, eta_0, expectation_b.15,
       cluster
     ),
@@ -157,7 +160,7 @@ test_that("test tau_star_cluster", {
   )
   expect_equal(
     tau_star(
-      log(T.15), X, delta, alpha.15, omega.15, mu.15, tau_0,
+      log(Time.15), X, delta, alpha.15, omega.15, mu.15, tau_0,
       sigma_squared.15, expectation_b.15, cluster
     ),
     tau.15
@@ -174,7 +177,7 @@ test_that("test omega_star_cluster", {
   )
   expect_equal(
     omega_star_cluster(
-      log(T.15), X, delta, omega_0, mu.15, tau.15,
+      log(Time.15), X, delta, omega_0, mu.15, tau.15,
       expectation_b.15, cluster
     ),
     37.8544658

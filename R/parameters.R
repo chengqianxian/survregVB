@@ -28,10 +28,14 @@ omega_star <- function(y, X, delta, omega_0, mu, expectation_b) {
     bz_i <- y[i] - sum(X[i, ] * mu)
     z_i <- bz_i / expectation_b
     phi <- ifelse(z_i <= -5, 0,
-                  ifelse(z_i <= -1.701, 0.0426,
-                         ifelse(z_i <= 0, 0.3052,
-                                ifelse(z_i <= 1.702, 0.6950,
-                                       ifelse(z_i <= 5, 0.9574, 1)))))
+      ifelse(z_i <= -1.701, 0.0426,
+        ifelse(z_i <= 0, 0.3052,
+          ifelse(z_i <= 1.702, 0.6950,
+            ifelse(z_i <= 5, 0.9574, 1)
+          )
+        )
+      )
+    )
     res <- res + (delta[i] - (1 + delta[i]) * phi) * bz_i
   }
   omega_0 - res
@@ -55,17 +59,23 @@ mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
   for (i in seq_len(nrow(X))) {
     z_i <- (y[i] - sum(X[i, ] * mu)) / expectation_b
     rho <- ifelse(z_i <= -5, 0,
-                  ifelse(z_i <= -1.7, 0.1696,
-                         ifelse(z_i <= 1.7, 0.5,
-                                ifelse(z_i <= 5, 0.8303, 1))))
+      ifelse(z_i <= -1.7, 0.1696,
+        ifelse(z_i <= 1.7, 0.5,
+          ifelse(z_i <= 5, 0.8303, 1)
+        )
+      )
+    )
     zeta <- ifelse(z_i <= -5, 0,
-                   ifelse(z_i <= -1.7, 0.0189,
-                          ifelse(z_i <= 1.7, 0.1138,
-                                 ifelse(z_i <= 5, 0.0190, 0))))
+      ifelse(z_i <= -1.7, 0.0189,
+        ifelse(z_i <= 1.7, 0.1138,
+          ifelse(z_i <= 5, 0.0190, 0)
+        )
+      )
+    )
 
     yX_matrix <- yX_matrix +
       (inv_b * (-delta[i] + (1 + delta[i]) * rho) +
-      2 * inv_b_2 * (1 + delta[i]) * y[i] * zeta) * X[i, ]
+        2 * inv_b_2 * (1 + delta[i]) * y[i] * zeta) * X[i, ]
   }
 
   (v_0 * mu_0 + yX_matrix) %*% Sigma
@@ -85,9 +95,12 @@ Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu, expectation_b) {
   for (i in seq_len(nrow(X))) {
     z_i <- (y[i] - sum(X[i, ] * mu)) / expectation_b
     zeta <- ifelse(z_i <= -5, 0,
-                   ifelse(z_i <= -1.7, 0.0189,
-                          ifelse(z_i <= 1.7, 0.1138,
-                                 ifelse(z_i <= 5, 0.0190, 0))))
+      ifelse(z_i <= -1.7, 0.0189,
+        ifelse(z_i <= 1.7, 0.1138,
+          ifelse(z_i <= 5, 0.0190, 0)
+        )
+      )
+    )
     X_matrix <- X_matrix + (1 + delta[i]) * zeta * (X[i, ] %*% t(X[i, ]))
   }
 
@@ -118,10 +131,14 @@ omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
   for (i in seq_len(nrow(X))) {
     z_i <- (y_cluster[i] - sum(X[i, ] * mu)) / expectation_b
     phi <- ifelse(z_i <= -5, 0,
-                  ifelse(z_i <= -1.701, 0.0426,
-                         ifelse(z_i <= 0, 0.3052,
-                                ifelse(z_i <= 1.702, 0.6950,
-                                       ifelse(z_i <= 5, 0.9574, 1)))))
+      ifelse(z_i <= -1.701, 0.0426,
+        ifelse(z_i <= 0, 0.3052,
+          ifelse(z_i <= 1.702, 0.6950,
+            ifelse(z_i <= 5, 0.9574, 1)
+          )
+        )
+      )
+    )
     bz_i <- y[i] - sum(X[i, ] * mu)
     res <- res + (delta[i] - (1 + delta[i]) * phi) * bz_i
   }
@@ -174,9 +191,12 @@ sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
   for (i in seq_len(nrow(X))) {
     z_i <- (y[i] - sum(X[i, ] * mu)) / expectation_b
     zeta[i] <- ifelse(z_i <= -5, 0,
-                   ifelse(z_i <= -1.7, 0.0189,
-                          ifelse(z_i <= 1.7, 0.1138,
-                                 ifelse(z_i <= 5, 0.0190, 0))))
+      ifelse(z_i <= -1.7, 0.0189,
+        ifelse(z_i <= 1.7, 0.1138,
+          ifelse(z_i <= 5, 0.0190, 0)
+        )
+      )
+    )
   }
 
   inv_b_2 <- (alpha + alpha^2) / omega^2
@@ -213,13 +233,19 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
     # zeta_i is the coefficient of quadratic approximation
     z_i <- (y_cluster[i] - sum(X[i, ] * mu)) / expectation_b
     zeta[i] <- ifelse(z_i <= -5, 0,
-                      ifelse(z_i <= -1.7, 0.0189,
-                             ifelse(z_i <= 1.7, 0.1138,
-                                    ifelse(z_i <= 5, 0.0190, 0))))
+      ifelse(z_i <= -1.7, 0.0189,
+        ifelse(z_i <= 1.7, 0.1138,
+          ifelse(z_i <= 5, 0.0190, 0)
+        )
+      )
+    )
     rho[i] <- ifelse(z_i <= -5, 0,
-                  ifelse(z_i <= -1.7, 0.1696,
-                         ifelse(z_i <= 1.7, 0.5,
-                                ifelse(z_i <= 5, 0.8303, 1))))
+      ifelse(z_i <= -1.7, 0.1696,
+        ifelse(z_i <= 1.7, 0.5,
+          ifelse(z_i <= 5, 0.8303, 1)
+        )
+      )
+    )
   }
 
   inv_b <- alpha / omega
@@ -238,7 +264,7 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
     for (i in seq_len(nrow(X_k))) {
       tau_sub <- inv_b * (rho_k[i] + delta_k[i] * (rho_k[i] - 1)) +
         2 * inv_b_2 * (1 + delta_k[i]) * zeta_k[i] *
-        (y_k[i] - sum(X_k[i, ] * mu))
+          (y_k[i] - sum(X_k[i, ] * mu))
 
       tau_k <- tau_k + tau_sub
     }
@@ -248,7 +274,8 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
 }
 
 #' Calculates parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})} to
-#' optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
+#' optimize the evidence based lower bound (ELBO) in
+#' \code{survregVB.frailty.fit}.
 #'
 #' @inheritParams elbo_cluster
 #' @param K The number of clusters.
@@ -261,7 +288,8 @@ lambda_star <- function(lambda_0, K) {
 }
 
 #' Calculates parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_{\gamma})} to
-#' optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
+#' optimize the evidence based lower bound (ELBO) in
+#' \code{survregVB.frailty.fit}.
 #'
 #' @inheritParams elbo_cluster
 #' @return Parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_{\gamma})}.

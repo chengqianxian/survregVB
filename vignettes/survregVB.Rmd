@@ -287,18 +287,18 @@ eta_0 <- 500
 We specify that we want to introduce shared frailty by setting the `cluster` parameter. In this case, we set it to `inst` so that the observations are clustered based on the enrolling institution:
 
 ```{r}
-# fit2 <- survregVB(formula = Surv(time, infect) ~ trt + fev,
-#                   data = dnase,
-#                   alpha_0 = 501,
-#                   omega_0 = 500,
-#                   mu_0 = c(4.4, 0.25, 0.04),
-#                   v_0 = 1,
-#                   lambda_0 = 501,
-#                   eta_0 = 500,
-#                   cluster = inst,
-#                   max_iteration = 10000,
-#                   threshold = 0.0005,
-#                   na.action = na.omit)
+fit2 <- survregVB(formula = Surv(time, infect) ~ trt + fev,
+                  data = dnase,
+                  alpha_0 = 501,
+                  omega_0 = 500,
+                  mu_0 = c(4.4, 0.25, 0.04),
+                  v_0 = 1,
+                  lambda_0 = 501,
+                  eta_0 = 500,
+                  cluster = inst,
+                  max_iteration = 10000,
+                  threshold = 0.0005,
+                  na.action = na.omit)
 ```
 
 ## Interpreting the Results
@@ -310,7 +310,7 @@ At the end of the model fitting process, the VB algorithm obtains the approximat
 -   $q^*(\sigma^2_\gamma)$, a $\text{Inverse-Gamma}(\lambda^*,\eta^*)$ density function [@xian2024a]
 
 ```{r}
-print(fit)
+print(fit2)
 ```
 
 The `survreg` object returned includes additional results for:

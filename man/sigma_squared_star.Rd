@@ -36,7 +36,8 @@ sigma_squared_star(
 \item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
 means.}
 
-\item{lambda}{The shape parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_\gamma)}.}
+\item{lambda}{The shape parameter \eqn{\lambda^*} of
+\eqn{q^*(\sigma^2_\gamma)}.}
 
 \item{eta}{The scale parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_\gamma)}.}
 

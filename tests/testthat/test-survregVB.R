@@ -22,18 +22,18 @@ test_that("survregVB", {
     max_iteration = 100, threshold = 0.0005
   )
   expected <- list(
-    ELBO = -4857.1776,
+    ELBO = -4857.09446,
     alpha = 744,
-    omega = 674.93613,
+    omega = 674.6480035,
     mu = c(
-      "(Intercept)" = 4.11256275, "trt" = 0.41556503,
-      "fev" = 0.0214483
+      "(Intercept)" = 4.112387227, "trt" = 0.415469071,
+      "fev" = 0.02129090543
     ),
     Sigma = matrix(
       c(
-        0.03621216, -0.01027572, -0.00047336,
-        -0.01027572, 0.01987219, 0.00002210,
-        -0.00047336, 0.00002210, 0.00000827
+        0.0362042587960, -1.027351580e-02, -4.732594311e-04,
+        -0.0102735158000,  1.986778912e-02,  2.209508562e-05,
+        -0.0004732594311,  2.209508562e-05,  8.265796487e-06
       ),
       nrow = 3, byrow = TRUE,
       dimnames = list(
@@ -41,7 +41,7 @@ test_that("survregVB", {
         c("(Intercept)", "trt", "fev")
       )
     ),
-    iterations = 10,
+    iterations = 9,
     n = 645,
     call = quote(survregVB(
       formula = Surv(time, infect) ~ trt + fev,

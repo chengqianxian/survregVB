@@ -35,7 +35,8 @@ algorithm: before converging or reaching \code{max_iteration}.
 \item \code{n}: The number of observations.
 \item \code{call}: The function call used to invoke the \code{survregVB}
 method.
-\item \code{not_converged}: A boolean indicating if the algorithm converged.
+\item \code{not_converged}: A boolean indicating if the algorithm
+converged.
 \itemize{
 \item \code{TRUE}: If the algorithm did not converge prior to
 achieving \code{max_iteration}.

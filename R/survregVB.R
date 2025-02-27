@@ -134,8 +134,9 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
   }
   passed <- match(defined, names(Call), nomatch = 0)
   missing <- which(passed == 0)
-  if (length(missing) > 0)
+  if (length(missing) > 0) {
     stop(paste("missing value(s) for", defined[missing]))
+  }
 
   indx <- match(c("formula", "data", "cluster", "na.action"),
     names(Call),
@@ -226,7 +227,8 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
 #'   \item \code{n}: The number of observations.
 #'   \item \code{call}: The function call used to invoke the \code{survregVB}
 #'    method.
-#'   \item \code{not_converged}: A boolean indicating if the algorithm converged.
+#'   \item \code{not_converged}: A boolean indicating if the algorithm
+#'    converged.
 #'   \itemize{
 #'     \item \code{TRUE}: If the algorithm did not converge prior to
 #'      achieving `max_iteration`.

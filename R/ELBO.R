@@ -14,10 +14,14 @@ expectation_log_likelihood <- function(y, X, delta, alpha, omega, mu,
     bz_i <- y[i] - sum(X[i, ] * mu)
     z_i <- bz_i / expectation_b
     phi <- ifelse(z_i <= -5, 0,
-                  ifelse(z_i <= -1.701, 0.0426,
-                         ifelse(z_i <= 0, 0.3052,
-                                ifelse(z_i <= 1.702, 0.6950,
-                                       ifelse(z_i <= 5, 0.9574, 1)))))
+      ifelse(z_i <= -1.701, 0.0426,
+        ifelse(z_i <= 0, 0.3052,
+          ifelse(z_i <= 1.702, 0.6950,
+            ifelse(z_i <= 5, 0.9574, 1)
+          )
+        )
+      )
+    )
     res <- res + (delta[i] - phi * (1 + delta[i])) * bz_i
   }
 

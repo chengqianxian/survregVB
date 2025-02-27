@@ -61,7 +61,7 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
     )
 
     if (abs(elbo - curr_elbo) > threshold &&
-        sum(abs(mu - curr_mu)) > threshold) {
+      sum(abs(mu - curr_mu)) > threshold) {
       converged <- FALSE
     } else {
       converged <- TRUE

@@ -3,7 +3,8 @@
 \name{lambda_star}
 \alias{lambda_star}
 \title{Calculates parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})} to
-optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.}
+optimize the evidence based lower bound (ELBO) in
+\code{survregVB.frailty.fit}.}
 \usage{
 lambda_star(lambda_0, K)
 }
@@ -18,7 +19,8 @@ Parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})}.
 }
 \description{
 Calculates parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})} to
-optimize the evidence based lower bound (ELBO) in \code{survregVB.frailty.fit}.
+optimize the evidence based lower bound (ELBO) in
+\code{survregVB.frailty.fit}.
 }
 \seealso{
 \code{\link{survregVB.frailty.fit}}

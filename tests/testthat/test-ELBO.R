@@ -7,7 +7,7 @@ beta1 <- 0.2
 beta2 <- 0.8
 b <- 0.8
 y <- beta0 + beta1 * x1 + beta2 * x2 + b * z
-T <- exp(y)
+Time <- exp(y)
 
 # generate censoring times
 set.seed(1)
@@ -15,13 +15,13 @@ cen.time.10 <- runif(300, 0, 48)
 cen.time.30 <- runif(300, 0, 17)
 
 # obtain observed time
-T.10 <- pmin(T, cen.time.10)
-T.30 <- pmin(T, cen.time.30)
+Time.10 <- pmin(Time, cen.time.10)
+Time.30 <- pmin(Time, cen.time.30)
 
 # obtain censoring indicator
 delta <- rep(1, 300)
-delta.10 <- ifelse(T == T.10, 1, 0)
-delta.30 <- ifelse(T == T.30, 1, 0)
+delta.10 <- ifelse(Time == Time.10, 1, 0)
+delta.30 <- ifelse(Time == Time.30, 1, 0)
 
 # create X matrix
 X <- matrix(c(rep(1, 300), x1, x2), nrow = 300)
@@ -99,19 +99,19 @@ elbo.30 <- -7858.6235
 test_that("expectation_log_likelihood", {
   expect_equal(
     expectation_log_likelihood(
-      log(T), X, delta, alpha, omega, mu, expectation_b
+      log(Time), X, delta, alpha, omega, mu, expectation_b
     ),
     expectation_log_likelihood
   )
   expect_equal(
     expectation_log_likelihood(
-      log(T.10), X, delta.10, alpha.10, omega.10, mu.10, expectation_b.10
+      log(Time.10), X, delta.10, alpha.10, omega.10, mu.10, expectation_b.10
     ),
     expectation_log_likelihood.10
   )
   expect_equal(
     expectation_log_likelihood(
-      log(T.30), X, delta.30, alpha.30, omega.30, mu.30, expectation_b.30
+      log(Time.30), X, delta.30, alpha.30, omega.30, mu.30, expectation_b.30
     ),
     expectation_log_likelihood.30
   )
@@ -131,7 +131,7 @@ test_that("diff_b", {
 
 test_that("elbo", {
   expected <- elbo(
-    log(T), X, delta, alpha_0, omega_0, mu_0, v_0, alpha,
+    log(Time), X, delta, alpha_0, omega_0, mu_0, v_0, alpha,
     omega, mu, Sigma, expectation_b
   )
   result <- -16736.1527
@@ -139,14 +139,14 @@ test_that("elbo", {
 
   expect_equal(
     elbo(
-      log(T.10), X, delta.10, alpha_0, omega_0, mu_0, v_0, alpha.10, omega.10,
+      log(Time.10), X, delta.10, alpha_0, omega_0, mu_0, v_0, alpha.10, omega.10,
       mu.10, Sigma.10, expectation_b.10
     ),
     elbo.10
   )
   expect_equal(
     elbo(
-      log(T.30), X, delta.30, alpha_0, omega_0, mu_0, v_0, alpha.30, omega.30,
+      log(Time.30), X, delta.30, alpha_0, omega_0, mu_0, v_0, alpha.30, omega.30,
       mu.30, Sigma.30, expectation_b.30
     ),
     elbo.30
