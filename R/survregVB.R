@@ -121,30 +121,28 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
     stop("formula argument cannot be a list")
   }
 
-  defined <- if (missing(cluster)) {
-    c("alpha_0", "omega_0", "mu_0", "v_0")
-  } else {
-    c("alpha_0", "omega_0", "mu_0", "v_0", "lambda_0", "eta_0")
-  }
-  passed <- names(as.list(Call)[-1])
-  if (any(!defined %in% passed)) {
-    stop(paste("Missing value(s) for", paste(setdiff(defined, passed),
-      collapse =
-        ", "
-    )))
-  }
-
   Terms <- if (missing(data)) {
     terms(formula)
   } else {
     terms(formula, data = data)
   }
 
+  defined <- if (missing(cluster)) {
+    c("alpha_0", "omega_0", "mu_0", "v_0")
+  } else {
+    c("alpha_0", "omega_0", "mu_0", "v_0", "lambda_0", "eta_0")
+  }
+  passed <- match(defined, names(Call), nomatch = 0)
+  missing <- which(passed == 0)
+  if (length(missing) > 0)
+    stop(paste("missing value(s) for", defined[missing]))
+
   indx <- match(c("formula", "data", "cluster", "na.action"),
     names(Call),
     nomatch = 0
   )
   if (indx[1] == 0) stop("A formula argument is required")
+
   temp <- Call[c(1, indx)] # only keep the arguments we wanted
   temp[[1L]] <- quote(stats::model.frame) # change the function called
 

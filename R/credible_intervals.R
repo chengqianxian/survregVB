@@ -16,8 +16,7 @@ beta_ci <- function(mu, Sigma, ci = 0.95) {
     upper_bounds[i] <-
       qnorm(1 - (1 - ci) / 2, mu[i], sqrt(diag(Sigma)[i]))
   }
-  ci_matrix <- cbind(CI.Lower = lower_bounds, CI.Upper = upper_bounds)
-  return(ci_matrix)
+  cbind(CI.Lower = lower_bounds, CI.Upper = upper_bounds)
 }
 
 #' Calculates the credible interval for a posterior distribution,
@@ -36,5 +35,5 @@ b_ci <- function(alpha, omega, ci = 0.95) {
   posterior <- rinvgamma(100000, alpha, omega)
   lower <- hdi(posterior, ci)$CI_low
   upper <- hdi(posterior, ci)$CI_high
-  return(c(lower, upper))
+  (c(lower, upper))
 }

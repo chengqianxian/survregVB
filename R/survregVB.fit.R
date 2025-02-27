@@ -42,7 +42,7 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
   converged <- FALSE
   iteration <- 0
 
-  expectation_b <- expectation_b(alpha, omega)
+  expectation_b <- omega / (alpha - 1)
   curr_mu <- mu_0
   curr_elbo <- 0
 
@@ -60,15 +60,14 @@ survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
       curr_mu, Sigma, expectation_b
     )
 
-    elbo_diff <- abs(elbo - curr_elbo)
-    mu_diff <- sum(abs(mu - curr_mu))
-    if (elbo_diff > threshold && mu_diff > threshold) {
+    if (abs(elbo - curr_elbo) > threshold &&
+        sum(abs(mu - curr_mu)) > threshold) {
       converged <- FALSE
     } else {
       converged <- TRUE
     }
 
-    expectation_b <- expectation_b(alpha, omega)
+    expectation_b <- omega / (alpha - 1)
     curr_elbo <- elbo
     curr_mu <- mu
   }

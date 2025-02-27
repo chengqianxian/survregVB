@@ -70,7 +70,7 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
   alpha <- object$alpha
   omega <- object$omega
   scale_sd <- sqrt((omega^2) / ((alpha - 1)^2 * (alpha - 2)))
-  scale <- c(expectation_b(alpha, omega), scale_sd, b_ci(alpha, omega, ci))
+  scale <- c(omega / (alpha - 1), scale_sd, b_ci(alpha, omega, ci))
 
   if (!is.null(object$clustered)) {
     # for models with shared frailty
@@ -78,7 +78,7 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
     lambda <- object$lambda
     eta <- object$eta
     intercept_sd <- sqrt((eta^2) / ((lambda - 1)^2 * (eta - 2)))
-    intercept <- c(expectation_b(lambda, eta), intercept_sd, b_ci(lambda, eta, ci))
+    intercept <- c(eta / (lambda - 1), intercept_sd, b_ci(lambda, eta, ci))
 
     posteriors <- rbind(coefficients, scale, intercept)
     row_names <- c(names(mu), "scale", "intercept")
