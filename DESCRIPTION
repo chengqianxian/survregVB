@@ -1,12 +1,12 @@
 Package: survregVB
-Title: Variational Bayesian Analysis of Survival Data Using a Log-Logistic Accelerated Failure Time Model
+Title: Variational Bayesian Analysis of Survival Data
 Version: 0.0.0.9000
 Authors@R: 
     person("Alison", "Zhang", , "alisonxzhang@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: This package implements an alternative approach to MCMC methods and infers the parameters     of the log-logistic AFT model via a mean-field variational Bayes (VB) algorithm. A piecewise           approximation technique is embedded in deriving the VB algorithm to achieve conjugacy. 
+Description: This package implements Bayesian inference in accelerated failure time (AFT) models for       right-censored survival times following a log-logistic distribution. 
 URL: https://github.com/chengqianxian/survregVB
-License: MIT + file LICENSE
+License: MIT + file LICENSE | LGPL-2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
@@ -21,3 +21,6 @@ Suggests:
     survival
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+Depends: 
+    R (>= 3.5)
+LazyData: true

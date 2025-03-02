@@ -60,7 +60,7 @@
 #' With shared frailty, a model with \eqn{i=1,...,K} clusters is specified
 #' with additional parameters:
 #' - \eqn{\sigma^2_\gamma}, the random intercept, and
-#' - \eqn{\gamma_i|\sigma^2_\gamma} the random effects.
+#' - \eqn{\gamma_i|\sigma^2_\gamma} the frailty variance.
 #'
 #' We additionally assume prior distributions:
 #' - \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}, and

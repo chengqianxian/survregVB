@@ -1,22 +1,5 @@
 test_that("survregVB", {
   library(survival)
-  first <- subset(rhDNase, !duplicated(id)) # first row for each subject
-  dnase <- tmerge(first, first, id = id, tstop = as.numeric(end.dt - entry.dt))
-
-  # Subjects whose fu ended during the 6 day window are the reason for
-  #  this next line
-  temp.end <- with(rhDNase, pmin(ivstop + 6, end.dt - entry.dt))
-  dnase <- tmerge(dnase, rhDNase,
-    id = id,
-    infect = event(ivstart),
-    end = event(temp.end)
-  )
-  # toss out the non-at-risk intervals, and extra variables
-  #  3 subjects had an event on their last day of fu, infect=1 and end=1
-  dnase <- subset(dnase, (infect == 1 | end == 0), c(id:trt, fev:infect))
-  dnase <- subset(dnase, !duplicated(id))
-  dnase$time <- dnase$tstop - dnase$tstart
-
   result <- survregVB(Surv(time, infect) ~ trt + fev, dnase,
     501, 500, c(4.4, 0.25, 0.04), 1,
     max_iteration = 100, threshold = 0.0005

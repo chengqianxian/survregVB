@@ -1,148 +1,87 @@
 ---
-title: "survregVB"
+title: "Using the survregVB Package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{survregVB}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-bibliography: references.bib
-csl: https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
-link-citations: true
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+```{r pre,echo=FALSE,results='hide'}
+library(knitr)
+opts_chunk$set(warning=FALSE,message=FALSE,cache=FALSE)
 ```
 
-# Introduction
+# Overview of survregVB
 
-This vignette demonstrates how to use the `survregVB` function from the **survregVB** package to fit a log-logistic Accelerated Failure Time (AFT) model. This function uses Variational Bayes (VB) to infer the model parameters by maximizing the Evidence Lower Bound (ELBO). We will use the `rhDNase` dataset from the **survival** package to illustrate the process. Specifically, we will show you how to prepare the data, set prior distributions, fit the model, and interpret the results.
+The `survregVB` function provides a fast and accessible solution for variational inference in accelerated failure time (AFT) models for right-censored survival times following a log-logistic distribution. It provides an efficient alternative to Markov chain Monte Carlo (MCMC) methods by implementing a mean-field variational Bayes (VB) algorithm for parameter estimation. The VB approach employs a coordinate ascent algorithm and incorporates a piecewise approximation technique when computing expectations to achieve conjugacy.
 
-# Installation
+## The AFT Model
 
-First, install the **survregVB** package if not already installed. Since we'll be using the `rhDNase` dataset, install the **survival** package as well:
+The log-logistic AFT model without shared frailty is specified as follows for the $i^{th}$ subject in the sample, $i=1,...,n$ , $T_i$:
 
-```{r install, eval=FALSE}
-install.packages("survregVB")
-install.packages("survival")
-```
+$$
+log(T_i):=Y=X_i^T\beta+bz_i
+$$
 
-# Basic Usage
+where $X_i$ is column vector of $p-1$ covariates and a constant one (i.e. $X_i=(1,x_i1,...,x_i(p-1))^T$), $\beta$ is a vector of coefficients for the covariates, $z_i$ is a random variable following a standard logistic distribution with scale parameter $b$.
 
-Once installed, you can load both libraries with the `library()` function:
+The `survregVB` function uses a Bayesian framework to obtain the optimal variational densities of parameters $\beta$ and $b$ by maximizing the evidence based lower bound (ELBO). To do so, we assume prior distributions:
 
-```{r setup}
+-   $\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})$, with precision $v_0=1/\sigma^2$, and
+
+-   $b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)$
+
+where $\mu_0,v_0,\alpha_0$ and $\omega_0$ are known hyperparameters. At the end of the model fitting process, `survregVB` obtains the approximated posterior distributions:
+
+-   $q^*(\beta)$, a $N_p(\mu,\Sigma)$ density function, and
+
+-   $q^*(b)$, an $\text{Inverse-Gamma}(\alpha,\omega)$ density function,
+
+where the parameters $\mu,\Sigma,\alpha$ and $\omega$ are obtained via the VB algorithm.
+
+### The AFT Model With Shared Frailty
+
+We can also use the `survregVB` function is to fit it a shared frailty log-logistic AFT regression model that accounts for intra-cluster correlation through a cluster-specific random intercept. For time $T_{ij}$ of the $j_{th}$ subject from the $i_{th}$ cluster in the sample, in a sample with $i=1,...,K$ clusters and $j=1,...,n_i$ subjects:
+
+$$
+\log(T_{ij})=\gamma_i+X_{ij}^T\beta+b\epsilon_{ij}
+$$
+
+where $X_{ij}$ is column vector of $p-1$ covariates and a constant one (i.e. $X_{ij}=(1,x_{ij1},...,x_{ij(p-1)})^T$), $\beta$ is a vector of coefficients, $\gamma_i$ is a random intercept for the $i^{th}$ cluster, $\epsilon_{ij}$ is a variable following a standard logistic distribution with scale parameter $b$.
+
+In addition to parameters $\beta$ and $b$, `survregVB` obtains the optimal variational densities of parameters $\sigma^2_\gamma$ (the frailty variance) and $\gamma_i$. In addition to $\beta$ and $b$, we assume prior distributions:
+
+-   $\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)$, and
+
+-   $\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)$,
+
+where $\mu_0,v_0,\alpha_0$, $\omega_0$, $\lambda_0$ and $\eta_0$ are known hyperparameters. At the end of the model fitting process, `survregVB`obtains the approximated posterior distributions $q^*(\beta), q^*(b)$,
+
+-   $q^*(\gamma_i)$, a $N_l(\tau^*_i,\sigma^{2*}_i))$ density function, and
+
+-   $q^*(\sigma^2_\gamma)$, an $\text{Inverse-Gamma}(\lambda^*,\eta^*)$ density function,
+
+where the parameters $\mu,\Sigma,\alpha,\omega,\tau_i, \sigma_i, \lambda$ and $\eta$ are obtained via the VB algorithm.
+
+# Getting Started using survregVB
+
+First, we load the survregVB and survival libraries.
+
+```{r loadLibrary}
 library(survregVB)
 library(survival)
 ```
 
-# Preparing the Data
+## Fitting the Model
 
-The `rhDNase` dataset contains the results of a randomized trial of rhDNase for the treatment of cystic fibrosis. The survival time for each patient, *T*, is defined as the time until the first pulmonary exacerbation. *T* is calculated as the difference between the date of entry into the study (`entry.dt`) and date of last follow-up (`end.dt`), with the follow-up period capped at 169 days [@survival]. The survival times can be clustered based on the enrolling institution of each patient (`inst`). The covariates of interest are:
+For the rhDNASE data set included in the package, our goal is to fit it a log-logistic AFT regression model of the form:
 
--   Treatment (`trt`: 0=placebo, 1=rhDNase), and
--   Forced expiratory volume (`fev`)
+$$
+\log(T):=Y=\beta_0+\beta_1x_1+\beta_2x_2+bz
+$$ where `trt` ($x_1$) and `fev` ($x_2$) are the covariates of interest, and the event status indicator is `infect`.
 
-Here is a preview of the `rhDNase` dataset:
-
-```{r}
-head(rhDNase)
-```
-
-Next, we need to prepare the data for modeling via the example code provided in the survival package [@survival]:
-
-```{r}
-# Extract the first row for each subject
-first <- subset(rhDNase, !duplicated(id))
-dnase <- tmerge(first, first, id = id, tstop = as.numeric(end.dt - entry.dt))
-
-# Subject whose fu ended during the 6 day window after finishing their
-# antibiotics are not counted as new infections
-temp.end <- with(rhDNase, pmin(ivstop + 6, end.dt - entry.dt))
-
-# Create the event indicator
-dnase <- tmerge(dnase, rhDNase,
-  id = id,
-  infect = event(ivstart),
-  end = event(temp.end)
-)
-
-# Toss out the non-at-risk intervals, and extra variables
-dnase <- subset(dnase, (infect == 1 | end == 0), c(id:trt, fev:infect))
-
-# Remove duplicated subjects
-dnase <- subset(dnase, !duplicated(id))
-
-# Set the survival time
-dnase$time <- dnase$tstop - dnase$tstart
-
-head(dnase)
-```
-
-Now, the dataset is ready with the survival time (`time`) and event indicator (`infect`).
-
-# Defining the AFT Model
-
-Our goal is to fit it a log-logistic AFT regression model of the form:
-
-$${\log(T):=Y=\beta_0+\beta_1x_1+\beta_2x_2+bz}$$ where:
-
--   $x_1$ is `trt`,
-
--   $x_2$ is `fev`, and
-
--   $z$ is a random variable following a standard logistic distribution with scale parameter *b* [@xian2024].
-
-The event of interest is whether or not the subject experienced infection, `infect`.
-
-## Formula Specification
-
-We define a formula, where the left-hand side is a survival object returned by the `Surv` function, and the right-hand side consists of the covariates, `trt` and `infect`. The object returned by the `Surv` function consists of the time and event of interest [@survival]. In this case, the time is `time` and the event of interest is `infect`:
-
-```{r}
-formula <- Surv(time, infect) ~ trt + fev
-```
-
-# Setting Prior Distributions
-
-Next we define the prior distributions of the model parameters:
-
--   $\beta\sim\text{MVN}(\mu_0,\sigma_0^2I_{p*p})$, with precision $v_0=1/\sigma^2$, and
-
--   $b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)$ [@xian2024]
-
-We set hyperparameters $\alpha_0=501$ and $\omega_0=500$ to achieve a mean scale of one.
-
-```{r}
-alpha_0 <- 501
-omega_0 <- 500
-```
-
-The prior means for $\mu_0$ are chosen based on historical data and similar analyses on this type of data:
-
--   for the intercept $\beta_0$, we use $\log(169/2)\approx4.4$ (half the follow-up period),
-
--   for $\beta_1$ (`trt`), we use $\log(1.28)\approx0.25$ [@shah1996]
-
--   for $\beta_2$ (`fev`) we use $\log(1.04)\approx0.04$ [@block2006]
-
-```{r}
-mu_0 <- c(4.4, 0.25, 0.04)
-v_0 <- 1
-```
-
-# Fitting the model
-
-Now that we have set up the formula and prior distributions, we can fit the `rhDNase` dataset to the log-logistic AFT model using the `survregVB` function. The remaining parameters we need to set are:
-
--   `max_iteration`: The maximum number of iterations the VB algorithm will run for with default 100. In this case, we allow up to 10,000 iterations to ensure that the algorithm has enough time to converge.
-
--   `threshold`: The convergence threshold based on the change in the ELBO between iterations. with default 0.0001 In this case, the algorithm will stop if the change in ELBO becomes smaller than 0.0005.
-
--   `na.action`: A filter function that specifies how to deal with missing data in the provided data-set with default `options()$na.action`. In this case, we set it to `na.omit` to omit any missing values if present.
+The following fits the model:
 
 ```{r}
 fit <- survregVB(
@@ -156,169 +95,40 @@ fit <- survregVB(
   threshold = 0.0005,
   na.action = na.omit
 )
+fit
 ```
 
-If the VB algorithm reaches the maximum number of iterations before converging, we will receive a warning message:
+## Fitting a Model with Shared Frailty
+
+We will fit the simulation_frailty data set included in the package to a log-logistic AFT regression model with shared frailty. For the $j^{th}$ subject in the $i^{th}$ cluster, $i=1,...,K$ and $j=1,...,n_i$:
+
+$$
+\log(T_i):=Y_i=0.5+\beta_1x_{1i}+\beta_2x_{2i}+\gamma_i+b\epsilon_i
+$$
+
+The following fits the model:
 
 ```{r}
-survregVB(
-  formula = Surv(time, infect) ~ trt + fev,
-  data = dnase,
-  alpha_0 = 501,
-  omega_0 = 500,
-  mu_0 = c(4.4, 0.25, 0.04),
-  v_0 = 1,
-  max_iteration = 9,
-  threshold = 0.0005
+fit2 <- survregVB(
+  formula = Surv(T.15, delta.15) ~ x1 + x2, 
+  data = simulation_frailty, 
+  alpha_0 = 3, 
+  omega_0 = 2, 
+  mu_0 = c(0, 0, 0), 
+  v_0 = 0.1, 
+  lambda_0 = 3, 
+  eta_0 = 2, 
+  cluster = cluster, 
+  max_iteration = 100, 
+  threshold = 0.01
 )
+fit2
 ```
 
-# Interpreting the Results
+# Session info
 
-At the end of the model fitting process, the VB algorithm obtains the approximated posterior distributions:
+The following package and versions were used in the production of this vignette.
 
--   $q^*(\beta)$, a $N_p(\mu,\Sigma)$ density function, and
-
--   $q^*(b)$, an $\text{Inverse-Gamma}(\alpha,\omega)$ density function [@xian2024]
-
-```{r}
-print(fit)
+```{r echo=FALSE}
+sessionInfo()
 ```
-
-## The `survregVB` Object
-
-The `survregVB` function returns a `survreg` object, which is a list containing the following results:
-
--   `ELBO`: The value of the converged ELBO. If the algorithm does not converge before reaching `max_iteration`, it will be the value of ELBO at the final iteration.
-
--   `alpha`: The final value of parameter $\alpha$ of the approximate posterior distribution of *b.*
-
--   `omega`: The final value of parameter $\omega$ of the approximate posterior distribution of *b.*
-
--   `mu`: The final value of parameter $\mu$ of the approximate posterior distribution of *β*.
-
--   `Sigma`: The final value of parameter $\Sigma$ of the approximate posterior distribution of *β*.
-
--   `iterations`: The number of iterations the algorithm performs before converging or reaching `max_iteration`.
-
--   `n`: The number of observations.
-
--   `call`: The function call used to invoke the `survregVB` method.
-
-We can access each item in the list using the `$` operator. For example, if we want to view the evidence lower bound (ELBO):
-
-```{r}
-fit$ELBO
-```
-
-We can also view summary statistics for the results of the fit via the `summary` function, which returns the following:
-
--   `call`: The function call used to invoke the `survregVB` method.
-
--   `alpha`: The parameter $\alpha$ of the approximate posterior distribution of the scale parameter *b.*
-
--   `omega`: The parameter $\omega$ of the approximate posterior distribution of the scale parameter *b.*
-
--   `mu`: The parameter $\mu$ of the approximate posterior distribution of the regression coefficient *β*.
-
--   `Sigma`: The parameter $\Sigma$ of the approximate posterior distribution of the regression coefficient *β*.
-
--   `iteration`: The number of iterations performed by the \#' VB algorithm: before converging or reaching `max_iteration`.
-
--   `n`: The number of observations.
-
--   `coefficients`: A matrix with one row for each coefficient, and columns containing:
-
-    -   `Value`: The estimated value of each of the regression coefficients of *β*.
-
-    -   `Lower CI`: The lower bound of the credible interval associated with the coefficient.
-
-    -   `Upper CI`: The upper bound of the credible interval associated with the coefficient.
-
--   `scale`: A vector containing:
-
-    -   `Value`: The estimated value of the scale parameter *b*.
-
-    -   `Lower CI`: The lower bound of the credible interval associated with the scale parameter.
-
-    -   `Upper CI`: The upper bound of the credible interval associated with the scale parameter.
-
-We can adjust the significance level for the credible intervals by altering the `ci` argument. The default is set to `0.95`.
-
-```{r}
-summary(fit, ci = 0.9)
-```
-
-# Using `survregVB` with Shared Frailty
-
-## The Shared Frailty AFT Model
-
-For data clustered by `inst` $i=1,2,...,51$, we can specify a shared-frailty log-logistic AFT regression model for the $i^{th}$ `inst` of the form:
-
-$${\log(T_i):=Y_i=0.5+\beta_1x_{1i}+\beta_2x_{2i}+\gamma_i+b\epsilon_i}$$
-
-where:
-
--   $x_{1i}$ is `trt`,
-
--   $x_{2i}$ is `fev`,
-
--   $\gamma_i$ is the random intercept,
-
--   $\epsilon_i$ is a random variable following a standard logistic distribution with scale parameter *b* [@xian2024a].
-
-## Setting Prior Distributions
-
-The formula and values for hyperparameters $\alpha_0,\omega_0,\mu_0$ and $v_0$ are the same as above. We also need to define the prior distributions of:
-
--   $\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}N(0,\sigma^2_\gamma)$, and
-
--   $\sigma^2\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)$ [@xian2024a]
-
-We set hyperparameters $\lambda_0=501$ and $\eta_0=500$ to achieve a mean scale of one.
-
-```{r}
-lambda_0 <- 501
-eta_0 <- 500
-```
-
-## Fitting the model
-
-We specify that we want to introduce shared frailty by setting the `cluster` parameter. In this case, we set it to `inst` so that the observations are clustered based on the enrolling institution:
-
-```{r}
-fit2 <- survregVB(formula = Surv(time, infect) ~ trt + fev,
-                  data = dnase,
-                  alpha_0 = 501,
-                  omega_0 = 500,
-                  mu_0 = c(4.4, 0.25, 0.04),
-                  v_0 = 1,
-                  lambda_0 = 501,
-                  eta_0 = 500,
-                  cluster = inst,
-                  max_iteration = 10000,
-                  threshold = 0.0005,
-                  na.action = na.omit)
-```
-
-## Interpreting the Results
-
-At the end of the model fitting process, the VB algorithm obtains the approximated posterior distributions $q^*(b),q^*(\beta)$ ,
-
--   $q^*(\gamma_i)$, a $N_l(\tau^*_i,\sigma^{2*}_i))$ density function, and
-
--   $q^*(\sigma^2_\gamma)$, a $\text{Inverse-Gamma}(\lambda^*,\eta^*)$ density function [@xian2024a]
-
-```{r}
-print(fit2)
-```
-
-The `survreg` object returned includes additional results for:
-
--   `clustered`: A boolean that indicates the model has shared frailty.
--   `tau`: The parameter $\tau$ of the approximate posterior distribution of the random intercept $\gamma_i$*.*
--   `sigma`: The parameter $\sigma^2$ of the approximate posterior distribution of the random intercept $\gamma_i$*.*
--   `lambda`: The parameter $\lambda$ of the approximate posterior distribution of the variance of the random intercept $\sigma^2_\gamma$.
--   `eta`: The parameter $\eta$ of the approximate posterior distribution of the variance of the random intercept $\sigma^2_\gamma$.
-
-# References

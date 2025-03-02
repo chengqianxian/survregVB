@@ -57,11 +57,11 @@ AFT survival data under a log-logistic distribution with and without
 frailty respectively.
 
 The goal of the `survregVB` function is to fit it a log-logistic AFT
-regression model of the following form for right-censored survival time
-$T_i$:
+regression model of the following form for the $i^{th}$ subject in the
+sample, $i=1,...,n$ , $T_i$:
 
 $$
-log(T_i):=Y=X_i^T+bz_i
+log(T_i):=Y=X_i^T\beta+bz_i
 $$
 
 where $X_i$ is column vector of $p-1$ covariates and a constant one

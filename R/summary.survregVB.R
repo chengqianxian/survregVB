@@ -75,7 +75,7 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
 
   if (!is.null(object$clustered)) {
     # for models with shared frailty
-    # random intercept (sigma_gamma squared)
+    # frailty variance (sigma_gamma squared)
     lambda <- object$lambda
     eta <- object$eta
     intercept_sd <- sqrt((eta^2) / ((lambda - 1)^2 * (eta - 2)))

@@ -1,33 +1,12 @@
 library(survival)
-set.seed(1)
-x1 <- rnorm(300, 1, 0.2)
-x2 <- rbinom(300, 1, 0.5)
-z <- rlogis(300)
-
-# generate survival times
-beta0 <- 0.5
-beta1 <- 0.2
-beta2 <- 0.8
-b <- 0.8
-Y <- beta0 + beta1 * x1 + beta2 * x2 + b * z
-T <- exp(Y)
-
-# generate censoring times
-set.seed(1)
-cen.time.10 <- runif(300, 0, 48)
-cen.time.30 <- runif(300, 0, 17)
-
-# obtain observed time
-T.10 <- pmin(T, cen.time.10)
-T.30 <- pmin(T, cen.time.30)
-
-# obtain censoring indicator
-delta <- rep(1, 300)
-delta.10 <- ifelse(T == T.10, 1, 0)
-delta.30 <- ifelse(T == T.30, 1, 0)
 
 # create X matrix
-X <- matrix(c(rep(1, 300), x1, x2), nrow = 300)
+X <- matrix(c(rep(1, 300), simulation_nofrailty$x1, simulation_nofrailty$x2), nrow = 300)
+
+# create Surv objects
+Y <- Surv(simulation_nofrailty$T, simulation_nofrailty$delta)
+Y.10 <- Surv(simulation_nofrailty$T.10, simulation_nofrailty$delta.10)
+Y.30 <- Surv(simulation_nofrailty$T.30, simulation_nofrailty$delta.30)
 
 # priors, use non-informative priors
 mu_0 <- c(0, 0, 0)
@@ -36,7 +15,7 @@ alpha_0 <- 11
 omega_0 <- 10
 
 test_that("survregVB.fit", {
-  result <- survregVB.fit(Surv(T, delta), X, alpha_0, omega_0, mu_0, v_0,
+  result <- survregVB.fit(Y, X, alpha_0, omega_0, mu_0, v_0,
     max_iteration = 100, threshold = 0.01
   )
   expected <- list(
@@ -58,7 +37,7 @@ test_that("survregVB.fit", {
   )
   expect_equal(result, expected)
 
-  result <- survregVB.fit(Surv(T.10, delta.10), X, alpha_0, omega_0,
+  result <- survregVB.fit(Y.10, X, alpha_0, omega_0,
     mu_0, v_0,
     max_iteration = 100,
     threshold = 0.01
@@ -82,7 +61,7 @@ test_that("survregVB.fit", {
   )
   expect_equal(result, expected)
 
-  result <- survregVB.fit(Surv(T.30, delta.30), X, alpha_0, omega_0,
+  result <- survregVB.fit(Y.30, X, alpha_0, omega_0,
     mu_0, v_0,
     max_iteration = 100,
     threshold = 0.01

@@ -98,7 +98,7 @@ With shared frailty, a model with \eqn{i=1,...,K} clusters is specified
 with additional parameters:
 \itemize{
 \item \eqn{\sigma^2_\gamma}, the random intercept, and
-\item \eqn{\gamma_i|\sigma^2_\gamma} the random effects.
+\item \eqn{\gamma_i|\sigma^2_\gamma} the frailty variance.
 }
 
 We additionally assume prior distributions:
