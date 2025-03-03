@@ -19,7 +19,8 @@ the date of last follow-up capped at 169 days}
 }
 }
 \source{
-\code{survival} package, https://cran.r-project.org/package=survival
+\code{survival} package.
+\url{https://cran.r-project.org/package=survival}
 }
 \usage{
 dnase

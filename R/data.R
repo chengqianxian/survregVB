@@ -15,7 +15,8 @@
 #'    the date of last follow-up capped at 169 days}
 #' }
 #'
-#' @source `survival` package, https://cran.r-project.org/package=survival
+#' @source `survival` package.
+#'  \url{https://cran.r-project.org/package=survival}
 "dnase"
 
 #' Simulated Survival Data Without Frailty
@@ -55,3 +56,28 @@
 #' }
 #' @source Simulated data
 "simulation_frailty"
+
+#' Subset of GSE102287: African American (AA) Patients
+#'
+#' This dataset is a subset of the GSE102287 dataset that includes only
+#' characteristics of patients who are identified as African American (AA).
+#'
+#' @format A data frame with selected patient characteristics:
+#' \describe{
+#'   \item{age}{Patient age.}
+#'   \item{Stage}{Cancer stage.}
+#'   \item{time}{Survival time in days.}
+#'   \item{status}{0 = Alive, 1 = Dead due to lung cancer.}
+#' }
+#'
+#' @source  Gene Expression Omnibus (GEO), Accession: GSE102287.
+#'  \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE102287}
+#'
+#' @references Mitchell, K. A., Zingone, A., Toulabi, L., Boeckelman, J.,
+#' & Ryan, B. M. (2017). Comparative Transcriptome Profiling Reveals Coding
+#' and Noncoding RNA Differences in NSCLC from African Americans and European
+#' Americans. Clinical cancer research : an official journal of the American
+#' Association for Cancer Research, 23(23), 7412–7425.
+#' \doi{10.1158/1078-0432.CCR-17-0527}
+"lung"
+
