@@ -74,39 +74,33 @@
 #'
 #' @examples
 #' # Data frame containing survival data
-#' example_data <- data.frame(
-#'   time = c(100, 120, 90, 35, 140),
-#'   status = c(1, 0, 1, 0, 1),
-#'   age = c(60, 55, 45, 70, 50),
-#'   gender = c("M", "F", "M", "M", "F"),
-#'   group = c(1, 1, 2, 3, 3)
+#' fit <- survregVB(
+#'  formula = survival::Surv(time, infect) ~ trt + fev,
+#'  data = dnase,
+#'  alpha_0 = 501,
+#'  omega_0 = 500,
+#'  mu_0 = c(4.4, 0.25, 0.04),
+#'  v_0 = 1,
+#'  max_iteration = 100,
+#'  threshold = 0.0005
 #' )
-#' # Formula for the survival model
-#' example_formula <- survival::Surv(time, status) ~ age + gender
-#' # Call the survregVB function
-#' result1 <- survregVB(
-#'   formula = example_formula,
-#'   data = example_data,
-#'   alpha_0 = 10,
-#'   omega_0 = 11,
-#'   mu_0 = c(5, 0, 0),
-#'   v_0 = 0.2
-#' )
-#' # View results
-#' summary(result1)
+#' fit
 #'
 #' # Call the survregVB function with shared frailty
-#' result2 <- survregVB(
-#'   formula = example_formula,
-#'   data = example_data,
-#'   alpha_0 = 10,
-#'   omega_0 = 11,
-#'   mu_0 = c(5, 0, 0),
-#'   v_0 = 0.2,
-#'   lambda_0 = 3,
-#'   eta_0 = 2,
-#'   cluster = group
+#' fit2 <- survregVB(
+#'  formula = survival::Surv(T.15, delta.15) ~ x1 + x2,
+#'  data = simulation_frailty,
+#'  alpha_0 = 3,
+#'  omega_0 = 2,
+#'  mu_0 = c(0, 0, 0),
+#'  v_0 = 0.1,
+#'  lambda_0 = 3,
+#'  eta_0 = 2,
+#'  cluster = cluster,
+#'  max_iteration = 100,
+#'  threshold = 0.01
 #' )
+#' fit2
 #' @import stats
 #'
 #' @export
@@ -169,6 +163,10 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
   X <- model.matrix(Terms, m)
   if (!all(is.finite(X)) || !all(is.finite(Y))) {
     stop("data contains an infinite predictor")
+  }
+
+  if (ncol(X) != length(mu_0)) {
+    stop("the length of mu_0 must match the number of covariates")
   }
 
   cluster <- model.extract(m, "cluster")

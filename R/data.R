@@ -4,8 +4,7 @@
 #' `survival` package.
 #' It is included in this package under the LGPL (≥ 2) license.
 #'
-#' @format ## `dnase`
-#' A data frame with 767 observations on the following variables:
+#' @format A data frame with 767 observations on the following variables:
 #' \describe{
 #'   \item{trt}{treatment arm: 0=placebo, 1= rhDNase}
 #'   \item{fev}{forced expriatory volume at enrollment, a measure of lung
@@ -24,7 +23,7 @@
 #' This dataset is a simulated survival dataset generated to demonstrate
 #' Bayesian inference in accelerated failure time (AFT) models.
 #'
-#' @format A data frame with 300 rows and 8 variables:
+#' @format A data frame with 300 rows and the following variables:
 #' \describe{
 #'   \item{x1}{Continuous covariate from `N(1, 0.2)`}
 #'   \item{x2}{Binary covariate from `Bernoulli(0.5)`}
@@ -44,7 +43,7 @@
 #' to account for cluster-level uncertainty. It is designed for demonstrating
 #' Bayesian inference in accelerated failure time (AFT) models.
 #'
-#' @format A data frame with 75 rows and 7 variables:
+#' @format A data frame with 75 rows and the following variables:
 #' \describe{
 #'   \item{x1}{Continuous covariate from `N(1, 0.2)`}
 #'   \item{x2}{Binary covariate from `Bernoulli(0.5)`}
@@ -62,7 +61,7 @@
 #' This dataset is a subset of the GSE102287 dataset that includes only
 #' characteristics of patients who are identified as African American (AA).
 #'
-#' @format A data frame with selected patient characteristics:
+#' @format A data frame with 53 observations on selected patient characteristics:
 #' \describe{
 #'   \item{age}{Patient age.}
 #'   \item{Stage}{Cancer stage.}
@@ -76,8 +75,8 @@
 #' @references Mitchell, K. A., Zingone, A., Toulabi, L., Boeckelman, J.,
 #' & Ryan, B. M. (2017). Comparative Transcriptome Profiling Reveals Coding
 #' and Noncoding RNA Differences in NSCLC from African Americans and European
-#' Americans. Clinical cancer research : an official journal of the American
+#' Americans. Clinical cancer research: an official journal of the American
 #' Association for Cancer Research, 23(23), 7412–7425.
-#' \doi{10.1158/1078-0432.CCR-17-0527}
+#' doi:10.1158/1078-0432.CCR-17-0527.
 "lung"
 

@@ -5,8 +5,6 @@
 \alias{dnase}
 \title{Subset of \code{rhDNase} from the \code{survival} package}
 \format{
-\subsection{\code{dnase}}{
-
 A data frame with 767 observations on the following variables:
 \describe{
 \item{trt}{treatment arm: 0=placebo, 1= rhDNase}
@@ -15,7 +13,6 @@ capacity}
 \item{infect}{an infection that required the use of intravenous antibiotics}
 \item{time}{difference between the date of entry into the study and
 the date of last follow-up capped at 169 days}
-}
 }
 }
 \source{

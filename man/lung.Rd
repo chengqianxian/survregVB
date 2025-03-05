@@ -5,7 +5,7 @@
 \alias{lung}
 \title{Subset of GSE102287: African American (AA) Patients}
 \format{
-A data frame with selected patient characteristics:
+A data frame with 53 observations on selected patient characteristics:
 \describe{
 \item{age}{Patient age.}
 \item{Stage}{Cancer stage.}
@@ -28,8 +28,8 @@ characteristics of patients who are identified as African American (AA).
 Mitchell, K. A., Zingone, A., Toulabi, L., Boeckelman, J.,
 & Ryan, B. M. (2017). Comparative Transcriptome Profiling Reveals Coding
 and Noncoding RNA Differences in NSCLC from African Americans and European
-Americans. Clinical cancer research : an official journal of the American
+Americans. Clinical cancer research: an official journal of the American
 Association for Cancer Research, 23(23), 7412–7425.
-\doi{10.1158/1078-0432.CCR-17-0527}
+doi:10.1158/1078-0432.CCR-17-0527.
 }
 \keyword{datasets}

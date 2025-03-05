@@ -5,7 +5,7 @@
 \alias{simulation_nofrailty}
 \title{Simulated Survival Data Without Frailty}
 \format{
-A data frame with 300 rows and 8 variables:
+A data frame with 300 rows and the following variables:
 \describe{
 \item{x1}{Continuous covariate from \code{N(1, 0.2)}}
 \item{x2}{Binary covariate from \code{Bernoulli(0.5)}}
