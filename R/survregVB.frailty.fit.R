@@ -122,8 +122,7 @@ survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
 
   if (converged == FALSE) {
     warning(
-      "The max iteration has been achieved and the algorithm has not
-      converged\n"
+      "The max iteration has been achieved and the algorithm has not converged\n"
     )
     return_list$not_converged <- TRUE
   }

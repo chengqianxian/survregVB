@@ -75,30 +75,30 @@
 #' @examples
 #' # Data frame containing survival data
 #' fit <- survregVB(
-#'  formula = survival::Surv(time, infect) ~ trt + fev,
-#'  data = dnase,
-#'  alpha_0 = 501,
-#'  omega_0 = 500,
-#'  mu_0 = c(4.4, 0.25, 0.04),
-#'  v_0 = 1,
-#'  max_iteration = 100,
-#'  threshold = 0.0005
+#'   formula = survival::Surv(time, infect) ~ trt + fev,
+#'   data = dnase,
+#'   alpha_0 = 501,
+#'   omega_0 = 500,
+#'   mu_0 = c(4.4, 0.25, 0.04),
+#'   v_0 = 1,
+#'   max_iteration = 100,
+#'   threshold = 0.0005
 #' )
 #' fit
 #'
 #' # Call the survregVB function with shared frailty
 #' fit2 <- survregVB(
-#'  formula = survival::Surv(T.15, delta.15) ~ x1 + x2,
-#'  data = simulation_frailty,
-#'  alpha_0 = 3,
-#'  omega_0 = 2,
-#'  mu_0 = c(0, 0, 0),
-#'  v_0 = 0.1,
-#'  lambda_0 = 3,
-#'  eta_0 = 2,
-#'  cluster = cluster,
-#'  max_iteration = 100,
-#'  threshold = 0.01
+#'   formula = survival::Surv(T.15, delta.15) ~ x1 + x2,
+#'   data = simulation_frailty,
+#'   alpha_0 = 3,
+#'   omega_0 = 2,
+#'   mu_0 = c(0, 0, 0),
+#'   v_0 = 0.1,
+#'   lambda_0 = 3,
+#'   eta_0 = 2,
+#'   cluster = cluster,
+#'   max_iteration = 100,
+#'   threshold = 0.01
 #' )
 #' fit2
 #' @import stats
@@ -129,14 +129,13 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
   passed <- match(defined, names(Call), nomatch = 0)
   missing <- which(passed == 0)
   if (length(missing) > 0) {
-    stop(paste("missing value(s) for", defined[missing]))
+    stop(paste("missing value(s) for", paste(defined[missing], collapse = ", ")))
   }
 
   indx <- match(c("formula", "data", "cluster", "na.action"),
     names(Call),
     nomatch = 0
   )
-  if (indx[1] == 0) stop("A formula argument is required")
 
   temp <- Call[c(1, indx)] # only keep the arguments we wanted
   temp[[1L]] <- quote(stats::model.frame) # change the function called
@@ -161,10 +160,6 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
   }
 
   X <- model.matrix(Terms, m)
-  if (!all(is.finite(X)) || !all(is.finite(Y))) {
-    stop("data contains an infinite predictor")
-  }
-
   if (ncol(X) != length(mu_0)) {
     stop("the length of mu_0 must match the number of covariates")
   }

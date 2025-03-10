@@ -81,12 +81,12 @@ test_that("survregVB.frailty.fit", {
     Sigma = matrix(
       c(
         0.47649862, -0.432523126, -0.039795273,
-        -0.43252313,  0.422329210,  0.006203171,
-        -0.03979527,  0.006203171,  0.061215951
-        ),
+        -0.43252313, 0.422329210, 0.006203171,
+        -0.03979527, 0.006203171, 0.061215951
+      ),
       nrow = 3, byrow = TRUE,
       dimnames = list(NULL, NULL)
-      ),
+    ),
     tau = setNames(
       c(
         -0.201920682, 0.668452249, 0.453402893, 0.129862127, 1.658932288,
@@ -109,4 +109,17 @@ test_that("survregVB.frailty.fit", {
     n = 75
   )
   expect_equal(result, expected)
+})
+
+test_that("unconverged", {
+  expect_warning(
+    survregVB.frailty.fit(
+      Y = Y, X = X, alpha_0 = alpha_0,
+      omega_0 = omega_0, mu_0 = mu_0, v_0 = v_0,
+      lambda_0 = lambda_0, eta_0 = eta_0,
+      cluster = cluster, max_iteration = 11,
+      threshold = 0.01
+    ),
+    "The max iteration has been achieved and the algorithm has not converged"
+  )
 })

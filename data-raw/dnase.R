@@ -12,9 +12,9 @@ temp.end <- with(rhDNase, pmin(ivstop + 6, end.dt - entry.dt))
 
 # Create the event indicator
 dnase <- tmerge(dnase, rhDNase,
-                id = id,
-                infect = event(ivstart),
-                end = event(temp.end)
+  id = id,
+  infect = event(ivstart),
+  end = event(temp.end)
 )
 
 # Toss out the non-at-risk intervals, and extra variables

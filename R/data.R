@@ -78,5 +78,4 @@
 #' Americans. Clinical cancer research: an official journal of the American
 #' Association for Cancer Research, 23(23), 7412–7425.
 #' doi:10.1158/1078-0432.CCR-17-0527.
-"lung"
-
+"lung_cancer"
