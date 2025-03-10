@@ -139,15 +139,15 @@ test_that("elbo", {
 
   expect_equal(
     elbo(
-      log(Time.10), X, delta.10, alpha_0, omega_0, mu_0, v_0, alpha.10, omega.10,
-      mu.10, Sigma.10, expectation_b.10
+      log(Time.10), X, delta.10, alpha_0, omega_0, mu_0, v_0, alpha.10,
+      omega.10, mu.10, Sigma.10, expectation_b.10
     ),
     elbo.10
   )
   expect_equal(
     elbo(
-      log(Time.30), X, delta.30, alpha_0, omega_0, mu_0, v_0, alpha.30, omega.30,
-      mu.30, Sigma.30, expectation_b.30
+      log(Time.30), X, delta.30, alpha_0, omega_0, mu_0, v_0, alpha.30,
+      omega.30, mu.30, Sigma.30, expectation_b.30
     ),
     elbo.30
   )

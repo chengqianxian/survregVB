@@ -1,7 +1,8 @@
 library(survival)
 
 # create X matrix
-X <- matrix(c(rep(1, 300), simulation_nofrailty$x1, simulation_nofrailty$x2), nrow = 300)
+X <- matrix(c(rep(1, 300), simulation_nofrailty$x1,
+              simulation_nofrailty$x2), nrow = 300)
 
 # create Surv objects
 Y <- Surv(simulation_nofrailty$T, simulation_nofrailty$delta)

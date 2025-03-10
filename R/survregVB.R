@@ -129,7 +129,8 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
   passed <- match(defined, names(Call), nomatch = 0)
   missing <- which(passed == 0)
   if (length(missing) > 0) {
-    stop(paste("missing value(s) for", paste(defined[missing], collapse = ", ")))
+    stop(paste("missing value(s) for",
+               paste(defined[missing], collapse = ", ")))
   }
 
   indx <- match(c("formula", "data", "cluster", "na.action"),

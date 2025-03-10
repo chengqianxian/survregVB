@@ -1,7 +1,8 @@
 library(survival)
 
 # prepare for the data structure
-X <- matrix(c(rep(1, 75), simulation_frailty$x1, simulation_frailty$x2), nrow = 75)
+X <- matrix(c(rep(1, 75), simulation_frailty$x1,
+              simulation_frailty$x2), nrow = 75)
 
 # create Surv objects
 Y <- Surv(simulation_frailty$T, simulation_frailty$delta)

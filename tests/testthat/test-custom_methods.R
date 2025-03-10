@@ -4,7 +4,8 @@ result <- survregVB(Surv(time, infect) ~ trt + fev, dnase,
   max_iteration = 100, threshold = 0.0005
 )
 
-simulation_frailty <- rbind(simulation_frailty, NA) # to test if null values are omitted
+# to test if null values are omitted
+simulation_frailty <- rbind(simulation_frailty, NA)
 cluster <- simulation_frailty$cluster
 x1 <- simulation_frailty$x1
 x2 <- simulation_frailty$x2

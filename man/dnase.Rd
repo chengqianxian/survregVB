@@ -10,7 +10,8 @@ A data frame with 767 observations on the following variables:
 \item{trt}{treatment arm: 0=placebo, 1= rhDNase}
 \item{fev}{forced expriatory volume at enrollment, a measure of lung
 capacity}
-\item{infect}{an infection that required the use of intravenous antibiotics}
+\item{infect}{an infection that required the use of intravenous
+antibiotics}
 \item{time}{difference between the date of entry into the study and
 the date of last follow-up capped at 169 days}
 }

@@ -1,4 +1,4 @@
-## code to prepare `DATASET` dataset goes here
+## code to prepare `DATimeASETime` dataset goes here
 library(survival)
 cluster <- rep(1:15, each = 5)
 
@@ -19,15 +19,16 @@ for (l in 1:75) {
   Y[l] <- beta0 + beta1 * x1[l] + beta2 * x2[l] +
     random.int[(l - 1) %/% 5 + 1] + b * epsilon[l]
 }
-T <- exp(Y)
+Time <- exp(Y)
 
 # obtain observed time
-T.15 <- pmin(T, cen.time.15)
+Time.15 <- pmin(Time, cen.time.15)
 
 # obtain censoring indicator
 delta <- rep(1, 75)
-delta.15 <- ifelse(T == T.15, 1, 0)
+delta.15 <- ifelse(Time == Time.15, 1, 0)
 
-simulation_frailty <- data.frame(x1, x2, T, T.15, delta, delta.15, cluster)
+simulation_frailty <- data.frame(x1, x2, Time, Time.15,
+                                 delta, delta.15, cluster)
 
 usethis::use_data(simulation_frailty, overwrite = TRUE)

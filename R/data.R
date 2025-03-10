@@ -1,3 +1,5 @@
+## Datasets ============================================================
+
 #' Subset of `rhDNase` from the `survival` package
 #'
 #' The `dnase` dataset is a subset of the `rhDNase` dataset from the
@@ -9,7 +11,8 @@
 #'   \item{trt}{treatment arm: 0=placebo, 1= rhDNase}
 #'   \item{fev}{forced expriatory volume at enrollment, a measure of lung
 #'    capacity}
-#'   \item{infect}{an infection that required the use of intravenous antibiotics}
+#'   \item{infect}{an infection that required the use of intravenous
+#'    antibiotics}
 #'   \item{time}{difference between the date of entry into the study and
 #'    the date of last follow-up capped at 169 days}
 #' }
@@ -61,11 +64,15 @@
 #' This dataset is a subset of the GSE102287 dataset that includes only
 #' characteristics of patients who are identified as African American (AA).
 #'
-#' @format A data frame with 53 observations on selected patient characteristics:
+#' @format A data frame with 53 observations on selected patient
+#'  characteristics:
 #' \describe{
+#'   \item{patient}{Patient identification number.}
 #'   \item{age}{Patient age.}
 #'   \item{Stage}{Cancer stage.}
 #'   \item{time}{Survival time in days.}
+#'   \item{gender}{Gender of the patient.}
+#'   \item{smoking}{0 = Never smoked, 1 = Has smoked.}
 #'   \item{status}{0 = Alive, 1 = Dead due to lung cancer.}
 #' }
 #'

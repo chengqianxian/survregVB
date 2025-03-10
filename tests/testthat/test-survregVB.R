@@ -39,7 +39,8 @@ test_that("survregVB", {
 })
 
 test_that("survregVB frailty", {
-  simulation_frailty <- rbind(simulation_frailty, NA) # to test if null values are omitted
+  # to test if null values are omitted
+  simulation_frailty <- rbind(simulation_frailty, NA)
   cluster <- simulation_frailty$cluster
   x1 <- simulation_frailty$x1
   x2 <- simulation_frailty$x2
