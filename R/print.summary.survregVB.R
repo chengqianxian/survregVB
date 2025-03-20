@@ -3,9 +3,6 @@
 print.summary.survregVB <- function(x, digits =
                                       max(options()$digits - 4, 3),
                                     signif.stars = FALSE, ...) {
-  if (is.null(digits)) {
-    digits <- options()$digits
-  }
   cat("Call:\n")
   dput(x$call)
 

@@ -11,7 +11,7 @@
 #'  operator, and the covariates on the right. The response must be a survival
 #'  object of type `right`, as returned by the \code{Surv} function.
 #' @param data A `data.frame` in which to interpret the variables named in
-#'  the formula`.
+#'  the `formula` and `cluster` arguments.
 #' @param alpha_0 The shape hyperparameter \eqn{\alpha_0} of the prior
 #'  distribution of \emph{b}.
 #' @param omega_0 The shape hyperparameter \eqn{\omega_0} of the prior

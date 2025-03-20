@@ -48,7 +48,7 @@
 #'
 #' @format A data frame with 75 rows and the following variables:
 #' \describe{
-#'   \item{x1}{Continuous covariate from `N(1, 0.2)`}
+#'   \item{x1}{Continuous covariate from `N(1, 0.2^2)`}
 #'   \item{x2}{Binary covariate from `Bernoulli(0.5)`}
 #'   \item{T}{True survival time}
 #'   \item{T.15}{Observed survival time under `cen.time.15`}
@@ -64,16 +64,16 @@
 #' This dataset is a subset of the GSE102287 dataset that includes only
 #' characteristics of patients who are identified as African American (AA).
 #'
-#' @format A data frame with 53 observations on selected patient
+#' @format A data frame with 60 observations on selected patient
 #'  characteristics:
 #' \describe{
 #'   \item{patient}{Patient identification number.}
 #'   \item{age}{Patient age.}
-#'   \item{Stage}{Cancer stage.}
+#'   \item{Stage}{Lung cancer stage (I, II, III).}
 #'   \item{time}{Survival time in days.}
 #'   \item{gender}{Gender of the patient.}
 #'   \item{smoking}{0 = Never smoked, 1 = Has smoked.}
-#'   \item{status}{0 = Alive, 1 = Dead due to lung cancer.}
+#'   \item{status}{0 = Alive, 1 = Death due to lung cancer.}
 #' }
 #'
 #' @source  Gene Expression Omnibus (GEO), Accession: GSE102287.

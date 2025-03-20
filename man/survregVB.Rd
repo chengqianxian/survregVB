@@ -26,7 +26,7 @@ operator, and the covariates on the right. The response must be a survival
 object of type \code{right}, as returned by the \code{Surv} function.}
 
 \item{data}{A \code{data.frame} in which to interpret the variables named in
-the formula`.}
+the \code{formula} and \code{cluster} arguments.}
 
 \item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
 distribution of \emph{b}.}

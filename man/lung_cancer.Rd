@@ -5,16 +5,16 @@
 \alias{lung_cancer}
 \title{Subset of GSE102287: African American (AA) Patients}
 \format{
-A data frame with 53 observations on selected patient
+A data frame with 60 observations on selected patient
 characteristics:
 \describe{
 \item{patient}{Patient identification number.}
 \item{age}{Patient age.}
-\item{Stage}{Cancer stage.}
+\item{Stage}{Lung cancer stage (I, II, III).}
 \item{time}{Survival time in days.}
 \item{gender}{Gender of the patient.}
 \item{smoking}{0 = Never smoked, 1 = Has smoked.}
-\item{status}{0 = Alive, 1 = Dead due to lung cancer.}
+\item{status}{0 = Alive, 1 = Death due to lung cancer.}
 }
 }
 \source{

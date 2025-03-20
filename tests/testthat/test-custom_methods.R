@@ -3,6 +3,12 @@ result <- survregVB(Surv(time, infect) ~ trt + fev, dnase,
   501, 500, c(4.4, 0.25, 0.04), 1,
   max_iteration = 100, threshold = 0.0005
 )
+result2 <- suppressWarnings(
+  survregVB(Surv(time, infect) ~ trt + fev, dnase,
+                    501, 500, c(4.4, 0.25, 0.04), 1,
+                    max_iteration = 8, threshold = 0.0005
+  )
+)
 
 # to test if null values are omitted
 simulation_frailty <- rbind(simulation_frailty, NA)
@@ -20,6 +26,9 @@ result_frailty <- survregVB(
 test_that("print", {
   expected_output <- "Call:\nsurvregVB(formula = Surv(time, infect) ~ trt + fev, data = dnase, \n    alpha_0 = 501, omega_0 = 500, mu_0 = c(4.4, 0.25, 0.04), \n    v_0 = 1, max_iteration = 100, threshold = 5e-04)\n\nPosterior distributions of the regression coefficients (Beta):\nmu=\n(Intercept)         trt         fev \n     4.1124      0.4155      0.0213 \n\nSigma=\n            (Intercept)   trt     fev\n(Intercept)    0.036204 -0.01 < 2e-16\ntrt           -0.010274  0.02 2.2e-05\nfev           -0.000473  0.00 8.3e-06\n\nPosterior distribution of the scale parameter (b):\nalpha=  744   omega=  674.648 \n\nELBO=  -4857.094 \n\nNumber of iterations=  9 \n\nn= 645 "
   expect_equal(capture_output(print(result)), expected_output)
+
+  expected_output <- "Call:\nsurvregVB(formula = Surv(time, infect) ~ trt + fev, data = dnase, \n    alpha_0 = 501, omega_0 = 500, mu_0 = c(4.4, 0.25, 0.04), \n    v_0 = 1, max_iteration = 8, threshold = 5e-04)\n\nThe VB algorithm did not converge.\n\nPosterior distributions of the regression coefficients (Beta):\nmu=\n(Intercept)         trt         fev \n     4.1123      0.4156      0.0213 \n\nSigma=\n            (Intercept)   trt     fev\n(Intercept)    0.036254 -0.01 < 2e-16\ntrt           -0.010287  0.02 2.2e-05\nfev           -0.000474  0.00 8.3e-06\n\nPosterior distribution of the scale parameter (b):\nalpha=  744   omega=  674.6411 \n\nELBO=  -4857.18 \n\nNumber of iterations=  8 \n\nn= 645 "
+  expect_equal(capture_output(print(result2)), expected_output)
 
   expected_output <- "Call:\nsurvregVB(formula = Y ~ x1 + x2, alpha_0 = 3, omega_0 = 2, mu_0 = c(0, \n    0, 0), v_0 = 0.1, lambda_0 = 3, eta_0 = 2, na.action = na.omit, \n    cluster = cluster, max_iteration = 100, threshold = 0.01)\n\nPosterior distributions of the regression coefficients (Beta):\nmu=\n(Intercept)          x1          x2 \n     -0.292       0.808       0.557 \n\nSigma=\n            (Intercept)    x1     x2\n(Intercept)      0.5025 -0.46 <2e-16\nx1              -0.4565  0.45 0.0043\nx2              -0.0389  0.00 0.0629\n\nPosterior distribution of the scale parameter (b):\nalpha=  78   omega=  52.3792 \n\nPosterior distribution of the random intercept (sigma_gamma squared):\nlambda=  10.5   eta=  10.03876 \n\nPosterior distributions of the random effects for each cluster (gamma):\ntau=\n     1      2      3      4      5      6      7      8      9     10     11 \n-0.208  0.704  0.434  0.127  1.612  0.285  0.707  1.833 -1.121 -0.764 -0.522 \n    12     13     14     15 \n-0.675 -1.586 -0.793  0.422 \n\nsigma=\n    1     2     3     4     5     6     7     8     9    10    11    12    13 \n0.225 0.162 0.162 0.189 0.189 0.189 0.225 0.189 0.189 0.162 0.162 0.278 0.162 \n   14    15 \n0.189 0.234 \n\nELBO=  -312.412 \n\nNumber of iterations=  13 \n\nn=75 (1 observation deleted due to missingness)"
   expect_equal(capture_output(print(result_frailty)), expected_output)
@@ -57,15 +66,15 @@ test_that("summary", {
     n = 645,
     posteriors = matrix(
       c(
-        4.11238723, 3.73945671, 4.48531774, 4.11238723,
-        0.41546907, 0.13920598, 0.69173216, 0.41546907,
-        0.02129091, 0.01565595, 0.02692586, 0.02129091,
-        0.90800539, 0.03333393, 0.84358709, 0.97365570
+        4.11238723, 0.19027417,   3.73945671,   4.48531774,
+        0.41546907, 0.14095315,   0.13920598,   0.69173216,
+        0.02129091, 0.00287503,   0.01565595,   0.02692586,
+        0.90800539, 0.03333393,   0.84358709,   0.97365570
       ),
       nrow = 4, byrow = TRUE,
       dimnames = list(
         c("(Intercept)", "trt", "fev", "scale"),
-        c("Value", "SD", "95% CI Upper", "95% CI Lower")
+        c("Value", "SD", "95% CI Lower", "95% CI Upper")
       )
     )
   )
@@ -122,16 +131,16 @@ test_that("summary", {
     n = 75,
     posteriors = matrix(
       c(
-        -0.292434906, -1.681755441, 1.0968856, -0.2924349,
-        0.808339850, -0.499498821, 2.1161785, 0.8083399,
-        0.557493825, 0.065948446, 1.0490392, 0.5574938,
-        0.680249307, 0.078029947, 0.5368565, 0.8374610,
-        1.056711318, 0.372702147, 0.4906938, 1.7664480
+        -0.2924349,  0.70885003, -1.68175544,  1.0968856,
+        0.8083399,  0.66727689, -0.49949882,  2.1161785,
+        0.5574938,  0.25079307,  0.06594845,  1.0490392,
+        0.6802493,  0.07802995,  0.53685649,  0.8374610,
+        1.0567113,  0.37270215,  0.49069380,  1.7664480
       ),
       nrow = 5, byrow = TRUE,
       dimnames = list(
         c("(Intercept)", "x1", "x2", "scale", "intercept"),
-        c("Value", "SD", "95% CI Upper", "95% CI Lower")
+        c("Value", "SD", "95% CI Lower", "95% CI Upper")
       )
     )
   )
@@ -140,9 +149,12 @@ test_that("summary", {
 })
 
 test_that("print.summary", {
-  expected_output <- "Call:\nsurvregVB(formula = Surv(time, infect) ~ trt + fev, data = dnase, \n    alpha_0 = 501, omega_0 = 500, mu_0 = c(4.4, 0.25, 0.04), \n    v_0 = 1, max_iteration = 100, threshold = 5e-04)\n             Value     SD 95% CI Upper 95% CI Lower\n(Intercept) 4.1124 3.7395         4.49        4.112\ntrt         0.4155 0.1392         0.69        0.415\nfev         0.0213 0.0157         0.03        0.021\nscale       0.9080 0.0333         0.84        0.974\n\nELBO=  -4857.094 \n\nNumber of iterations=  9 \n\nn= 645 "
+  expected_output <- "Call:\nsurvregVB(formula = Surv(time, infect) ~ trt + fev, data = dnase, \n    alpha_0 = 501, omega_0 = 500, mu_0 = c(4.4, 0.25, 0.04), \n    v_0 = 1, max_iteration = 100, threshold = 5e-04)\n              Value      SD 95% CI Lower 95% CI Upper\n(Intercept) 4.11239 0.19027         3.74        4.485\ntrt         0.41547 0.14095         0.14        0.692\nfev         0.02129 0.00288         0.02        0.027\nscale       0.90801 0.03333         0.84        0.974\n\nELBO=  -4857.094 \n\nNumber of iterations=  9 \n\nn= 645 "
   expect_equal(capture_output(print(summary(result, digits = 4))), expected_output)
 
-  expected_output <- "Call:\nsurvregVB(formula = Y ~ x1 + x2, alpha_0 = 3, omega_0 = 2, mu_0 = c(0, \n    0, 0), v_0 = 0.1, lambda_0 = 3, eta_0 = 2, na.action = na.omit, \n    cluster = cluster, max_iteration = 100, threshold = 0.01)\n              Value      SD 95% CI Upper 95% CI Lower\n(Intercept) -0.2924 -1.6818         1.10       <2e-16\nx1           0.8083 -0.4995         2.12         0.81\nx2           0.5575  0.0659         1.05         0.56\nscale        0.6802  0.0780         0.54         0.84\nintercept    1.0567  0.3727         0.49         1.77\n\nELBO=  -312.412 \n\nNumber of iterations=  13 \n\nn=75 (1 observation deleted due to missingness)"
+  expected_output <- "Call:\nsurvregVB(formula = Surv(time, infect) ~ trt + fev, data = dnase, \n    alpha_0 = 501, omega_0 = 500, mu_0 = c(4.4, 0.25, 0.04), \n    v_0 = 1, max_iteration = 8, threshold = 5e-04)\n              Value      SD 95% CI Lower 95% CI Upper\n(Intercept) 4.11230 0.19041         3.74        4.485\ntrt         0.41564 0.14105         0.14        0.692\nfev         0.02130 0.00288         0.02        0.027\nscale       0.90800 0.03333         0.84        0.974\n\nELBO=  -4857.18 \n\nNumber of iterations=  8 \n\nn= 645 "
+  expect_equal(capture_output(print(suppressWarnings(summary(result2)))), expected_output)
+
+  expected_output <- "Call:\nsurvregVB(formula = Y ~ x1 + x2, alpha_0 = 3, omega_0 = 2, mu_0 = c(0, \n    0, 0), v_0 = 0.1, lambda_0 = 3, eta_0 = 2, na.action = na.omit, \n    cluster = cluster, max_iteration = 100, threshold = 0.01)\n             Value     SD 95% CI Lower 95% CI Upper\n(Intercept) -0.292  0.709        -1.68         1.10\nx1           0.808  0.667        -0.50         2.12\nx2           0.557  0.251         0.07         1.05\nscale        0.680  0.078         0.54         0.84\nintercept    1.057  0.373         0.49         1.77\n\nELBO=  -312.412 \n\nNumber of iterations=  13 \n\nn=75 (1 observation deleted due to missingness)"
   expect_equal(capture_output(print(summary(result_frailty))), expected_output)
 })

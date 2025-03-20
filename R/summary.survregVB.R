@@ -55,7 +55,7 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
 
   # column names for posteriors
   ci_label <- paste0(100 * ci, "% CI")
-  col_names <- c("Value", "SD", paste(ci_label, c("Upper", "Lower")))
+  col_names <- c("Value", "SD", paste(ci_label, c("Lower", "Upper")))
 
   # regression coefficients (beta)
   coefficients <- matrix(rep(mu, 4), ncol = 4)
@@ -64,8 +64,8 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
 
   # Cred. Int
   beta_ci <- beta_ci(mu, object$Sigma, ci)
-  coefficients[, 2] <- beta_ci[, 1]
-  coefficients[, 3] <- beta_ci[, 2]
+  coefficients[, 3] <- beta_ci[, 1]
+  coefficients[, 4] <- beta_ci[, 2]
 
   # scale parameter (b)
   alpha <- object$alpha
