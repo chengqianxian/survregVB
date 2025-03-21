@@ -42,7 +42,7 @@ The `survregVB` R package is developed to implement mean-field variational Bayes
 
 ## Research Question & Objectives
 
-How can VB inference be implemented as an R package for parametric survival regression of right-censored log-logistic AFT models with and without frailty? The objectives are to develop **survregVB**, and validate its performance through simulations and application to real-world data.
+How can VB inference be implemented as an R package for parametric survival regression of right-censored log-logistic AFT models with and without frailty? The objectives are to develop `survregVB`, and validate its performance through simulations and application to real-world data.
 
 ## Principal Ideas
 

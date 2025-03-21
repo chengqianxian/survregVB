@@ -16,7 +16,7 @@ opts_chunk$set(warning = FALSE, message = FALSE, cache = FALSE)
 
 # Overview of survregVB
 
-The `survregVB` function provides a fast and accessible solution for variational inference in accelerated failure time (AFT) models for right-censored survival times following a log-logistic distribution. It provides an efficient alternative to Markov chain Monte Carlo (MCMC) methods by implementing a mean-field variational Bayes (VB) algorithm for parameter estimation. The VB approach employs a coordinate ascent algorithm and incorporates a piecewise approximation technique when computing expectations to achieve conjugacy.
+`survregVB` is an R package that provides Bayesian inference for log-logistic accelerated failure time (AFT) models used in survival analysis as a faster alternative to Markov chain Monte Carlo (MCMC) methods. `survregVB` supports AFT models with and without shared frailty, and implements a mean-field variational Bayes (VB) algorithm for parameter estimation. The VB approach employs a coordinate ascent algorithm and incorporates a piecewise approximation technique when computing expectations to achieve conjugacy.
 
 ## The AFT Model
 
@@ -68,7 +68,7 @@ where the parameters $\mu,\Sigma,\alpha,\omega,\tau_i, \sigma_i, \lambda$ and $\
 
 # Getting Started using survregVB
 
-First, we load the survregVB and survival libraries.
+First, we load the `survregVB` and `survival` libraries.
 
 ```{r loadLibrary}
 library(survregVB)

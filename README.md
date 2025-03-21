@@ -8,22 +8,22 @@
 
 To install `survregVB`, use the following command:
 
-``` R
+``` r
 remotes::install_github("https://github.com/chengqianxian/survregVB")
 ```
 
-## Usage 
+## Usage
 
 ### Loading the Package
 
-``` R
+``` r
 library(survregVB)
 library(survival) 
 ```
 
-### Fitting a Basic Model 
+### Fitting a Basic Model
 
-``` R
+``` r
 # Example using dataset included in the package
 data(dnase)
 
@@ -35,9 +35,9 @@ fit <- survregVB(formula = Surv(time, infect) ~ trt + fev, data = dnase,
 summary(fit)
 ```
 
-### Fitting a Model with Frailty 
+### Fitting a Model with Frailty
 
-``` R
+``` r
 # Using dataset included in the package
 data(simulation_frailty)
 
