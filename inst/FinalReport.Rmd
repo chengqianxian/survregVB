@@ -66,39 +66,21 @@ Since no existing software provides VB methods for AFT models, the development o
 
 # 1. Introduction
 
+## 1.1 General Background & Problem Description
+
 # 2. Background & Related Work
 
 ## 2.1 Survival Analysis
 
-Survival analysis is the branch of statistics concerned with modelling time-to-event data, where the focus is on analyzing survival time, the length of time between an origin and an event of interest. The definition of an event (i.e. death, sickness, accident, bankruptcy, etc.) is highly variable, making survival analysis applicable across many domains, such as medicine, sociology, marketing or economics [@emmert-streib2019].
+Survival analysis is the branch of statistics concerned with modelling time-to-event data, where the focus is on analyzing survival time, the length of time between an origin and an event of interest. The definition of an event (i.e. death, sickness, accident, bankruptcy, etc.) is highly variable, making survival analysis applicable across many domains, such as medicine, sociology, marketing or economics [@emmert-streib2019]. In survival analysis, censored observations occur when the exact survival time is unknown for some individuals as the event of interest does not occur during the duration of a study or data collection. In specific, right censoring occurs when the time taken for event of interest to occur exceeds the observed length of time for an individual [@kobara2022statistical].
 
-## 2.2 Censoring
+## 2.2 AFT Models
 
-In survival analysis, censored observations occur when the exact survival time is unknown for some individuals as the event of interest does not occur during the duration of a study or data collection. In specific, right censoring occurs when the time taken for event of interest to occur exceeds the observed length of time for an individual [@kobara2022statistical].
+For situations where explanatory variables may affect survival time, usual survival distribution methods are insufficient. Since survival times are only positive (and therefore rarely normally distributed), and may contain censored observations, survival regression methods are necessary for analyzing survival data for non-homogeneous populations [@kobara2022statistical]. A commonly used survival regression model is the accelerated failure time (AFT) model, which assumes an accelerative effect of the covariates directly on survival time [@webber2022]. There are several possible distributions for the AFT model, including exponential, Weibull, log-logistic, log-normal or gamma. In particular, the log-logistic distribution is suitable for modelling a wide variety of survival data [@rivas-lópez2022]. See Appendix A for the log-logistic AFT model specification.
 
-## 2.3 AFT Models
+## 2.3 Shared Frailty
 
-For situations where explanatory variables may affect survival time, usual survival distribution methods are insufficient. Since survival times are only positive (and therefore rarely normally distributed), and may contain censored observations, survival regression methods are necessary for analyzing survival data for non-homogeneous populations [@kobara2022statistical]. A commonly used survival regression model is the accelerated failure time (AFT) model, which assumes an accelerative effect of the covariates directly on survival time [@webber2022]. There are several possible distributions for the AFT model, including exponential, Weibull, log-logistic, log-normal or gamma. In particular, the log-logistic distribution is suitable for modelling a wide variety of survival data [@rivas-lópez2022].
-
-For survival time $T_i$, censoring time $C_i$ and censoring indicator $\delta_i=\mathbb{1}(T_i\le C_i)$ for the $i^{th}$ subject in the sample, $i=1,...,n$, the log-logistic AFT model is represented as follows:
-
-$$
-log(T_i):=Y=\mathbf{X}_i^T\beta+bz_i
-$$
-
-where $\mathbf{X}_i$ is column vector of $p-1$ covariates and a constant one (i.e. $\mathbf{X}_i=(1,x_i1,...,x_i(p-1))^T$), $\beta$ is a vector of coefficients for the covariates, $z_i$ is a random variable following a standard logistic distribution and $b$ is a scale parameter [@xian2024].
-
-### 2.3.1 With Shared Frailty
-
-Frailty is a multiplicative, latent effect on the baseline hazard function used to account for heterogeneity and random effects. A shared frailty model is a random effects model where the frailties are shared among groups and randomly distributed across groups [@gutierrez2002]. In cases where correlated survival data arises from clusters of individuals with shared environmental factors, a shared frailty AFT model can be used to account for correlations among survival data [@hougaard1995; @hanagal2011; @gorfine2023]. Since the choice of distribution is not critical, the log-logistic AFT model can be used [@lambert2004].
-
-For survival time $T_{ij}$, censoring time $C_{ij}$ and censoring indicator $\delta_{ij}=\mathbb{1}(T_{ij}\le C_{ij})$ for the $j^{th}$ subject from the $i^{th}$ cluster in a sample with $i=1,...,K$ clusters and $j=1,...,n_i$ subjects, the shared frailty log-logistic AFT model is represented as follows:
-
-$$
-\log(T_{ij})=\gamma_i+\mathbf{X}_{ij}^T\beta+b\epsilon_{ij}
-$$
-
-where $\mathbf{X}_{ij}$ is column vector of $p-1$ covariates and a constant one (i.e. $\mathbf{X}_{ij}=(1,x_{ij1},...,x_{ij(p-1)})^T$), $\beta$ is a vector of coefficients for the covariates, $\gamma_i$ is a random intercept for the $i^{th}$ cluster, $\epsilon_{ij}$ is a variable following a standard logistic distribution and $b$ is a scale parameter [@xian2024a].
+Frailty is a multiplicative, latent effect on the baseline hazard function used to account for heterogeneity and random effects. A shared frailty model is a random effects model where the frailties are shared among groups and randomly distributed across groups [@gutierrez2002]. In cases where correlated survival data arises from clusters of individuals with shared environmental factors, a shared frailty AFT model can be used to account for correlations among survival data [@hougaard1995; @hanagal2011; @gorfine2023]. Since the choice of distribution is not critical, the log-logistic AFT model can be used [@lambert2004]. See Appendix A for the shared frailty log-logistic AFT model specification.
 
 ## 2.4 Bayesian Inference
 
@@ -117,7 +99,7 @@ Several R packages currently exist to provide estimation methods for AFT models,
 -   `survregBayes` from `spBayesSurv` uses MCMC-based Bayesian inference to estimate shared frailty AFT models [@spBayesSurv].
 -   `frailtyHL` implements the hierarchical likelihood (h-likelihood) approach for shared frailty AFT models [@ha2012].
 
-However, VB methods for AFT models are a relatively recent development, and currently no integrated software exists for their practical implementation [@xian2024]. Compared to more traditional Bayesian approaches, the`survregVB` package offers the following advantages:
+However, VB methods for AFT models are a relatively recent development, and currently no integrated software exists for their practical implementation [@xian2024]. Compared to more traditional Bayesian approaches, the `survregVB` package offers the following advantages:
 
 -   Significantly reduced computation cost with similar estimation results compared to MCMC, with an average speedup of up to 300 times [@xian2024].
 
@@ -169,15 +151,21 @@ To ensure usability, accuracy, and compliance with R package development standar
 
 ## 4.2 Tools & Techniques
 
--   The `survival` Package provides the standard functions for survival modeling in R, ensuring that `survregVB` is compatible with existing workflows [@survival].
+-   R, the standard language for statistical computing and survival analysis, provides built-in methods for data manipulation and model fitting used in `survregVB` [@RProject].
+
+-   RStudio is used as the primary development environment for writing, building and testing `survregVB` [@silge2019].
+
+-   The `survival` package provides the standard functions for survival modeling in R, ensuring that `survregVB` is compatible with existing workflows [@survival].
 
 -   Stan allows MCMC-based validation of VB results, ensuring model accuracy [@rstan].
 
 -   Package development tools like `devtools`, `usethis`, and `testthat`, are used to maintain code quality in `survregVB` [@silge2019].
 
+-   GitHub for version control and development.
+
 ## 4.3 Algorithms
 
-`survregVB` implements two mean-field variational Bayes (VB) algorithms for right-censored log-logistic AFT models with and without frailty (Algorithms 1 and 2 respectively in the Appendix) [@xian2024; @xian2024a].
+`survregVB` implements two mean-field variational Bayes (VB) algorithms for right-censored log-logistic AFT models with and without frailty (Algorithms 1 and 2 respectively in Appendix B) [@xian2024; @xian2024a].
 
 # 5. Results
 
@@ -207,80 +195,17 @@ To ensure usability, accuracy, and compliance with R package development standar
 
 ### 5.2.2 System Design & Architecture
 
-`survregVB` was based off existing R code from the `vbaft` repository (<https://github.com/chengqianxian/vbaft/tree/main>), which implements survival regression for right-censored log-logistic AFT models without shared frailty. However, significant modifications have been made to meet CRAN submission standards, and improve usability, performance and maintainability.
+`survregVB` was based off existing R code from the `vbaft` repository (<https://github.com/chengqianxian/vbaft/tree/main>), which implements survival regression for right-censored log-logistic AFT models without shared frailty. However, significant modifications have been made to add support for shared frailty, meet CRAN submission standards, and improve usability, performance and maintainability.
 
 #### i) Architectural/Design Patterns Used
 
-The \`survregVB\` follows the standard R package format [\@silge2019] and includes a test suite, a vignette, function documentation, and simulated and real-world data sets for use in examples and testing. Adherence to R package development best practices ensures usability and maintainability.
-
-``` yaml
-survregVB/
-├── R/
-│   ├── survregVB.R               # Primary user-facing function 
-│   ├── survregVB.frailty.fit.R   # Implements VB with shared frailty 
-│   ├── survregVB.fit.R           # Implements VB without shared frailty 
-│   ├── summary.survregVB.R       # Summary method for survregVB
-│   ├── print.survregVB.R         # Print method for survregVB
-│   ├── print.summary.survregVB.R # Print method for summary.survregVB
-│   ├── parameters.R              # Parameter update calculations for VB 
-│   ├── ELBO.R                    # Convergence criteria calculations for VB
-│   ├── data.R                    # Dataset documentation
-│   ├── credible_intervals.R      # Computes Bayesian credible intervals 
-│
-├── tests/                        # Unit tests for functions found in R/ 
-│   ├── testthat/
-│
-├── vignettes/                    
-│   ├── survregVB.Rmd             # User guide and examples
-│
-├── man/                          # Documentation
-│
-├── data/                         # Example data sets 
-│   ├── simulation_nofrailty.rda  # Simulated data set without clusters
-│   ├── simulation_frailty.rda    # Simulated data set with clusters
-│   ├── lung_cancer.rda           # Subset of the GSE102287 data set
-│   ├── dnase.rda                 # Subset of the rhDNase data set
-├── data-raw/                     # Clean raw data before saving in data/
-│
-├── DESCRIPTION                   # Package metadata
-├── NAMESPACE                     # Function exports
-├── LICENSE                       # License file
-├── LICENSE.md                    # Readable version of license file 
-└── README.md                     # Installation guide
-```
+The \`survregVB\` follows the standard R package format [@silge2019] and includes a test suite, a vignette, function documentation, and simulated and real-world data sets for use in examples and testing. Adherence to R package development best practices ensures usability and maintainability. Refer to Appendix C for the package structure.
 
 #### ii) Component Interfaces
 
-1.  `survregVB()` is the primary user-facing function for performing VB survival regression in an AFT model.
+1.  `survregVB()`
 
-```{r}
-survregVB <- function(
-    formula,       # Model formula (e.g., Surv(time, status) ~ predictors)
-    data,          # Data frame to interpret the variables. 
-    alpha_0,       # Shape hyperparameter of b 
-    omega_0,       # Scale hyperparameter of b
-    mu_0,          # Mean hyperparameter of beta
-    v_0,           # Precision hyperparameter of beta
-    lambda_0,      # Shape hyperparameter for frailty component
-    eta_0,         # Scale hyperparameter for frailty component 
-    na.action = na.omit, # Handling of missing values
-    cluster,       # Optional clustering variable for frailty models
-    max_iteration = 100, # Maximum number of iterations for the VB algorithm
-    threshold = 0.0001   # Convergence threshold for the ELBO
-)
-```
-
-Its main role is to:
-
--   Parse the formula input (`Surv(time, status) ~ predictors`).
-
--   Check for missing data, outliers, and non-supported distributions.
-
--   Determine whether to use a frailty model (if `cluster` is specified).
-
--   Call either `survregVB.fit()` or `survregVB.frailty.fit()` based on model type.
-
--   Return a `survregVB` object with results and metadata.
+`survregVB()` is the primary user-facing function for performing VB survival regression in an AFT model.Its main role is to parse the formula input (`Surv(time, status) ~ predictors`), check for missing data, outliers, and non-supported distributions, and determine whether to use a frailty model (if `cluster` is specified). It then calls either `survregVB.fit()` or `survregVB.frailty.fit()` based on model type and returns a `survregVB` object with results and metadata.
 
 2.  Core fitting functions
 
@@ -288,7 +213,7 @@ Its main role is to:
 
 -   `survregVB.frailty.fit()` implements VB estimation for standard log-logistic AFT models with shared frailty when the `cluster` variable is specified.
 
-4.  S3 methods for interpreting/presenting results
+3.  S3 methods for interpreting/presenting results
 
 -   `print.survregVB()` displays the posterior distributions of the AFT model parameters, and is called automatically when displaying results from `survregVB()`
 
@@ -312,23 +237,17 @@ Its main role is to:
 
 The following tools and technologies were used in developing `survregVB`:
 
-1.  Programming Language
-
--   R: The standard language for statistical computing and survival analysis. It provides built-in methods for data manipulation, model fitting, and visualization [@RProject].
-
-2.  Libraries and Packages
-
-Survival analysis:
+1.  Survival analysis:
 
 -   `survival` - Core library for survival analysis routines, including definition of `Surv` objects and parametric AFT models [@survival].
 
 -   `rstan` - R interface for `stan`, used for comparisons against MCMC techniques [@rstan].
 
-Package and Development:
+2.  Package and Development:
 
 -   `devtools`, `usethis` - For general package development, including functions for automating R package creation and setup, testing and documenting functions, and building the package [@devtools; @usethis].
 
--   `testthat` - For writing function unit tests to ensure the package works as expected [@testthat].
+-   `testthat`- For writing function unit tests to ensure the package works as expected [@testthat].
 
 -   `roxygen2` - To generate in-line function documentation in a standardized format [@roxygen2].
 
@@ -338,7 +257,7 @@ Package and Development:
 
 -   `covr` - To check the test coverage of the package [@covr].
 
-Other libraries:
+3.  Other libraries:
 
 -   `invgamma` - To sample from the inverse gamma distribution [@invgamma].
 
@@ -346,35 +265,17 @@ Other libraries:
 
 -   `GEOquery` - To access data from the NCBI Gene Expression Omnibus (GEO) for real-world data analysis [@GEOquery].
 
-3.  Algorithms
+4.  Algorithms
 
--   `survregVB` implements Algorithms 1 and 2 in the Appendix through the `survregVB.fit()` and `survregVB.frailty.fit()` functions respectively.
-
-4.  Development Environment & Version Control
-
--   RStudio - The primary development environment for writing, building and testing R packages [@silge2019].
-
--   GitHub - Version control and development.
+-   `survregVB` implements Algorithms 1 and 2 in Appendix D through the `survregVB.fit()` and `survregVB.frailty.fit()` functions respectively.
 
 #### Testing
 
-`survregVB` uses the `testthat` package to automate testing and improve code structure, and ensure the functions are behaving as expected. Following the conventions of `testthat`, the test suite is found under the `/tests/testthat` directory and contains a corresponding test file for each file found under the `/R/` directory [@testthat]. The whole test suite is run by executing `devtools::test()` [@silge2019].
-
-The `covr` package was used to measure code coverage for the entire `survregVB` package, ensuring that all components are covered by test cases [@covr]. The results indicate that 99.79% of the code base is covered by test cases, showing strong test coverage and robust code.
+`survregVB` uses the `testthat` package to automate testing and improve code structure, and ensure the functions are behaving as expected. Tthe test suite contains a corresponding test file for each R file [@testthat]. The `covr` package was used to measure code coverage for the entire `survregVB` package, ensuring that all components are covered by test cases [@covr]. The results indicate that 99.79% of the code base is covered by test cases, showing strong test coverage and robust code.
 
 ### 5.2.4 System Validation
 
 `devtools::check()` was used during development for comprehensive package validation to ensure that `survregVB` meets CRAN standards. This command runs tests, checks documentation, verifies dependencies, and identifies potential issues such as missing imports, documentation inconsistencies, or coding errors [@devtools].
-
-**`devtools::check()`** was used for comprehensive package validation, ensuring `survregVB` meets CRAN standards. This command performs the following checks [\@devtools]:
-
--   Runs automated tests to detect errors.
-
--   Validates documentation and function consistency.
-
--   Identifies missing dependencies and imports.
-
--   Ensures compliance with R package development best practices.
 
 #### Case Study using `dnase`
 
@@ -390,17 +291,16 @@ $$ where `trt` ($x_1$) and `fev` ($x_2$) are the covariates of interest, and the
 
 2.  Fitting the Model
 
-First, we load the `survregVB` and `survival` libraries and view the data set documentation:
+First, we load the `survregVB` and `survival` libraries:
 
 ```{r loadLibrary}
 library(survregVB)
 library(survival)
-?dnase
 ```
 
 To fit the log-logistic AFT model using `survregVB`:
 
-```{r}
+```{r, eval=FALSE}
 fit <- survregVB(
   formula = Surv(time, infect) ~ trt + fev, data = dnase, alpha_0 = 501, omega_0 = 500,
   mu_0 = c(4.4, 0.25, 0.04), v_0 = 1, max_iteration = 10000, threshold = 0.0005,
@@ -418,21 +318,9 @@ We also simulate survival data with and without clustering to validate the perfo
 
 1.  Scenario with frailty (`simulated_frailty`)
 
-We will show an example using the `simulated_frailty` data set included in the package, which contains survival data generated as follows for the $j^{th}$ subject in the $i^{th}$ cluster, $i=1, \dots, K$ and $j=1,\dots, n_i$:
+We will show an example using the `simulated_frailty` data set included in the package, which contains generated survival data. The following fits the model with non-informative priors:
 
-$$
-\log(T_{ij})=0.5+\beta_1x_{ij1}+\beta_2x_{ij2}+\gamma_i+b\epsilon_{ij},
-$$
-
--   $x_{ij1} \sim N(1, 0.2^2)$
--   $x_{ij2}\sim \text{Bernoulli}(0.5)$
--   $\epsilon_{ij}\sim \text{logistic}(0,1)$
--   $\gamma_i\sim N(0,\sigma_\gamma^2)$ with $\sigma^2_\gamma=1$
--   Censoring time $C_{ij}\sim \text{uniform}(0,d)$ where $t_{ij}=\min(T_{ij},C_{ij})$, and $\delta_{ij}=\mathbb{1}(T_{ij}\le C_{ij})$ and $d=48$ to achieve a 15% censoring rate [@xian2024a].
-
-The following fits the model with non-informative priors:
-
-```{r}
+```{r, eval=FALSE}
 fit2 <- survregVB(
   formula = Surv(T.15, delta.15) ~ x1 + x2, data = simulation_frailty, alpha_0 = 3,
   omega_0 = 2, mu_0 = c(0, 0, 0), v_0 = 0.1, lambda_0 = 3, eta_0 = 2,
@@ -442,7 +330,7 @@ print(fit2)
 summary(fit2)
 ```
 
-These distributions of $\beta$, $b$ (scale) and $\sigma_\gamma^2$ (intercept) match those obtained from the shared frailty VB algorithm from @xian2024a, validating the implementation.
+The distributions of $\beta$, $b$ (scale) and $\sigma_\gamma^2$ (intercept) match those obtained from the shared frailty VB algorithm from @xian2024a, validating the implementation.
 
 2.  Scenario without frailty (`simulated_nofrailty`)
 
@@ -454,53 +342,23 @@ While VB methods have been explored in statistical literature, no existing softw
 
 ### Comparative Analysis to Other Work
 
-To establish the novelty of `survregVB`, we compare its performance on two real-world data sets with:
-
--   Likelihood-based estimation using `survreg()` from `survival`.
-
--   HMC sampling from `rstan`.
-
-For each of the following data sets, we fit a log-logistic AFT model, use historically motivated priors for Bayesian estimation, and compare parameter estimates, runtime, and model fit.
+To establish the novelty of `survregVB`, we compare its performance on two real-world data sets with likelihood-based estimation using `survreg()` from `survival`, and HMC sampling from `rstan`. For each of the following data sets, we fit a log-logistic AFT model, use historically motivated priors for Bayesian estimation, and compare parameter estimates, runtime, and model fit.
 
 #### GSE102287 Data set
 
-This data set, publicly available in the NCBI Gene Expression Omnibus (GEO), contains clinical and gene expression data from African American and European American patients with non-small cell lung cancer (NSCLC) [@mitchell2017]. A processed subset of 60 African American patients referred to as `lung_cancer` is included in `survregVB`, focusing on factors influencing survival, such as age, cancer stage, gender, and smoking status . Previous research shows that the log-logistic model is the best fit for the data as compared to other parametric models [@kumar2019].
+This data set, publicly available in the NCBI Gene Expression Omnibus (GEO), contains clinical and gene expression data from African American and European American patients with non-small cell lung cancer (NSCLC) [@mitchell2017]. A processed subset of 60 African American patients referred to as `lung_cancer` is included in `survregVB`, focusing on factors influencing survival, such as age, cancer stage, gender, and smoking status. Previous research shows that the log-logistic model is the best fit for the data as compared to other parametric models [@kumar2019].
 
-We choose priors based off historical analysis on this type of data [@kumar2019]. We choose the log of half the follow-up period length, $\log(1825/2)\approx6.8$ as the mean of the intercept. To summarize, we consider the following prior distributions for the model parameters [@xian2024]:
+We choose priors based off historical analysis on this type of data [@kumar2019]. We choose the log of half the follow-up period length, $\log(1825/2)\approx6.8$ as the mean of the intercept, and the ELBO convergence threshold is set as $0.01$ which is the default recommendation [@yao2018yes].
 
--   $\beta\sim N_p(\boldsymbol{\mu}_0,\sigma_0^2\mathbf{I}_{p\times p}$), with $\boldsymbol{\mu}_0 = (6.8,0,0,0,0,0)$ and $v_0=1$
-
--   $b\sim \text{Inverse-Gamma}(\alpha_0,\omega_0)$ with $\alpha_0=11$ and $\omega_0=10$
-
-The ELBO convergence threshold is set as $0.01$ which is the default recommendation [@yao2018yes]. To fit this model using `survregVB`, we use the following:
-
-```{r}
-fit <- survregVB(formula = Surv(time, status) ~ age + Stage + gender + factor(smoking),
-                 data = lung_cancer, alpha_0 = 11, omega_0 = 10,
-                 mu_0 = c(6.8, 0, 0, 0, 0, 0), v_0 = 1, threshold = 0.01)
-```
-
-#### Lung Data set 
+#### Lung Data set
 
 The `lung` data set in the `survival` package contains survival data from 228 patients with advanced lung cancer from the North Central Cancer Treatment Group [@survival]. We have assessed that this data set is suitable for the log-logistic distribution.
 
-We choose the log of the median follow-up period length, $\log(824)\approx6.7$ as the mean of the intercept and $0$ as the prior means for the other covariates based of previous studies [@ando2001; @kumar2019]. To summarize, we consider the following prior distributions for the model parameters [@xian2024]:
+We choose the log of the median follow-up period length, $\log(824)\approx6.7$ as the mean of the intercept and $0$ as the prior means for the other covariates based of previous studies [@ando2001; @kumar2019].
 
--   $\beta\sim N_p(\boldsymbol{\mu}_0,\sigma_0^2\mathbf{I}_{p\times p}$), with $\boldsymbol{\mu}_0 = (6.7,0,0,0,0,0)$ and $v_0=1$
+#### Comparative Results
 
--   $b\sim \text{Inverse-Gamma}(\alpha_0,\omega_0)$ with $\alpha_0=501$ and $\omega_0=500$
-
-We fit the model as follows:
-
-```{r}
-fit2 <- survregVB(formula = Surv(time, status == 2) ~ age + factor(sex) +
-                    factor(ph.ecog), data = lung, alpha_0 = 501, omega_0 = 500,
-                  mu_0 = c(6.7, 0, 0, 0, 0, 0), v_0 = 1, threshold = 0.01)
-```
-
-#### Comparative Results 
-
-The estimation results from `survregVB`, `survreg` and `rstan` for GSE102287 and `lung` are shown in Table 1 and Table 2 in the Appendix. The convergence of the MCMC algorithm was well assessed and checked by the trace plot and autocorrection plot [@comparis2021]. The results demonstrate that `survregVB` results align well with likelihood and MCMC-based estimates. Furthermore, the credible intervals from survregVB overlap with those from MCMC for both data sets, showing that it captures parameter uncertainty well.
+The estimation results from `survregVB`, `survreg` and `rstan` for GSE102287 and `lung` are shown in Table 1 and Table 2 in Appendix D. The convergence of the MCMC algorithm was well assessed and checked by the trace plot and autocorrection plot [@comparis2021]. The results demonstrate that `survregVB` results align well with likelihood and MCMC-based estimates. Furthermore, the credible intervals from survregVB overlap with those from MCMC for both data sets, showing that it captures parameter uncertainty well.
 
 For GSE102287, survregVB achieves a 960x speedup (41.5504 sec → 0.0431 sec), and for `lung`, survregVB achieves a 160x speedup (12.5573 sec → 0.0765 sec). This significant reduction in runtime confirms that VB provides a stable and computationally efficient alternative to MCMC-based inference. Furthermore, unlike `rstan`, `survregVB` automates preprocessing (handling missing data, categorical variables, etc.), making Bayesian inference accessible to applied researchers.
 
@@ -508,19 +366,74 @@ For GSE102287, survregVB achieves a 960x speedup (41.5504 sec → 0.0431 sec), a
 
 ## 6.1 Threats to the Validity of the Results
 
+Several factors could have affected the validity of the results obtained from `survregVB`. For instance, the accuracy of the results depends on the correctness of the implemented VB algorithm. Any errors in coding or parameter calculations could introduce issues. To mitigate this problem, the implementation was validated through unit testing, replication of key results from a separate implementation, and comparison with existing methods. The package was also tested using both real-world and simulated data to ensure robustness under different scenarios.
+
 ## 6.2 Implications of the Research Results
 
-Since no existing software provides VB methods for AFT models, the development of `survregVB` will fill this gap to offer an efficient alternative to MCMC-based methods. Applying VB inference to a variety of data sets, such as ones with small sample sizes, many covariates or differing cluster sizes, provides new insight into its robustness and practicality. Comparing results with traditional techniques provides further information on the computational cost and accuracy of the VB methods. This evaluation will help address the strengths and weaknesses of the current VB algorithms, and identify areas for future research for Bayesian inference in survival models.
+Since no existing software provides VB methods for AFT models, the development of survregVB will fill this gap to simplify Bayesian survival analysis. Researchers now have a computationally efficient alternative to MCMC-based methods, enabling larger-scale studies and more complex modeling scenarios. Furthermore, the comparative results from this research provides further information on the computational cost and accuracy of the VB methods. This evaluation will help address the strengths and weaknesses of the current VB algorithms and identify areas for future research for Bayesian inference in survival models.
 
-As survival analysis is an important field of study across multiple domains, `survregVB` will benefit researchers involved in biology, medicine, engineering, marketing, social sciences or behavioral sciences [@emmert-streib2019]. The package will be freely available through CRAN, making VB inference widely accessible to end users. Function documentation will be available in the package, and a vignette will serve as an in-depth guide to improve usage. Furthermore, the package will automatically handle missing values, perform one-hot encoding, and generate summary statistics, streamlining the analysis process.
+As survival analysis is an important field of study across multiple domains, survregVB will benefit researchers involved in biology, medicine, engineering, marketing, social sciences and behavioral sciences [@emmert-streib2019]. The package will be freely available through CRAN, making VB inference widely accessible to end users. Function documentation will be available in the package, and a vignette will serve as an in-depth guide to improve usage. Furthermore, the package will provide automatic data pre-processing, handling of missing values, and categorical variable encoding to reduce the complexity of Bayesian modeling for non-specialists.
 
 ## 6.3 Limitations of the Results
 
-## 6.4 Generalisability of the Results 
+While the package performs well on the included real-world and simulated data sets, its performance should be further evaluated across different scenarios, such as ones with ones with small sample sizes, many covariates or differing cluster sizes, to confirm its robustness in different practical settings.
+
+Furthermore, `survregVB` is restricted by the limitations of the implemented VB algorithm. For large datasets, the algorithms may result in high computational costs. In addition, one could explore more intricate Gaussian processes for modeling the random errors of the share frailty model. The approach also relies on the assumption that the number of B-spline basis functions is known prior to applying the algorithm [@xian2024b].
+
+## 6.4 Generalisability of the Results
+
+The methods implemented in `survregVB` are broadly applicable to survival data analysis in various disciplines since the log-logistic distributions is suitable for modelling a wide-variety of survival data [@rivas-lópez2022]. It also supports shared frailty for cases with correlated survival data. However, `survregVB` does not support other parametric distributions, such as Weibull or log-normal. Furthermore, `survregVB` handles right-censored data, but not left or interval-censored scenarios. This limits its use in scenarios requiring different types of survival data. As well, `survregVB` assumes a parametric model with log-logistic distributions. While this covers many scenarios, the package is not currently designed for semi-parametric or non-parametric survival models, limiting its applicability.
+
+# 7. Conclusions
+
+The main goal of this research was to develop the `survregVB` R package to implement mean-field VB algorithms for right-censored log-logistic AFT models with and without frailty as an alternative to Markov Chain Monte Carlo (MCMC) methods. As such, the objectives were to develop `survregVB`, and validate its performance through simulations and application to real-world data.
+
+The main result obtained was the `survregVB` package, the components and quality attributes of which are discussed in Section 5.2.2: System Design & Architecture. Not only does the package offer an efficient alternative to traditional Bayesian methods, it also integrates seamlessly with existing R survival workflows, pre-processes data and handles missing values. `survregVB` was validated by comparisons against `survreg` and `rstan`, the results of which are shown in Tables 1 and 2 in Appendix D, simulation studies (Section 5.2.4: System Validation), and applications to real-world data sets (Section 5.3: Novelty of Results).
+
+In conclusion, the `survregVB` package successfully implements mean-field VB algorithms for right-censored log-logistic AFT models, providing an efficient alternative to MCMC methods. By integrating smoothly with existing R survival analysis workflows, handling missing data, and demonstrating competitive performance against existing implementations, `survregVB` offers a practical solution for Bayesian survival modeling. The validation studies confirm its accuracy and efficiency, reinforcing its practicality. Future work could include extending the approach to other distributions, implementing additional censoring types, and further optimizing performance speed.
+
+# 8. Future Work & Lessons Learned
+
+## 8.1 Future Work
+
+1.  Currently, `survregVB` only supports log-logistic AFT models since VB algorithms do not exist for other distributions. Future work could focus on extending the package to other parametric AFT models, such as Weibull, log-normal, etc. This would increase applicability to different survival analysis scenarios, mirroring the `survreg` function in `survival`.
+2.  `survregVB` only supports right-censored data, so extending the package to handle left-censored and interval-censored data would make it applicable to a broader range of survival data.
+3.  Although the VB algorithms implemented by `survregVB` are already very efficient compared to MCMC methods, implementing parallelized VB inference of GPU acceleration could help improve performance speed, especially for large data sets.
+4.  Applying `survregVB` to additional real-world data sets and simulations would help further validate its performance, and uncover areas for improvement. For instance, applying `survregVB` to data sets or simulations with small sample sizes, many covariates or differing cluster sizes would help confirm its robustness under different scenarios.
+
+## 8.2 Lessons Learned
+
+Through applications of `survregVB` to real-world data sets, this research has evaluated the performance of VB algorithms in new practical scenarios.
+
+# 9. Acknowledgements
 
 # 10. Appendix
 
-**Algorithm 1**: Variational Bayes Inference of Survival Data using a Log-logistic AFT Model [@xian2024]
+## A. Log-logistic AFT Model Formulas
+
+**(1) Log-logistic AFT Model Formula**
+
+For survival time $T_i$, censoring time $C_i$ and censoring indicator $\delta_i=\mathbb{1}(T_i\le C_i)$ for the $i^{th}$ subject in the sample, $i=1,...,n$, the log-logistic AFT model is represented as follows:
+
+$$
+log(T_i):=Y=\mathbf{X}_i^T\beta+bz_i
+$$
+
+where $\mathbf{X}_i$ is column vector of $p-1$ covariates and a constant one (i.e. $\mathbf{X}_i=(1,x_i1,...,x_i(p-1))^T$), $\beta$ is a vector of coefficients for the covariates, $z_i$ is a random variable following a standard logistic distribution and $b$ is a scale parameter [@xian2024].
+
+**(2) Shared Frailty Log-logistic AFT Model Formula**
+
+or survival time $T_{ij}$, censoring time $C_{ij}$ and censoring indicator $\delta_{ij}=\mathbb{1}(T_{ij}\le C_{ij})$ for the $j^{th}$ subject from the $i^{th}$ cluster in a sample with $i=1,...,K$ clusters and $j=1,...,n_i$ subjects, the shared frailty log-logistic AFT model is represented as follows:
+
+$$
+\log(T_{ij})=\gamma_i+\mathbf{X}_{ij}^T\beta+b\epsilon_{ij}
+$$
+
+where $\mathbf{X}_{ij}$ is column vector of $p-1$ covariates and a constant one (i.e. $\mathbf{X}_{ij}=(1,x_{ij1},...,x_{ij(p-1)})^T$), $\beta$ is a vector of coefficients for the covariates, $\gamma_i$ is a random intercept for the $i^{th}$ cluster, $\epsilon_{ij}$ is a variable following a standard logistic distribution and $b$ is a scale parameter [@xian2024a].
+
+## B. VB Algorithms
+
+**Algorithm 1.** Variational Bayes Inference of Survival Data using a Log-logistic AFT Model [@xian2024]
 
 **Data**: a sample of independent log observed time $y_i$, their corresponding covariate vectors $\mathbf{X}_i$ and the right censoring indicator $\delta_i,i=1,\ldots,n$ where $n$ is the sample size; values of hyperparameters: $\boldsymbol{\mu}_0,v_0,\alpha_0$ and $\omega_0$; convergence threshold $\gamma$ and maximum number of iterations $M$
 
@@ -616,6 +529,48 @@ As survival analysis is an important field of study across multiple domains, `su
 12 calculate the current difference of $\text{ELBO}$, $\text{ELBO}^{(m)}-\text{ELBO}^{(m-1)}$;
 
 13 **end**
+
+## C. Components of `survregVB`
+
+**(1) `survregVB` Package Structure**
+
+``` yaml
+survregVB/
+├── R/
+│   ├── survregVB.R               # Primary user-facing function 
+│   ├── survregVB.frailty.fit.R   # Implements VB with shared frailty 
+│   ├── survregVB.fit.R           # Implements VB without shared frailty 
+│   ├── summary.survregVB.R       # Summary method for survregVB
+│   ├── print.survregVB.R         # Print method for survregVB
+│   ├── print.summary.survregVB.R # Print method for summary.survregVB
+│   ├── parameters.R              # Parameter update calculations for VB 
+│   ├── ELBO.R                    # Convergence criteria calculations for VB
+│   ├── data.R                    # Dataset documentation
+│   ├── credible_intervals.R      # Computes Bayesian credible intervals 
+│
+├── tests/                        # Unit tests for functions found in R/ 
+│   ├── testthat/
+│
+├── vignettes/                    
+│   ├── survregVB.Rmd             # User guide and examples
+│
+├── man/                          # Documentation
+│
+├── data/                         # Example data sets 
+│   ├── simulation_nofrailty.rda  # Simulated data set without clusters
+│   ├── simulation_frailty.rda    # Simulated data set with clusters
+│   ├── lung_cancer.rda           # Subset of the GSE102287 data set
+│   ├── dnase.rda                 # Subset of the rhDNase data set
+├── data-raw/                     # Clean raw data before saving in data/
+│
+├── DESCRIPTION                   # Package metadata
+├── NAMESPACE                     # Function exports
+├── LICENSE                       # License file
+├── LICENSE.md                    # Readable version of license file 
+└── README.md                     # Installation guide
+```
+
+## D. Comparative Results
 
 **Table 1**: Results from analysis on NCBI lung cancer data: Posterior means (Mean) with posterior standard deviations (SD), and 95% credible intervals (95% Cred. Int.) from the VB algorithm implemented by `survregVB` and MCMC, respectively. Point estimates (Est.) with standard errors (SE), and 95% confidence interval (95% Conf. Int.) from `survreg` in the R package `survival`
 

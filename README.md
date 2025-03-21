@@ -1,4 +1,51 @@
 # survregVB
 
-This is the source code for the "survregVB" package in R.
+## Overview
 
+`survregVB` is an R package that provides Bayesian inference for log-logistic accelerated failure time (AFT) models used in survival analysis as a faster alternative to Markov chain Monte Carlo (MCMC) methods. `survregVB` supports AFT models with and without shared frailty.
+
+## Installation
+
+To install `survregVB`, use the following command:
+
+``` R
+remotes::install_github("https://github.com/chengqianxian/survregVB")
+```
+
+## Usage 
+
+### Loading the Package
+
+``` R
+library(survregVB)
+library(survival) 
+```
+
+### Fitting a Basic Model 
+
+``` R
+# Example using dataset included in the package
+data(dnase)
+
+# Fit a survival model
+fit <- survregVB(formula = Surv(time, infect) ~ trt + fev, data = dnase,
+                 alpha_0 = 501, omega_0 = 500, mu_0 = c(4.4, 0.25, 0.04), v_0 = 1)
+
+# Print summary
+summary(fit)
+```
+
+### Fitting a Model with Frailty 
+
+``` R
+# Using dataset included in the package
+data(simulation_frailty)
+
+# Fit a survival model with shared frailty 
+fit_frailty <- survregVB(formula = Surv(T.15, delta.15) ~ x1 + x2, data = simulation_frailty,
+                         alpha_0 = 3, omega_0 = 2, mu_0 = c(0, 0, 0), v_0 = 0.1,
+                         lambda_0 = 3, eta_0 = 2, cluster = cluster)
+
+# Print summary
+summary(fit_frailty)
+```

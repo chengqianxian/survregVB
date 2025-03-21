@@ -97,7 +97,8 @@ fit <- survregVB(
   threshold = 0.0005,
   na.action = na.omit
 )
-fit
+print(fit)
+summary(fit)
 ```
 
 ## Fitting a Model with Shared Frailty
@@ -124,7 +125,8 @@ fit2 <- survregVB(
   max_iteration = 100,
   threshold = 0.01
 )
-fit2
+print(fit2)
+summary(fit2)
 ```
 
 # Session info
