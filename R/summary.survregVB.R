@@ -79,10 +79,10 @@ summary.survregVB <- function(object, ci = 0.95, ...) {
     lambda <- object$lambda
     eta <- object$eta
     intercept_sd <- sqrt((eta^2) / ((lambda - 1)^2 * (eta - 2)))
-    intercept <- c(eta / (lambda - 1), intercept_sd, b_ci(lambda, eta, ci))
+    frailty <- c(eta / (lambda - 1), intercept_sd, b_ci(lambda, eta, ci))
 
-    posteriors <- rbind(coefficients, scale, intercept)
-    row_names <- c(names(mu), "scale", "intercept")
+    posteriors <- rbind(coefficients, scale, frailty)
+    row_names <- c(names(mu), "scale", "frailty")
 
     dimnames(posteriors) <- list(row_names, col_names)
 

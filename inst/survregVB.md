@@ -170,116 +170,81 @@ enable researchers to more effectively apply AFT models in a variety of
 real-world scenarios, particularly those involving large datasets or
 complex survival analysis problems. In addition, The **survregVB**
 package will perform additional steps such as removing missing values,
-one-hot-encoding, and supplying summary statistics, to create a smoother
-workflow.
+one-hot-encoding, and supplying summary statistics, to integrate with
+existing R survival workflows.
 
 # Example
 
-The following example demonstrates how to use the `survregVB` function
-to fit data from the `rhDNase` dataset from the **survival** package.
-The `rhDNase` dataset contains the results of a randomized trial of
-rhDNase for the treatment of cystic fibrosis. The survival time, *T*, is
-defined as the time until the first pulmonary exacerbation. *T* is
-calculated as the difference between the date of entry into the study
-(`entry.dt`) and date of last follow-up (`end.dt`), with the follow-up
-period capped at 169 days [@survival). The covariates of interest are:
+The following example demonstrates how to use the `survregVB` function.
+First, we load the **survregVB** and **survival** libraries.
 
--   Treatment (`trt`: 0=placebo, 1=rhDNase), and
--   Forced expiratory volume (`fev`) [@survival]
-
-Our goal is to fit it a log-logistic AFT regression model of the form:
-
-$${\log(T):=Y=\beta_0+\beta_1x_1+\beta_2x_2+bz}$$ where:
-
--   $x_1$ is `trt`,
-
--   $x_2$ is `fev`, and
-
--   $z$ is a random variable following a standard logistic distribution
-    with scale parameter *b* [@xian2024].
-
-The event of interest is whether or not the subject experienced
-infection, `infect`.
-
-## Preparing the Data
-
-First, we prepare the data for modeling so the dataset is ready with the
-survival time (`time`) and event indicator (`infect`) via the example
-code provided in the survival package [@survival]:
-
-``` r
+```{r loadLibrary}
+library(survregVB)
 library(survival)
-# Extract the first row for each subject
-first <- subset(rhDNase, !duplicated(id)) 
-dnase <- tmerge(first, first, id=id, tstop=as.numeric(end.dt -entry.dt))
-# Subject whose fu ended during the 6 day window after finishing their 
-# antibiotics are not counted as new infections
-temp.end <- with(rhDNase, pmin(ivstop+6, end.dt-entry.dt))
-# Create the event indicator
-dnase <- tmerge(dnase, rhDNase, id=id,
-                infect=event(ivstart),
-                end=  event(temp.end))
-# Toss out the non-at-risk intervals, and extra variables
-dnase <- subset(dnase, (infect==1 | end==0), c(id:trt, fev:infect))
-# Remove duplicated subjects
-dnase <- subset(dnase, !duplicated(id))
-# Set the survival time 
-dnase$time <- dnase$tstop - dnase$tstart
 ```
 
-## Fitting the model
+## Fitting the Model
 
-### Setting prior distributions
+For the dnase data set included in the package, our goal is to fit it a
+log-logistic AFT regression model of the form:
 
-Next we define the prior distributions of the model parameters, *β* and
-*b*.
+$$
+\log(T):=Y=\beta_0+\beta_1x_1+\beta_2x_2+bz
+$$ where `trt` ($x_1$) and `fev` ($x_2$) are the covariates of interest,
+and the event status indicator is `infect`.
 
-We set hyperparameters $\alpha_0=501$ and $\omega_0=500$ to achieve a
-mean scale of one.
+The following fits the model with priors based off previous studies:
 
-The prior means for $\mu_0$ are chosen based on historical data and
-similar analyses on this type of data:
-
--   for the intercept $\beta_0$, we use $\log(169/2)\approx4.4$ (half
-    the follow-up period),
-
--   for $\beta_1$ (`trt`), we use $\log(1.28)\approx0.25$ [@shah1996]
-
--   for $\beta_2$ (`fev`) we use $\log(1.04)\approx0.04$ [@block2006]
-
-For the precision hyperparameter, we use a low precision $v_0=1$ to
-obtain a flat prior [@xian2024).
-
-### Applying the `survregVB` function
-
-Now that we have set up the prior distributions, we can fit the
-`rhDNase` dataset to the log-logistic AFT model using the `survregVB`
-function. At the end of the model fitting process, the VB algorithm
-obtains the approximated posterior distributions of *b* and *β:*
-
-``` r
-fit <- survregVB(formula = Surv(time, infect) ~ trt + fev, 
-                 data = dnase, 
-                 alpha_0 = 501,
-                 omega_0 = 500,
-                 mu_0 = c(4.4, 0.25, 0.04), 
-                 v_0 = 1, 
-                 max_iteration = 10000, 
-                 threshold = 0.0005)
+```{r}
+fit <- survregVB(
+  formula = Surv(time, infect) ~ trt + fev,
+  data = dnase,
+  alpha_0 = 501,
+  omega_0 = 500,
+  mu_0 = c(4.4, 0.25, 0.04),
+  v_0 = 1,
+  max_iteration = 10000,
+  threshold = 0.0005,
+  na.action = na.omit
+)
+print(fit)
+summary(fit)
 ```
 
-We can view summary statistics for the results of the fit via the
-`summary` function. We can adjust the significance level for the
-credible intervals by altering the `ci` argument:
+## Fitting a Model with Shared Frailty
 
-``` r
-summary(fit, ci=0.9)
+We will fit the simulation_frailty data set included in the package to a
+log-logistic AFT regression model with shared frailty. For the $j^{th}$
+subject in the $i^{th}$ cluster, $i=1,...,K$ and $j=1,...,n_i$:
+
+$$
+\log(T_i):=Y_i=0.5+\beta_1x_{1i}+\beta_2x_{2i}+\gamma_i+b\epsilon_i
+$$
+
+The following fits the model with non-informative priors:
+
+```{r}
+fit_frailty <- survregVB(
+  formula = Surv(T.15, delta.15) ~ x1 + x2,
+  data = simulation_frailty,
+  alpha_0 = 3,
+  omega_0 = 2,
+  mu_0 = c(0, 0, 0),
+  v_0 = 0.1,
+  lambda_0 = 3,
+  eta_0 = 2,
+  cluster = cluster,
+  max_iteration = 100,
+  threshold = 0.01
+)
+print(fit_frailty)
+summary(fit_frailty)
 ```
 
 # Code Availability
 
 The **survregVB** is available at the following GitHub repository:
-<https://github.com/chengqianxian/survregVB>, along with tutorials as
-vignettes in R Markdown notebooks.
+<https://github.com/chengqianxian/survregVB>, along with a tutorial as a
+vignettes in a R Markdown notebook.
 
 # References
