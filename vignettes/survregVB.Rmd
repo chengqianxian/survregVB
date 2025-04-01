@@ -16,7 +16,7 @@ opts_chunk$set(warning = FALSE, message = FALSE, cache = FALSE)
 
 # Overview of survregVB
 
-The `survregVB` function provides a fast and accessible solution for variational inference in accelerated failure time (AFT) models for right-censored survival times following a log-logistic distribution. It provides an efficient alternative to Markov chain Monte Carlo (MCMC) methods by implementing a mean-field variational Bayes (VB) algorithm for parameter estimation. The VB approach employs a coordinate ascent algorithm and incorporates a piecewise approximation technique when computing expectations to achieve conjugacy.
+The `survregVB` function provides a fast and accessible solution for variational inference in accelerated failure time (AFT) models for right-censored survival times following a log-logistic distribution. It provides an efficient alternative to Markov chain Monte Carlo (MCMC) methods by implementing a mean-field variational Bayes (VB) algorithm for parameter estimation. The VB approach employs a coordinate ascent algorithm and incorporates a piecewise approximation technique when computing expectations to achieve conjugacy [@xian2024].
 
 ## The AFT Model
 
@@ -40,7 +40,7 @@ where $\mu_0,v_0,\alpha_0$ and $\omega_0$ are known hyperparameters. At the end 
 
 -   $q^*(b)$, an $\text{Inverse-Gamma}(\alpha,\omega)$ density function,
 
-where the parameters $\mu,\Sigma,\alpha$ and $\omega$ are obtained via the VB algorithm.
+where the parameters $\mu,\Sigma,\alpha$ and $\omega$ are obtained via the VB algorithm [@xian2024].
 
 ### The AFT Model With Shared Frailty
 
@@ -64,7 +64,7 @@ where $\mu_0,v_0,\alpha_0$, $\omega_0$, $\lambda_0$ and $\eta_0$ are known hyper
 
 -   $q^*(\sigma^2_\gamma)$, an $\text{Inverse-Gamma}(\lambda^*,\eta^*)$ density function,
 
-where the parameters $\mu,\Sigma,\alpha,\omega,\tau_i, \sigma_i, \lambda$ and $\eta$ are obtained via the VB algorithm.
+where the parameters $\mu,\Sigma,\alpha,\omega,\tau_i, \sigma_i, \lambda$ and $\eta$ are obtained via the VB algorithm [@xian2024a].
 
 # Getting Started using survregVB
 
@@ -77,11 +77,11 @@ library(survival)
 
 ## Fitting the Model
 
-For the dnase data set included in the package, our goal is to fit it a log-logistic AFT regression model of the form:
+For the `dnase` data set included in the package, our goal is to fit it a log-logistic AFT regression model of the form:
 
 $$
 \log(T):=Y=\beta_0+\beta_1x_1+\beta_2x_2+bz
-$$ where `trt` ($x_1$) and `fev` ($x_2$) are the covariates of interest, and the event status indicator is `infect`.
+$$ where `trt` ($x_1$, treatment, binary) and `fev` ($x_2$, forced expiratory volume, continuous) are the covariates of interest, and the right-censoring indicator is `infect` [@xian2024].
 
 The following fits the model with priors based off previous studies:
 
@@ -103,13 +103,13 @@ summary(fit)
 
 ## 'Fitting a Model with Shared Frailty
 
-We will fit the simulation_frailty data set included in the package to a log-logistic AFT regression model with shared frailty. For the $j^{th}$ subject in the $i^{th}$ cluster, $i=1,...,K$ and $j=1,...,n_i$:
+We will fit the `simulation_frailty` data set included in the package to a log-logistic AFT regression model with shared frailty. For the $j^{th}$ subject in the $i^{th}$ cluster, $i=1,...,K$ and $j=1,...,n_i$:
 
 $$
 \log(T_i):=Y_i=0.5+\beta_1x_{1i}+\beta_2x_{2i}+\gamma_i+b\epsilon_i
 $$
 
-The following fits the model with non-informative priors:
+The following fits the model with non-informative priors [@xian2024a]:
 
 ```{r}
 fit_frailty <- survregVB(
