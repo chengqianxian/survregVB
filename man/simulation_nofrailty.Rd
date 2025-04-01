@@ -3,28 +3,35 @@
 \docType{data}
 \name{simulation_nofrailty}
 \alias{simulation_nofrailty}
-\title{Simulated Survival Data Without Frailty}
+\title{Simulated data without shared frailty effects to model unclustered
+time-to-event data.}
 \format{
-A data frame with 300 rows and the following variables:
+A dataframe with 300 observations.
 \describe{
-\item{x1}{Continuous covariate from \code{N(1, 0.2)}}
+\item{x1}{Continuous covariate from \code{N(1, 0.2^2)}}
 \item{x2}{Binary covariate from \code{Bernoulli(0.5)}}
-\item{T}{True survival time}
-\item{T.10}{Observed time under \code{cen.time.10}}
-\item{T.30}{Observed time under \code{cen.time.30}}
-\item{delta}{Event indicator (1 = event, 0 = censored)}
-\item{delta.10}{Censoring indicator under \code{cen.time.10}}
-\item{delta.30}{Censoring indicator under \code{cen.time.30}}
+\item{Time}{True survival time}
+\item{Time.10}{Observed survival time accounting for uniformly distributed
+right censoring time from \code{uniform(0,48)}}
+\item{Time.30}{Observed survival time accounting for uniformly distributed
+right censoring time from \code{uniform(0,17)}}
+\item{delta}{Event indicator for uncensored data (always 1 in this
+simulation.)}
+\item{delta.10}{Event indicator for T.10 (1 = event, 0 =
+censored).}
+\item{delta.30}{Event indicator for T.30 (1 = event, 0 =
+censored).}
 }
-}
-\source{
-Simulated data
+@references Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+& Tian, R. (2024). Variational Bayesian analysis of survival data
+using a log-logistic accelerated failure time model. Statistics and
+Computing, 34(2). https://doi.org/10.1007/s11222-023-10365-6
 }
 \usage{
 simulation_nofrailty
 }
 \description{
-This dataset is a simulated survival dataset generated to demonstrate
-Bayesian inference in accelerated failure time (AFT) models.
+Simulated data without shared frailty effects to model unclustered
+time-to-event data.
 }
 \keyword{datasets}

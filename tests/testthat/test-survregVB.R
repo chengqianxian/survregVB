@@ -44,7 +44,7 @@ test_that("survregVB frailty", {
   cluster <- simulation_frailty$cluster
   x1 <- simulation_frailty$x1
   x2 <- simulation_frailty$x2
-  Y <- Surv(simulation_frailty$T, simulation_frailty$delta)
+  Y <- Surv(simulation_frailty$Time, simulation_frailty$delta)
   result <- survregVB(
     formula = Y ~ x1 + x2, alpha_0 = 3, omega_0 = 2,
     mu_0 = c(0, 0, 0), v_0 = 0.1,

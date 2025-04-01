@@ -21,44 +21,6 @@
 #'  \url{https://cran.r-project.org/package=survival}
 "dnase"
 
-#' Simulated Survival Data Without Frailty
-#'
-#' This dataset is a simulated survival dataset generated to demonstrate
-#' Bayesian inference in accelerated failure time (AFT) models.
-#'
-#' @format A data frame with 300 rows and the following variables:
-#' \describe{
-#'   \item{x1}{Continuous covariate from `N(1, 0.2)`}
-#'   \item{x2}{Binary covariate from `Bernoulli(0.5)`}
-#'   \item{T}{True survival time}
-#'   \item{T.10}{Observed time under `cen.time.10`}
-#'   \item{T.30}{Observed time under `cen.time.30`}
-#'   \item{delta}{Event indicator (1 = event, 0 = censored)}
-#'   \item{delta.10}{Censoring indicator under `cen.time.10`}
-#'   \item{delta.30}{Censoring indicator under `cen.time.30`}
-#' }
-#' @source Simulated data
-"simulation_nofrailty"
-
-#' Simulated Survival Data with Frailty
-#'
-#' This dataset is a simulated survival dataset incorporating frailty effects
-#' to account for cluster-level uncertainty. It is designed for demonstrating
-#' Bayesian inference in accelerated failure time (AFT) models.
-#'
-#' @format A data frame with 75 rows and the following variables:
-#' \describe{
-#'   \item{x1}{Continuous covariate from `N(1, 0.2^2)`}
-#'   \item{x2}{Binary covariate from `Bernoulli(0.5)`}
-#'   \item{T}{True survival time}
-#'   \item{T.15}{Observed survival time under `cen.time.15`}
-#'   \item{delta}{Event indicator (1 = event, 0 = censored)}
-#'   \item{delta.15}{Censoring indicator under `cen.time.15`}
-#'   \item{cluster}{Cluster ID (1–15), indicating group-level frailty}
-#' }
-#' @source Simulated data
-"simulation_frailty"
-
 #' Subset of GSE102287: African American (AA) Patients
 #'
 #' This dataset is a subset of the GSE102287 dataset that includes only
@@ -86,3 +48,51 @@
 #' Association for Cancer Research, 23(23), 7412–7425.
 #' doi:10.1158/1078-0432.CCR-17-0527.
 "lung_cancer"
+
+#' Simulated data incorporating shared frailty effects to model clustered
+#' time-to-event data.
+#'
+#' @format A dataframe with 75 observations grouped into 15 clusters, each
+#'  with 5 individuals.
+#'  \describe{
+#'   \item{x1}{Continuous covariate from `N(1, 0.2^2)`}
+#'   \item{x2}{Binary covariate from `Bernoulli(0.5)`}
+#'   \item{Time}{True survival time}
+#'   \item{Time.15}{Observed survival time accounting for uniformly distributed
+#'    right censoring time from `uniform(0,u)`}
+#'   \item{delta}{Event indicator for uncensored data (always 1 in this
+#'    simulation.)}
+#'   \item{delta.15}{Event indicator after censoring (1 = event, 0 =
+#'    censored).}
+#'   \item{cluster}{Cluster ID (1–15), indicating group-level frailty}
+#'. }
+#'   @references Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+#'   & Tian, R. (2024). Fast variational bayesian inference for correlated
+#'   survival data: An application to invasive mechanical ventilation
+#'   duration analysis. https://doi.org/10.48550/ARXIV.2408.00177
+"simulation_frailty"
+
+#' Simulated data without shared frailty effects to model unclustered
+#' time-to-event data.
+#'
+#' @format A dataframe with 300 observations.
+#'  \describe{
+#'   \item{x1}{Continuous covariate from `N(1, 0.2^2)`}
+#'   \item{x2}{Binary covariate from `Bernoulli(0.5)`}
+#'   \item{Time}{True survival time}
+#'   \item{Time.10}{Observed survival time accounting for uniformly distributed
+#'    right censoring time from `uniform(0,48)`}
+#'   \item{Time.30}{Observed survival time accounting for uniformly distributed
+#'    right censoring time from `uniform(0,17)`}
+#'   \item{delta}{Event indicator for uncensored data (always 1 in this
+#'    simulation.)}
+#'   \item{delta.10}{Event indicator for T.10 (1 = event, 0 =
+#'    censored).}
+#'   \item{delta.30}{Event indicator for T.30 (1 = event, 0 =
+#'    censored).}
+#'   }
+#'   @references Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+#'   & Tian, R. (2024). Variational Bayesian analysis of survival data
+#'   using a log-logistic accelerated failure time model. Statistics and
+#'   Computing, 34(2). https://doi.org/10.1007/s11222-023-10365-6
+"simulation_nofrailty"

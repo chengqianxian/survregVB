@@ -84,11 +84,11 @@
 #'   max_iteration = 100,
 #'   threshold = 0.0005
 #' )
-#' fit
+#' summary(fit)
 #'
 #' # Call the survregVB function with shared frailty
 #' fit2 <- survregVB(
-#'   formula = survival::Surv(T.15, delta.15) ~ x1 + x2,
+#'   formula = survival::Surv(Time.15, delta.15) ~ x1 + x2,
 #'   data = simulation_frailty,
 #'   alpha_0 = 3,
 #'   omega_0 = 2,
@@ -100,7 +100,7 @@
 #'   max_iteration = 100,
 #'   threshold = 0.01
 #' )
-#' fit2
+#' summary(fit2)
 #' @import stats
 #'
 #' @export

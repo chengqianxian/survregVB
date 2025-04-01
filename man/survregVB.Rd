@@ -131,7 +131,7 @@ fit
 
 # Call the survregVB function with shared frailty
 fit2 <- survregVB(
-  formula = survival::Surv(T.15, delta.15) ~ x1 + x2,
+  formula = survival::Surv(Time.15, delta.15) ~ x1 + x2,
   data = simulation_frailty,
   alpha_0 = 3,
   omega_0 = 2,

@@ -5,9 +5,9 @@ X <- matrix(c(rep(1, 300), simulation_nofrailty$x1,
               simulation_nofrailty$x2), nrow = 300)
 
 # create Surv objects
-Y <- Surv(simulation_nofrailty$T, simulation_nofrailty$delta)
-Y.10 <- Surv(simulation_nofrailty$T.10, simulation_nofrailty$delta.10)
-Y.30 <- Surv(simulation_nofrailty$T.30, simulation_nofrailty$delta.30)
+Y <- Surv(simulation_nofrailty$Time, simulation_nofrailty$delta)
+Y.10 <- Surv(simulation_nofrailty$Time.10, simulation_nofrailty$delta.10)
+Y.30 <- Surv(simulation_nofrailty$Time.30, simulation_nofrailty$delta.30)
 
 # priors, use non-informative priors
 mu_0 <- c(0, 0, 0)

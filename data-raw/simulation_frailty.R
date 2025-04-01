@@ -1,4 +1,4 @@
-## code to prepare `DATimeASETime` dataset goes here
+# code to prepare `simulation_frailty` dataset goes here
 library(survival)
 cluster <- rep(1:15, each = 5)
 

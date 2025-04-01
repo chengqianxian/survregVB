@@ -5,8 +5,8 @@ X <- matrix(c(rep(1, 75), simulation_frailty$x1,
               simulation_frailty$x2), nrow = 75)
 
 # create Surv objects
-Y <- Surv(simulation_frailty$T, simulation_frailty$delta)
-Y.15 <- Surv(simulation_frailty$T.15, simulation_frailty$delta.15)
+Y <- Surv(simulation_frailty$Time, simulation_frailty$delta)
+Y.15 <- Surv(simulation_frailty$Time.15, simulation_frailty$delta.15)
 
 # get clusters
 cluster <- simulation_frailty$cluster

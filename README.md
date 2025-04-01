@@ -42,7 +42,7 @@ summary(fit)
 data(simulation_frailty)
 
 # Fit a survival model with shared frailty 
-fit_frailty <- survregVB(formula = Surv(T.15, delta.15) ~ x1 + x2, data = simulation_frailty,
+fit_frailty <- survregVB(formula = Surv(Time.15, delta.15) ~ x1 + x2, data = simulation_frailty,
                          alpha_0 = 3, omega_0 = 2, mu_0 = c(0, 0, 0), v_0 = 0.1,
                          lambda_0 = 3, eta_0 = 2, cluster = cluster)
 

@@ -1,4 +1,4 @@
-## code to prepare `data1` dataset goes here
+## code to prepare `simulation_nofrailty` dataset goes here
 
 library(survival)
 set.seed(1)
