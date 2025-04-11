@@ -2,7 +2,7 @@
 
 ## Overview
 
-`survregVB` is an R package that provides Bayesian inference for log-logistic accelerated failure time (AFT) models used in survival analysis as a faster alternative to Markov chain Monte Carlo (MCMC) methods. `survregVB` supports AFT models with and without shared frailty.
+`survregVB` is an R package that provides Bayesian inference for log-logistic accelerated failure time (AFT) models used in survival analysis as a faster alternative to Markov chain Monte Carlo (MCMC) methods. The details of the Variational Bayes algorithms with and without shared frailty can be found in Xian et al., [(2024a)] (https://doi.org/10.1007/s11222-023-10365-6) and [(2024b)]  (https://doi.org/10.48550/ARXIV.2408.00177) respectively.
 
 ## Installation
 
