@@ -15,7 +15,7 @@ omega_star_cluster(y, X, delta, omega_0, mu, tau, expectation_b, cluster)
 \item{delta}{A binary vector indicating right censoring.}
 
 \item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{mu}{Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}, a vector of means.}
 

@@ -15,10 +15,10 @@ mu_star(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma, expectation_b)
 \item{delta}{A binary vector indicating right censoring.}
 
 \item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
-distribution of \emph{β}.}
+distribution of the vector of coefficients, \emph{β}.}
 
 \item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
-of the prior distribution of \emph{β}.}
+of the prior distribution of the vector of coefficients, \emph{β}.}
 
 \item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 

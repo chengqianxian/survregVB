@@ -98,7 +98,6 @@ diff_sigma_gamma <- function(lambda_0, eta_0, lambda, eta) {
 #'
 #' @inheritParams elbo_cluster
 #'
-#' @export
 #' @seealso \code{\link{survregVB.fit}}
 elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
                  mu, Sigma, expectation_b) {
@@ -135,7 +134,6 @@ elbo <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, alpha, omega,
 #'  each observation.
 #' @returns The evidence lower bound (ELBO).
 #'
-#' @export
 #' @seealso \code{\link{survregVB.fit}}
 elbo_cluster <- function(y, X, delta, alpha_0, omega_0, mu_0, v_0, lambda_0,
                          eta_0, alpha, omega, mu, Sigma, tau, sigma, lambda,

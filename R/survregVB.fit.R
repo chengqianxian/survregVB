@@ -13,6 +13,10 @@
 #' @returns A list containing results of the fit.
 #'
 #' @details
+#' Implements the Variational Bayes algorithm proposed in the paper "Variational
+#' Bayesian analysis of survival data using a log-logistic accelerated failure
+#' time model."
+#'
 #' For right-censored survival time \eqn{T_i} of the \eqn{i_{th}} subject
 #' in a sample, \eqn{i=1,...,n}, the log-logistic AFT model is specified
 #' as follows:
@@ -28,6 +32,20 @@
 #' - \emph{b} is a scale parameter.
 #'
 #' @export
+#' @references Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+#'   & Tian, R. (2024). "Variational Bayesian analysis of survival data
+#'   using a log-logistic accelerated failure time model." Statistics and
+#'   Computing, 34(2). https://doi.org/10.1007/s11222-023-10365-6
+#' @examples
+#' fit <- survregVB.fit(
+#'   Y = survival::Surv(simulation_nofrailty$Time, simulation_nofrailty$delta),
+#'   X = matrix(c(rep(1, 300), simulation_nofrailty$x1, simulation_nofrailty$x2), nrow = 300),
+#'   alpha_0 = 11,
+#'   omega_0 = 10,
+#'   mu_0 = c(0, 0, 0),
+#'   v_0 = 1
+#' )
+#'
 #' @seealso \code{\link{survregVB}}
 survregVB.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0,
                           max_iteration = 100, threshold = 0.0001) {

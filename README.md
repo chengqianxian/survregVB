@@ -49,3 +49,7 @@ fit_frailty <- survregVB(formula = Surv(Time.15, delta.15) ~ x1 + x2, data = sim
 # Print summary
 summary(fit_frailty)
 ```
+
+  <!-- badges: start -->
+  [![R-CMD-check](https://github.com/chengqianxian/survregVB/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/chengqianxian/survregVB/actions/workflows/R-CMD-check.yaml)
+  <!-- badges: end -->

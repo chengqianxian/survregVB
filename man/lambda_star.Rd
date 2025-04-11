@@ -10,7 +10,7 @@ lambda_star(lambda_0, K)
 }
 \arguments{
 \item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
-distribution of \eqn{\sigma_\gamma^2}.}
+distribution of the frailty variance, \eqn{\sigma_\gamma^2}.}
 
 \item{K}{The number of clusters.}
 }

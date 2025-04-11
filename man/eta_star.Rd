@@ -10,7 +10,7 @@ eta_star(eta_0, tau, sigma)
 }
 \arguments{
 \item{eta_0}{The scale hyperparameter \eqn{\eta_0} of the prior distribution
-of \eqn{\sigma_\gamma^2}.}
+of the frailty variance, \eqn{\sigma_\gamma^2}.}
 
 \item{tau}{Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a vector of
 means.}

@@ -7,7 +7,6 @@
 #' @inheritParams elbo
 #' @returns Parameter \eqn{\alpha^*} of \eqn{q^*(b)}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.fit}}
 #' @seealso \code{\link{survregVB.frailty.fit}}
 alpha_star <- function(alpha_0, delta) {
@@ -20,7 +19,6 @@ alpha_star <- function(alpha_0, delta) {
 #' @inheritParams elbo
 #' @returns Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.fit}}
 omega_star <- function(y, X, delta, omega_0, mu, expectation_b) {
   res <- 0
@@ -47,7 +45,6 @@ omega_star <- function(y, X, delta, omega_0, mu, expectation_b) {
 #' @inheritParams elbo
 #' @returns Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.fit}}
 mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
                     expectation_b) {
@@ -87,7 +84,6 @@ mu_star <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
 #' @inheritParams elbo
 #' @returns Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.fit}}
 Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu, expectation_b) {
   p <- ncol(X)
@@ -122,7 +118,6 @@ Sigma_star <- function(y, X, delta, v_0, alpha, omega, mu, expectation_b) {
 #' @inheritParams elbo_cluster
 #' @returns Parameter \eqn{\omega^*} of \eqn{q^*(b)}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
 omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
                                cluster) {
@@ -151,7 +146,6 @@ omega_star_cluster <- function(y, X, delta, omega_0, mu, tau, expectation_b,
 #' @inheritParams elbo_cluster
 #' @returns Parameter \eqn{\mu^*} of \eqn{q^*(\beta)}
 #'
-#' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
 mu_star_cluster <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
                             tau, expectation_b, cluster) {
@@ -165,7 +159,6 @@ mu_star_cluster <- function(y, X, delta, mu_0, v_0, alpha, omega, mu, Sigma,
 #' @inheritParams elbo_cluster
 #' @returns Parameter \eqn{\Sigma^*} of \eqn{q^*(\beta)}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
 Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
                                expectation_b, cluster) {
@@ -181,7 +174,6 @@ Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
 #' @returns Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for all
 #'  clusters.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
 sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
                                eta, expectation_b, cluster) {
@@ -220,7 +212,6 @@ sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
 #' @returns Parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
 #'  \eqn{i=1,...,K} clusters.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
 tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
                      expectation_b, cluster) {
@@ -281,7 +272,6 @@ tau_star <- function(y, X, delta, alpha, omega, mu, tau, sigma,
 #' @param K The number of clusters.
 #' @return Parameter \eqn{\lambda^*} of \eqn{q^*(\sigma^2_{\gamma})}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
 lambda_star <- function(lambda_0, K) {
   lambda_0 + K / 2
@@ -294,7 +284,6 @@ lambda_star <- function(lambda_0, K) {
 #' @inheritParams elbo_cluster
 #' @return Parameter \eqn{\eta^*} of \eqn{q^*(\sigma^2_{\gamma})}.
 #'
-#' @export
 #' @seealso \code{\link{survregVB.frailty.fit}}
 eta_star <- function(eta_0, tau, sigma) {
   eta_0 + 0.5 * sum(sigma + tau^2)

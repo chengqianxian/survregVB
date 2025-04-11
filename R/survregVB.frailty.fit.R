@@ -15,6 +15,10 @@
 #' @returns A list containing results of the fit.
 #'
 #' @details
+#' Implements the Variational Bayes algorithm with random intercepts proposed
+#' in the paper "Fast variational bayesian inference for correlated survival
+#' data: An application to invasive mechanical ventilation duration analysis".
+#'
 #' For right-censored survival time \eqn{T_{ij}} of the \eqn{j_{th}} subject
 #' from the \eqn{i_{th}} cluster in the sample, in a sample, \eqn{i=1,...,K}
 #' and \eqn{j=1,...,n_i}, the shared-frailty log-logistic AFT model is specified
@@ -31,6 +35,23 @@
 #' - \emph{b} is a scale parameter.
 #'
 #' @export
+#' @examples
+#' fit <- survregVB.frailty.fit(
+#'   X = matrix(c(rep(1, 75), simulation_frailty$x1, simulation_frailty$x2), nrow = 75),
+#'   Y = survival::Surv(simulation_frailty$Time, simulation_frailty$delta),
+#'   alpha_0 = 3,
+#'   omega_0 = 2,
+#'   mu_0 = c(0, 0, 0),
+#'   v_0 = 0.1,
+#'   lambda_0 = 3,
+#'   eta_0 = 2,
+#'   cluster = simulation_frailty$cluster
+#' )
+#'
+#' @references Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+#'   & Tian, R. (2024). "Fast variational bayesian inference for correlated
+#'   survival data: An application to invasive mechanical ventilation
+#'   duration analysis." https://doi.org/10.48550/ARXIV.2408.00177
 #' @seealso \code{\link{survregVB}}
 survregVB.frailty.fit <- function(Y, X, alpha_0, omega_0, mu_0, v_0, lambda_0,
                                   eta_0, cluster, max_iteration = 100,

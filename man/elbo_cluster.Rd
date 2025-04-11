@@ -35,22 +35,22 @@ elbo_cluster(
 \item{delta}{A binary vector indicating right censoring.}
 
 \item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
-distribution of \emph{β}.}
+distribution of the vector of coefficients, \emph{β}.}
 
 \item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
-of the prior distribution of \emph{β}.}
+of the prior distribution of the vector of coefficients, \emph{β}.}
 
 \item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
-distribution of \eqn{\sigma_\gamma^2}.}
+distribution of the frailty variance, \eqn{\sigma_\gamma^2}.}
 
 \item{eta_0}{The scale hyperparameter \eqn{\eta_0} of the prior distribution
-of \eqn{\sigma_\gamma^2}.}
+of the frailty variance, \eqn{\sigma_\gamma^2}.}
 
 \item{alpha}{The shape parameter \eqn{\alpha^*} of \eqn{q^*(b)}.}
 

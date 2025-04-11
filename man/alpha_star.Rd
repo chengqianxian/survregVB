@@ -10,7 +10,7 @@ alpha_star(alpha_0, delta)
 }
 \arguments{
 \item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{delta}{A binary vector indicating right censoring.}
 }

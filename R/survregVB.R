@@ -3,7 +3,7 @@
 #'
 #' Applies a mean-field Variational Bayes (VB) algorithm to infer the
 #' parameters of an accelerated failure time (AFT) survival model with
-#' right-censored  survival times following a log-logistic distribution.
+#' right-censored survival times following a log-logistic distribution.
 #'
 #' @name survregVB
 #'
@@ -13,17 +13,17 @@
 #' @param data A `data.frame` in which to interpret the variables named in
 #'  the `formula` and `cluster` arguments.
 #' @param alpha_0 The shape hyperparameter \eqn{\alpha_0} of the prior
-#'  distribution of \emph{b}.
+#'  distribution of the scale parameter, \emph{b}.
 #' @param omega_0 The shape hyperparameter \eqn{\omega_0} of the prior
-#'  distribution of \emph{b}.
+#'  distribution of the scale parameter, \emph{b}.
 #' @param mu_0 Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
-#'  distribution of \emph{β}.
+#'  distribution of the vector of coefficients, \emph{β}.
 #' @param v_0 The precision (inverse variance) hyperparameter \eqn{v_0},
-#'  of the prior distribution of \emph{β}.
+#'  of the prior distribution of the vector of coefficients, \emph{β}.
 #' @param lambda_0 The shape hyperparameter \eqn{\lambda_0} of the prior
-#'  distribution of \eqn{\sigma_\gamma^2}.
+#'  distribution of the frailty variance, \eqn{\sigma_\gamma^2}.
 #' @param eta_0 The scale hyperparameter \eqn{\eta_0} of the prior distribution
-#'  of \eqn{\sigma_\gamma^2}.
+#'  of the frailty variance, \eqn{\sigma_\gamma^2}.
 #' @param na.action A missing-data filter function, applied to the
 #'  \code{model.frame}, after any subset argument has been used.
 #'  (Default:\code{options()$na.action}).
@@ -40,37 +40,10 @@
 #'
 #' @details
 #' The goal of \code{survregVB} is to maximize the evidence lower bound
-#' (ELBO) to approximate posterior distributions of the model parameters.
-#'
-#' The log-logistic AFT model without shared frailty is specified with the
-#' parameters:
-#' - \emph{β}, the vector of coefficients for the fixed effects, and
-#' - \emph{b}, a scale parameter.
-#'
-#' We assume prior distributions:
-#' - \eqn{\beta\sim\text{MVN}(\mu_{0},\sigma_{0}^2I_{p*p})} with precision
-#'   \eqn{v_{0}=1/\sigma^2}, and
-#' - \eqn{b\sim\text{Inverse-Gamma}(\alpha_0,\omega_0)},
-#'
-#' and obtain approximate posterior distributions:
-#' - \eqn{q^*(\beta)}, a \eqn{N_p(\mu^*,\Sigma^*)} density function, and
-#' - \eqn{q^*(b)}, an \eqn{\text{Inverse-Gamma}(\alpha^*,\omega^*)}
-#'    density function.
-#'
-#' With shared frailty, a model with \eqn{i=1,...,K} clusters is specified
-#' with additional parameters:
-#' - \eqn{\sigma^2_\gamma}, the random intercept, and
-#' - \eqn{\gamma_i|\sigma^2_\gamma} the frailty variance.
-#'
-#' We additionally assume prior distributions:
-#' - \eqn{\sigma^2_\gamma\sim\text{Inverse-Gamma}(\lambda_0,\eta_0)}, and
-#' - \eqn{\gamma_i|\sigma^2_\gamma\mathop{\sim}\limits^{\mathrm{iid}}
-#'    N(0,\sigma^2_\gamma)}.
-#'
-#' and obtain posterior distributions:
-#' - \eqn{q^*(\sigma^2_\gamma)}, an \eqn{\text{Inverse-Gamma}(\lambda^*,\eta^*)}
-#'   density function, and
-#' - \eqn{q^*(\gamma_i)}, a \eqn{N_l(\tau^*_i,\sigma^{2*}_i))} density function.
+#' (ELBO) to approximate posterior distributions of the AFT model parameters
+#' using the VB algorithms with and without shared frailty proposed in Xian
+#' et al. (2024) <https://doi.org/10.1007/s11222-023-10365-6> and
+#' <https://doi.org/10.48550/ARXIV.2408.00177> respectively.
 #'
 #' @examples
 #' # Data frame containing survival data
@@ -104,6 +77,17 @@
 #' @import stats
 #'
 #' @export
+#' @references
+#'   Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+#'   & Tian, R. (2024). "Variational Bayesian analysis of survival data
+#'   using a log-logistic accelerated failure time model." Statistics and
+#'   Computing, 34(2). https://doi.org/10.1007/s11222-023-10365-6
+#'
+#'   Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+#'   & Tian, R. (2024). "Fast variational bayesian inference for correlated
+#'   survival data: An application to invasive mechanical ventilation
+#'   duration analysis." https://doi.org/10.48550/ARXIV.2408.00177
+#'
 #' @seealso \code{\link{survregVB.object}}
 survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
                       lambda_0, eta_0, na.action, cluster,

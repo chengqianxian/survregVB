@@ -22,16 +22,16 @@ survregVB.fit(
 \item{X}{A matrix of predictors (covariates), including an intercept.}
 
 \item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
-distribution of \emph{β}.}
+distribution of the vector of coefficients, \emph{β}.}
 
 \item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
-of the prior distribution of \emph{β}.}
+of the prior distribution of the vector of coefficients, \emph{β}.}
 
 \item{max_iteration}{The maximum number of iterations for the variational
 inference optimization. If reached, iteration stops. (Default:100)}
@@ -50,6 +50,10 @@ computations. This routine does no checking that the arguments are the
 proper length or type.
 }
 \details{
+Implements the Variational Bayes algorithm proposed in the paper "Variational
+Bayesian analysis of survival data using a log-logistic accelerated failure
+time model."
+
 For right-censored survival time \eqn{T_i} of the \eqn{i_{th}} subject
 in a sample, \eqn{i=1,...,n}, the log-logistic AFT model is specified
 as follows:
@@ -65,6 +69,23 @@ effects,
 distribution, and
 \item \emph{b} is a scale parameter.
 }
+}
+\examples{
+fit <- survregVB.fit(
+  Y = survival::Surv(simulation_nofrailty$Time, simulation_nofrailty$delta),
+  X = matrix(c(rep(1, 300), simulation_nofrailty$x1, simulation_nofrailty$x2), nrow = 300),
+  alpha_0 = 11,
+  omega_0 = 10,
+  mu_0 = c(0, 0, 0),
+  v_0 = 1
+)
+
+}
+\references{
+Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+& Tian, R. (2024). "Variational Bayesian analysis of survival data
+using a log-logistic accelerated failure time model." Statistics and
+Computing, 34(2). https://doi.org/10.1007/s11222-023-10365-6
 }
 \seealso{
 \code{\link{survregVB}}

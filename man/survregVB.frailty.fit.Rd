@@ -25,22 +25,22 @@ survregVB.frailty.fit(
 \item{X}{A matrix of predictors (covariates), including an intercept.}
 
 \item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{omega_0}{The shape hyperparameter \eqn{\omega_0} of the prior
-distribution of \emph{b}.}
+distribution of the scale parameter, \emph{b}.}
 
 \item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
-distribution of \emph{β}.}
+distribution of the vector of coefficients, \emph{β}.}
 
 \item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
-of the prior distribution of \emph{β}.}
+of the prior distribution of the vector of coefficients, \emph{β}.}
 
 \item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
-distribution of \eqn{\sigma_\gamma^2}.}
+distribution of the frailty variance, \eqn{\sigma_\gamma^2}.}
 
 \item{eta_0}{The scale hyperparameter \eqn{\eta_0} of the prior distribution
-of \eqn{\sigma_\gamma^2}.}
+of the frailty variance, \eqn{\sigma_\gamma^2}.}
 
 \item{cluster}{An optional variable which clusters the observations to
 introduce shared frailty for correlated survival data.}
@@ -63,6 +63,10 @@ This routine does no checking that the arguments are the proper length
 or type.
 }
 \details{
+Implements the Variational Bayes algorithm with random intercepts proposed
+in the paper "Fast variational bayesian inference for correlated survival
+data: An application to invasive mechanical ventilation duration analysis".
+
 For right-censored survival time \eqn{T_{ij}} of the \eqn{j_{th}} subject
 from the \eqn{i_{th}} cluster in the sample, in a sample, \eqn{i=1,...,K}
 and \eqn{j=1,...,n_i}, the shared-frailty log-logistic AFT model is specified
@@ -79,6 +83,26 @@ as follows:
 distribution, and
 \item \emph{b} is a scale parameter.
 }
+}
+\examples{
+fit <- survregVB.frailty.fit(
+  X = matrix(c(rep(1, 75), simulation_frailty$x1, simulation_frailty$x2), nrow = 75),
+  Y = survival::Surv(simulation_frailty$Time, simulation_frailty$delta),
+  alpha_0 = 3,
+  omega_0 = 2,
+  mu_0 = c(0, 0, 0),
+  v_0 = 0.1,
+  lambda_0 = 3,
+  eta_0 = 2,
+  cluster = simulation_frailty$cluster
+)
+
+}
+\references{
+Xian, C., Souza, C. P. E. de, He, W., Rodrigues, F. F.,
+& Tian, R. (2024). "Fast variational bayesian inference for correlated
+survival data: An application to invasive mechanical ventilation
+duration analysis." https://doi.org/10.48550/ARXIV.2408.00177
 }
 \seealso{
 \code{\link{survregVB}}
