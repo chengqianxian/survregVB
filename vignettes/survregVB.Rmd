@@ -60,7 +60,7 @@ In addition to parameters $\beta$ and $b$, `survregVB` obtains the optimal varia
 
 where $\mu_0,v_0,\alpha_0$, $\omega_0$, $\lambda_0$ and $\eta_0$ are known hyperparameters. At the end of the model fitting process, `survregVB`obtains the approximated posterior distribution,
 
--   $q^*(\gamma_i)$, a $N_l(\tau^*_i,\sigma^{2*}_i))$ density function, and
+-   $q^*(\gamma_i)$, a $N(\tau^*_i,\sigma^{2*}_i)$ density function, and
 
 -   $q^*(\sigma^2_\gamma)$, an $\text{Inverse-Gamma}(\lambda^*,\eta^*)$ density function,
 

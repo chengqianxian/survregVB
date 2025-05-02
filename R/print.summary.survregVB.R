@@ -6,7 +6,7 @@ print.summary.survregVB <- function(x, digits =
   cat("Call:\n")
   dput(x$call)
 
-  printCoefmat(round(x$posteriors, digits),
+  printCoefmat(round(x$estimates, digits),
     signif.stars = signif.stars,
     P.values = TRUE, has.Pvalue = TRUE
   )

@@ -9,7 +9,8 @@
 #'
 #' @inheritParams survregVB
 #' @param Y A `Surv` object containing 2 columns: time and event.
-#' @param X A matrix of predictors (covariates), including an intercept.
+#' @param X A design matrix including covariates with first column of ones
+#'  to represent the intercept.
 #' @returns A list containing results of the fit.
 #'
 #' @details

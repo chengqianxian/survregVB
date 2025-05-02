@@ -19,7 +19,8 @@ survregVB.fit(
 \arguments{
 \item{Y}{A \code{Surv} object containing 2 columns: time and event.}
 
-\item{X}{A matrix of predictors (covariates), including an intercept.}
+\item{X}{A design matrix including covariates with first column of ones
+to represent the intercept.}
 
 \item{alpha_0}{The shape hyperparameter \eqn{\alpha_0} of the prior
 distribution of the scale parameter, \emph{b}.}

@@ -39,14 +39,30 @@ converged.
 achieving \code{max_iteration}.
 \item \code{NULL}: If the algorithm converged successfully.
 }
-\item \code{posteriors}: A matrix with one row for each coefficient,
-and one row for the scale parameter, and columns containing:
+\item \code{estimates}: A matrix with one row for each regression coefficient,
+and one row for the scale parameter. The columns contain:
 \itemize{
-\item \code{Value}: The estimated value
+\item \code{Value}: The estimated value based on the posterior
+distribution mean.
 \item \code{Lower CI}: The lower bound of the credible interval.
 \item \code{Upper CI}: The upper bound of the credible interval.
 }
 }
+
+If called with shared frailty, the object also contains components:
+\itemize{
+\item \code{lambda}: The shape parameter \eqn{\lambda^*} of
+\eqn{q^*(\sigma^2_\gamma)}.
+\item \code{eta}: The scale parameter \eqn{\eta^*} of
+\eqn{q^*(\sigma^2_\gamma)}.
+\item \code{tau}: Parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)}, a
+vector of means.
+\item \code{sigma}: Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)},
+a vector of variance.
+}
+The \code{estimates} component will contain an additional row for the
+frailty, the estimated variance based on the posterior mean for the
+random intercepts.
 }
 \description{
 Produces a summary of a fitted Variational Bayes Parametric Survival

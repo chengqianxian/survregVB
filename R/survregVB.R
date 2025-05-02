@@ -218,7 +218,7 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
 #' argument), for approximate posterior distributions:
 #' - \eqn{q^*(\sigma^2_\gamma)}, an \eqn{\text{Inverse-Gamma}(\lambda^*,\eta^*)}
 #'   density function,
-#' - \eqn{q^*(\gamma_i)}, a \eqn{N_l(\tau^*_i,\sigma^{2*}_i))} density function,
+#' - \eqn{q^*(\gamma_i)}, a \eqn{N(\tau^*_i,\sigma^{2*}_i)} density function,
 #'   for \eqn{i=1,...,K} clusters, and
 #'
 #' the additional components are present:
@@ -228,7 +228,7 @@ survregVB <- function(formula, data, alpha_0, omega_0, mu_0, v_0,
 #'    \eqn{q^*(\sigma^2_\gamma)}.
 #'   \item \code{eta}: The scale parameter \eqn{\eta^*} of
 #'    \eqn{q^*(\sigma^2_\gamma)}.
-#'   \item \code{tau}: Parameter \eqn{\tau^*} of \eqn{q^*(\gamma_i)}, a
+#'   \item \code{tau}: Parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)}, a
 #'    vector of means.
 #'   \item \code{sigma}: Parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)},
 #'    a vector of variance.

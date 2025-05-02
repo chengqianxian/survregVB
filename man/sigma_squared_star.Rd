@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameters.R
 \name{sigma_squared_star}
 \alias{sigma_squared_star}
-\title{Calculates parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for
+\title{Calculates parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)} for
 \eqn{i=1,...,K} clusters to optimize the evidence based lower bound
 (ELBO) in \code{survregVB.frailty.fit}.}
 \usage{
@@ -47,11 +47,11 @@ means.}
 each observation.}
 }
 \value{
-Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for all
-clusters.
+Parameter vector \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)}
+for all clusters.
 }
 \description{
-Calculates parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for
+Calculates parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)} for
 \eqn{i=1,...,K} clusters to optimize the evidence based lower bound
 (ELBO) in \code{survregVB.frailty.fit}.
 }

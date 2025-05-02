@@ -64,7 +64,7 @@ test_that("summary", {
     ),
     iterations = 9,
     n = 645,
-    posteriors = matrix(
+    estimates = matrix(
       c(
         4.11238723, 0.19027417,   3.73945671,   4.48531774,
         0.41546907, 0.14095315,   0.13920598,   0.69173216,
@@ -129,7 +129,7 @@ test_that("summary", {
     na.action = structure(76, names = "76", class = "omit"),
     iterations = 13,
     n = 75,
-    posteriors = matrix(
+    estimates = matrix(
       c(
         -0.2924349,  0.70885003, -1.68175544,  1.0968856,
         0.8083399,  0.66727689, -0.49949882,  2.1161785,

@@ -33,7 +33,7 @@ vector of variance.}
 each observation.}
 }
 \value{
-Parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
+Parameter vector \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
 \eqn{i=1,...,K} clusters.
 }
 \description{

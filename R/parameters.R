@@ -166,13 +166,13 @@ Sigma_star_cluster <- function(y, X, delta, v_0, alpha, omega, mu, tau,
   Sigma_star(y, X, delta, v_0, alpha, omega, mu, expectation_b)
 }
 
-#' Calculates parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for
+#' Calculates parameter \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)} for
 #' \eqn{i=1,...,K} clusters to optimize the evidence based lower bound
 #' (ELBO) in \code{survregVB.frailty.fit}.
 #'
 #' @inheritParams elbo_cluster
-#' @returns Parameter \eqn{\sigma^{2*}} of \eqn{q^*(\gamma_i)} for all
-#'  clusters.
+#' @returns Parameter vector \eqn{\sigma^{2*}_i} of \eqn{q^*(\gamma_i)}
+#'  for all clusters.
 #'
 #' @seealso \code{\link{survregVB.frailty.fit}}
 sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
@@ -209,7 +209,7 @@ sigma_squared_star <- function(y, X, delta, alpha, omega, mu, tau, lambda,
 #' (ELBO) in \code{survregVB.frailty.fit}.
 #'
 #' @inheritParams elbo_cluster
-#' @returns Parameter \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
+#' @returns Parameter vector \eqn{\tau^*_i} of \eqn{q^*(\gamma_i)} for
 #'  \eqn{i=1,...,K} clusters.
 #'
 #' @seealso \code{\link{survregVB.frailty.fit}}
