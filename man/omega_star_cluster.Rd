@@ -10,7 +10,8 @@ omega_star_cluster(y, X, delta, omega_0, mu, tau, expectation_b, cluster)
 \arguments{
 \item{y}{A vector of observed log-transformed survival times.}
 
-\item{X}{A matrix of predictors (covariates), including an intercept.}
+\item{X}{A design matrix including covariates with first column of ones
+to represent the intercept.}
 
 \item{delta}{A binary vector indicating right censoring.}
 
