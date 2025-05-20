@@ -26,7 +26,7 @@
 #' - \eqn{X_i} is a column vector of length \eqn{p, p\ge2} containing
 #' \eqn{p-1} covariates and a constant one to incorporate the intercept
 #' (i.e., \eqn{X_i=(1,x_{i1},...,x_{i(p-1)})^T}),
-#' - \emph{β} is the corresponding vector of coefficients for the fixed
+#' - \eqn{\beta} is the corresponding vector of coefficients for the fixed
 #' effects,
 #' - \eqn{z_i} is a random variable following a standard logistic
 #' distribution, and

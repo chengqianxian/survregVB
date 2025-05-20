@@ -3,8 +3,8 @@ Title: Variational Bayesian Analysis of Survival Data
 Version: 0.0.1
 Authors@R: 
     person("Alison", "Zhang", , "alisonxzhang@gmail.com", role = c("aut", "cre"))
-Description: This package implements Bayesian inference in accelerated failure time (AFT) models for       right-censored survival times following a log-logistic distribution. The details of the             Variational Bayes algorithms with and without shared frailty can be found in Xian et al.            (2024) <https://doi.org/10.1007/s11222-023-10365-6> and 
-      <https://doi.org/10.48550/ARXIV.2408.00177> respectively.
+Description: Implements Bayesian inference in accelerated failure time (AFT) models for right           -censored survival times following a log-logistic distribution. The details of the Variational      Bayes algorithms with and without shared frailty can be found in Xian et al. (2024) 
+    <doi:10.1007/s11222-023-10365-6> and <doi:10.48550/ARXIV.2408.00177> respectively.
 URL: https://github.com/chengqianxian/survregVB
 License: MIT + file LICENSE | LGPL-2
 Encoding: UTF-8

@@ -1,7 +1,7 @@
 ## ELBO Calculations ===================================================
 
 #' Calculates the approximated expectation over the density of observed data
-#' \emph{D} given parameters \emph{β} and \emph{b}, \eqn{\log(p(D|\beta,b))}.
+#' \emph{D} given parameters \eqn{\beta} and \emph{b}, \eqn{\log(p(D|\beta,b))}.
 #'
 #' @inheritParams elbo
 #' @returns The approximated log-likelihood \eqn{\log(p(D|\beta,b))}.

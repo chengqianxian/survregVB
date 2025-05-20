@@ -4,7 +4,7 @@
 #'
 #' The `dnase` dataset is a subset of the `rhDNase` dataset from the
 #' `survival` package.
-#' It is included in this package under the LGPL (≥ 2) license.
+#' It is included in this package under the LGPL (\eqn{\geq2}) license.
 #'
 #' @format A data frame with 767 observations on the following variables:
 #' \describe{

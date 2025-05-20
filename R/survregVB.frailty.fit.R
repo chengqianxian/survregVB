@@ -29,7 +29,7 @@
 #' - \eqn{X_{ij}} is a column vector of length \eqn{p, p\ge2} containing
 #'    \eqn{p-1} covariates and a constant one to incorporate the intercept
 #' (i.e., \eqn{X_i=(1,x_{ij1},...,x_{ij(p-1)})^T}),
-#' - \emph{β} is the corresponding vector of coefficients for the fixed effects,
+#' - \eqn{\beta} is the corresponding vector of coefficients for the fixed effects,
 #' - \eqn{\gamma_i} is a random intercept for the \eqn{i_{th}} cluster,
 #' - \eqn{\epsilon_{ij}} is a random variable following a standard logistic
 #' distribution, and

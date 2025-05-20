@@ -17,9 +17,9 @@
 #' @param omega_0 The shape hyperparameter \eqn{\omega_0} of the prior
 #'  distribution of the scale parameter, \emph{b}.
 #' @param mu_0 Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
-#'  distribution of the vector of coefficients, \emph{β}.
+#'  distribution of the vector of coefficients, \eqn{\beta}.
 #' @param v_0 The precision (inverse variance) hyperparameter \eqn{v_0},
-#'  of the prior distribution of the vector of coefficients, \emph{β}.
+#'  of the prior distribution of the vector of coefficients, \eqn{\beta}.
 #' @param lambda_0 The shape hyperparameter \eqn{\lambda_0} of the prior
 #'  distribution of the frailty variance, \eqn{\sigma_\gamma^2}.
 #' @param eta_0 The scale hyperparameter \eqn{\eta_0} of the prior distribution

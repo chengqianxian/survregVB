@@ -42,10 +42,10 @@ distribution of the scale parameter, \emph{b}.}
 distribution of the scale parameter, \emph{b}.}
 
 \item{mu_0}{Hyperparameter \eqn{\mu_0}, a vector of means, of the prior
-distribution of the vector of coefficients, \emph{β}.}
+distribution of the vector of coefficients, \eqn{\beta}.}
 
 \item{v_0}{The precision (inverse variance) hyperparameter \eqn{v_0},
-of the prior distribution of the vector of coefficients, \emph{β}.}
+of the prior distribution of the vector of coefficients, \eqn{\beta}.}
 
 \item{lambda_0}{The shape hyperparameter \eqn{\lambda_0} of the prior
 distribution of the frailty variance, \eqn{\sigma_\gamma^2}.}

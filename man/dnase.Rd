@@ -26,6 +26,6 @@ dnase
 \description{
 The \code{dnase} dataset is a subset of the \code{rhDNase} dataset from the
 \code{survival} package.
-It is included in this package under the LGPL (≥ 2) license.
+It is included in this package under the LGPL (\eqn{\geq2}) license.
 }
 \keyword{datasets}
