@@ -30,8 +30,8 @@ beta_ci <- function(mu, Sigma, ci = 0.95) {
 #' @importFrom bayestestR hdi
 #' @importFrom invgamma rinvgamma
 #' @noRd
-b_ci <- function(alpha, omega, ci = 0.95) {
-  set.seed(100)
+b_ci <- function(alpha, omega, ci = 0.95, seed = 100) {
+  set.seed(seed)
   posterior <- rinvgamma(100000, alpha, omega)
   lower <- hdi(posterior, ci)$CI_low
   upper <- hdi(posterior, ci)$CI_high

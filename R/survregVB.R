@@ -42,8 +42,8 @@
 #' The goal of \code{survregVB} is to maximize the evidence lower bound
 #' (ELBO) to approximate posterior distributions of the AFT model parameters
 #' using the VB algorithms with and without shared frailty proposed in Xian
-#' et al. (2024) <https://doi.org/10.1007/s11222-023-10365-6> and
-#' <https://doi.org/10.48550/ARXIV.2408.00177> respectively.
+#' et al. (2024) <doi:10.1007/s11222-023-10365-6> and
+#' <doi:10.48550/ARXIV.2408.00177> respectively.
 #'
 #' @examples
 #' # Data frame containing survival data
