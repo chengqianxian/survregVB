@@ -1,8 +1,11 @@
 Package: survregVB
 Title: Variational Bayesian Analysis of Survival Data
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
-    person("Alison", "Zhang", , "alisonxzhang@gmail.com", role = c("aut", "cre"))
+    c(
+        person("Alison", "Zhang", , "alisonxzhang@gmail.com", role = c("aut", "cre")),
+        person("Chengqian", "Xian", , "cxian3@uwo.ca", role = c("aut"))
+    )
 Description: Implements Bayesian inference in accelerated failure time (AFT) models for 
     right-censored survival times assuming a log-logistic distribution. Details of the 
     variational Bayes algorithms, with and without shared frailty, are described in 
